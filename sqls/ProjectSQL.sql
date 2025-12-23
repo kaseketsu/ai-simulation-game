@@ -1,0 +1,83 @@
+CREATE DATABASE IF NOT EXISTS ai_simulation_game;
+
+USE ai_simulation_game;
+
+CREATE TABLE IF NOT EXISTS user
+(
+    id             BIGINT      NOT NULL AUTO_INCREMENT COMMENT '用户 id',
+    user_detail_id BIGINT      NOT NULL COMMENT '用户详情表 id',
+    user_name      VARCHAR(32) NOT NULL COMMENT '用户名',
+    user_account   VARCHAR(32) NOT NULL COMMENT '用户账号',
+    user_password  VARCHAR(32) NOT NULL COMMENT '密码',
+    user_role      VARCHAR(3)  NOT NULL COMMENT '0 - 普通用户; 1 - vip; 9 - 管理员',
+    create_time    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator        VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier       VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    UNIQUE KEY (user_account),
+    INDEX (user_role)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '用户基础表';
+
+CREATE TABLE IF NOT EXISTS user_detail
+(
+    id          BIGINT      NOT NULL AUTO_INCREMENT COMMENT '用户 id',
+    user_name   VARCHAR(32) NOT NULL COMMENT '用户名',
+    user_role   VARCHAR(3)  NOT NULL COMMENT '0 - 普通用户; 1 - vip; 9 - 管理员',
+    create_time DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator     VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier    VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX (user_role)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '用户详情表';
+
+ALTER TABLE user
+    DROP COLUMN user_detail_id;
+ALTER TABLE user_detail
+    ADD COLUMN user_id BIGINT NOT NULL COMMENT '用户 id';
+ALTER TABLE play_progress
+    ADD COLUMN user_id BIGINT NOT NULL COMMENT '用户 id';
+ALTER TABLE user_properties
+    ADD COLUMN user_id BIGINT NOT NULL COMMENT '用户 id';
+
+
+CREATE TABLE IF NOT EXISTS play_progress
+(
+    id           BIGINT      NOT NULL AUTO_INCREMENT COMMENT '用户 id',
+    user_name    VARCHAR(32) NOT NULL COMMENT '用户名',
+    user_role    VARCHAR(3)  NOT NULL COMMENT '0 - 普通用户; 1 - vip; 9 - 管理员',
+    open_days    INT         NOT NULL DEFAULT 0 COMMENT '经营天数',
+    time_period  TIME        NOT NULL COMMENT '营业时段',
+    earned_money BIGINT      NOT NULL DEFAULT 0 COMMENT '营业额',
+    store_level  INT         NOT NULL DEFAULT 0 COMMENT '店铺等级',
+    create_time  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator      VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier     VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX (user_role)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '用户游玩进度表';
+
+CREATE TABLE IF NOT EXISTS user_properties
+(
+    id             BIGINT      NOT NULL AUTO_INCREMENT COMMENT '用户 id',
+    user_name      VARCHAR(32) NOT NULL COMMENT '用户名',
+    user_role      VARCHAR(3)  NOT NULL COMMENT '0 - 普通用户; 1 - vip; 9 - 管理员',
+    store_type     VARCHAR(3)  NOT NULL COMMENT '0 - 饮品, 1 - 主食',
+    sense          INT         NOT NULL DEFAULT 0 COMMENT '眼光',
+    speaking_skill INT         NOT NULL DEFAULT 0 COMMENT '口才',
+    cooking_skill  INT         NOT NULL DEFAULT 0 COMMENT '厨艺',
+    create_time    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator        VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier       VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX (user_role)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '用户相关的属性';
+
+
