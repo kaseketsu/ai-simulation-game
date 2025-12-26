@@ -1,7 +1,7 @@
 package common.aop;
 
-import common.Exceptions.BusinessException;
-import common.Exceptions.ErrorCode;
+import common.exceptions.BusinessException;
+import common.exceptions.ErrorCode;
 import common.baseEntities.BaseResponse;
 import common.utils.ResultUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;

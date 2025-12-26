@@ -1,4 +1,4 @@
-package common.Exceptions;
+package common.exceptions;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;

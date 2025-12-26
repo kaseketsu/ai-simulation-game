@@ -1,6 +1,6 @@
 package common.utils;
 
-import common.Exceptions.ErrorCode;
+import common.exceptions.ErrorCode;
 import common.baseEntities.BaseResponse;
 
 /**

@@ -1,7 +1,6 @@
 package common.baseEntities;
 
-import common.Exceptions.ErrorCode;
-import lombok.Data;
+import common.exceptions.ErrorCode;
 import lombok.Setter;
 
 /**
