@@ -40,6 +40,13 @@
             <artifactId>mybatis-plus-generator</artifactId>
             <version>3.5.15</version>
         </dependency>
+        <!-- Freemarker 核心依赖（MyBatis-Plus代码生成器必需） -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.32</version> <!-- 推荐使用稳定版本，也可适配你的MyBatis-Plus版本 -->
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
