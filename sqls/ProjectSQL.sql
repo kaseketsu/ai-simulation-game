@@ -164,4 +164,25 @@ CREATE TABLE IF NOT EXISTS user_role
 ) ENGINE = InnoDB
   COLLATE = utf8mb4_0900_as_cs COMMENT = '用户角色关联表';
 
+alter table permission
+    add is_deleted int default 0 not null comment '是否删除';
+
+alter table play_progress
+    add is_deleted int default 0 not null comment '是否删除';
+
+alter table role
+    add is_deleted int default 0 not null comment '是否删除';
+
+alter table role_permission
+    add is_deleted int default 0 not null comment '是否删除';
+
+alter table user_detail
+    add is_deleted int default 0 not null comment '是否删除';
+
+alter table user_properties
+    add is_deleted int default 0 not null comment '是否删除';
+
+alter table user_role
+    add is_deleted int default 0 not null comment '是否删除';
+
 
