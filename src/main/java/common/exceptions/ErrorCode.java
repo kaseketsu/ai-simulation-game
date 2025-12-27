@@ -15,9 +15,10 @@ public enum ErrorCode {
     // ======= 通用错误 =======
     SUCCESS("990000", "操作成功"),
     PARAM_ERROR("990100", "参数不合法"),
-    OPERATION_ERROR("990300", "操作失败"),
+    OPERATION_ERROR("990201", "操作失败"),
     AUTHORIZE_ERROR("990400", "无权限"),
-    SYSTEM_ERROR("990301", "系统异常");
+    SYSTEM_ERROR("990200", "系统异常"),
+    PARSE_ERROR("990202", "解析失败");
 
     /**
      * 错误码
