@@ -80,4 +80,88 @@ CREATE TABLE IF NOT EXISTS user_properties
 ) ENGINE = InnoDB
   COLLATE = utf8mb4_0900_as_cs COMMENT = '用户相关的属性';
 
+USE ai_simulation_game;
+
+ALTER TABLE user
+    DROP COLUMN user_role;
+
+-- 创建角色表
+
+CREATE TABLE IF NOT EXISTS user_role
+(
+    id          BIGINT      NOT NULL AUTO_INCREMENT COMMENT '用户 id',
+    user_id     BIGINT      NOT NULL COMMENT '用户 id',
+    user_name   VARCHAR(32) NOT NULL COMMENT '用户名',
+    user_role   VARCHAR(3)  NOT NULL COMMENT '0 - 普通用户; 1 - vip; 9 - 管理员',
+    role_name   VARCHAR(16) NOT NULL COMMENT '角色名，普通用户, vip, 管理员',
+    create_time DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator     VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier    VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX (user_id),
+    INDEX (user_role)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '用户相关的属性';
+
+ALTER TABLE user_role RENAME role;
+
+ALTER TABLE role
+    DROP COLUMN user_id;
+
+ALTER TABLE role
+    DROP COLUMN user_name;
+
+ALTER TABLE role RENAME COLUMN user_role TO role_code;
+
+-- 创建权限表
+
+CREATE TABLE IF NOT EXISTS permission
+(
+    id              BIGINT      NOT NULL AUTO_INCREMENT COMMENT '用户 id',
+    permission_name VARCHAR(32) NOT NULL COMMENT '权限详情',
+    permission_code VARCHAR(3)  NOT NULL COMMENT '0 - 查看, 1 - 修改, 2 - 发布, 9 - 全部',
+    create_time     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator         VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier        VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX (permission_code)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '权限表';
+
+-- 创建权限角色关联表
+
+CREATE TABLE IF NOT EXISTS role_permission
+(
+    id            BIGINT      NOT NULL AUTO_INCREMENT COMMENT '关联表 id',
+    role_id       BIGINT      NOT NULL COMMENT '角色 id',
+    permission_id BIGINT      NOT NULL COMMENT '权限 id',
+    create_time   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator       VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier      VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX idx_role_id (role_id),
+    INDEX idx_role_id_permission_id (role_id, permission_id)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '权限表';
+
+-- 创建用户角色关联表
+
+CREATE TABLE IF NOT EXISTS user_role
+(
+    id          BIGINT      NOT NULL AUTO_INCREMENT COMMENT '关联表 id',
+    user_id     BIGINT      NOT NULL COMMENT '用户 id',
+    role_id     BIGINT      NOT NULL COMMENT '角色 id',
+    create_time DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator     VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier    VARCHAR(16) NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_user_id_role_id (user_id, role_id)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '用户角色关联表';
+
 
