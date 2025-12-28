@@ -1,6 +1,7 @@
 package common.manager;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RedisManager {
+
+    @Value("${spring.security.black-list-prefix}")
+    private String blacklistPrefix;
 
     /**
      * k - v 存储
@@ -55,6 +59,26 @@ public class RedisManager {
      */
     public boolean deleteValue(String key) {
         return redisTemplate.delete(key);
+    }
+
+    /**
+     * 检查是否有 key
+     *
+     * @param key k
+     * @return Y / N
+     */
+    public boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 检查是否在黑名单
+     *
+     * @param key k
+     * @return Y / N
+     */
+    public boolean isInBlackList(String key) {
+        return redisTemplate.hasKey(blacklistPrefix + key);
     }
 }
 
