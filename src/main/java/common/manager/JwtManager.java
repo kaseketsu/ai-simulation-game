@@ -8,8 +8,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,7 +72,7 @@ public class JwtManager {
      * @param userDetails 用户信息
      * @return 请求 token
      */
-    public String generateAccessToken(final UserDetails userDetails) {
+    public String generateAccessToken(@NonNull final UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         String jti = UUID.randomUUID().toString();
         claims.put("jti", jti);
@@ -86,7 +86,7 @@ public class JwtManager {
      * @param userDetails 用户信息
      * @return 刷新 token
      */
-    public String generateRefreshToken(final UserDetails userDetails) {
+    public String generateRefreshToken(@NonNull final UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         String jti = UUID.randomUUID().toString();
         claims.put("jti", jti);
@@ -102,7 +102,7 @@ public class JwtManager {
      * @param expireTime 过期时间
      * @return token
      */
-    public String generateToken(final Map<String, Object> claims, final String subject, final Long expireTime) {
+    public String generateToken(@NonNull final Map<String, Object> claims, @NonNull final String subject, @NonNull final Long expireTime) {
         return Jwts.builder()
                 .claims(claims)
                 .subject(subject)
@@ -118,7 +118,7 @@ public class JwtManager {
      * @param token jwt
      * @return 用户名
      */
-    public String extractUserName(final String token) {
+    public String extractUserName(@NonNull final String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -128,7 +128,7 @@ public class JwtManager {
      * @param token jwt
      * @return 过期时间
      */
-    public Date extractExpiration(final String token) {
+    public Date extractExpiration(@NonNull final String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
@@ -138,7 +138,7 @@ public class JwtManager {
      * @param token jwt
      * @return jti
      */
-    public String extractJti(final String token) {
+    public String extractJti(@NonNull final String token) {
         return extractClaim(token, claims -> claims.get("jti", String.class));
     }
 
@@ -148,7 +148,7 @@ public class JwtManager {
      * @param request servlet 请求
      * @return jwt
      */
-    public String extractTokenFromHttpRequest(HttpServletRequest request) {
+    public String extractTokenFromHttpRequest(@NonNull HttpServletRequest request) {
         String jwtHeader = request.getHeader(header);
         if (StrUtil.isNotBlank(jwtHeader) && jwtHeader.startsWith(tokenPrefix)) {
             return jwtHeader.substring(tokenPrefix.length() + 1);
@@ -163,7 +163,7 @@ public class JwtManager {
      * @param claimsResolver 函数
      * @return 所需属性值
      */
-    public <T> T extractClaim(final String token, Function<Claims, T> claimsResolver) {
+    public <T> T extractClaim(@NonNull final String token, @NonNull Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -174,7 +174,7 @@ public class JwtManager {
      * @param token jwt
      * @return 负荷信息
      */
-    public Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(@NonNull final String token) {
         try {
             return Jwts.parser()
                     .verifyWith(secretKey)
@@ -194,7 +194,7 @@ public class JwtManager {
      * @param userDetails 用户信息
      * @return 是否有效
      */
-    public boolean isValidToken(final String token, final UserDetails userDetails) {
+    public boolean isValidToken(@NonNull final String token, @NonNull final UserDetails userDetails) {
         String userName = extractUserName(token);
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
@@ -205,7 +205,7 @@ public class JwtManager {
      * @param token jwt
      * @return 是否过期
      */
-    public boolean isTokenExpired(final String token) {
+    public boolean isTokenExpired(@NonNull final String token) {
         return extractExpiration(token).before(new Date());
     }
 }

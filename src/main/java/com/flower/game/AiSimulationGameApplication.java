@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.yaml.snakeyaml.Yaml;
 
-@SpringBootApplication
-@MapperScan("com.flower.**.game")
+@SpringBootApplication(scanBasePackages = {"com.flower.game, common"})
+@MapperScan("com.flower.game.**")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AiSimulationGameApplication {
     public static void main(String[] args) {

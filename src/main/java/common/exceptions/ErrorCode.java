@@ -20,7 +20,9 @@ public enum ErrorCode {
     SYSTEM_ERROR("990200", "系统异常"),
     PARSE_ERROR("990202", "解析失败"),
     FILTER_ERROR("990300", "过滤失败"),
-    ILLEGAL_USER("990301", "非法用户");
+    ILLEGAL_USER("990301", "非法用户"),
+    GENERATE_ERROR("990302", "生成失败"),
+    EXPIRE_ERROR("990303", "已过期");
 
     /**
      * 错误码

@@ -1,10 +1,11 @@
 package common.manager;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * redis 工具类
@@ -27,8 +28,8 @@ public class RedisManager {
      * @param key   键
      * @param value 值
      */
-    public void addValue(String key, Object value) {
-        redisTemplate.opsForValue().setIfAbsent(key, value);
+    public void addValue(String key, Object value, Long expire, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().setIfAbsent(key, value, expire, timeUnit);
     }
 
     /**
