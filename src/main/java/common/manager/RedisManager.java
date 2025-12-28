@@ -1,5 +1,6 @@
 package common.manager;
 
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -74,11 +75,11 @@ public class RedisManager {
     /**
      * 检查是否在黑名单
      *
-     * @param key k
+     * @param jti jwt 唯一标识符
      * @return Y / N
      */
-    public boolean isInBlackList(String key) {
-        return redisTemplate.hasKey(blacklistPrefix + key);
+    public boolean isInBlackList(String jti) {
+        return redisTemplate.hasKey(blacklistPrefix + jti);
     }
 }
 

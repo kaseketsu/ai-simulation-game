@@ -1,12 +1,15 @@
 package common.manager;
 
+import cn.hutool.core.util.StrUtil;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +25,11 @@ import java.util.function.Function;
 @ConfigurationProperties(prefix = "spring.jwt")
 @Slf4j
 public class JwtManager {
+
+    /**
+     * 请求头 jwt 前缀
+     */
+    private String header;
 
     /**
      * 计算密钥 base
@@ -132,6 +140,20 @@ public class JwtManager {
      */
     public String extractJti(final String token) {
         return extractClaim(token, claims -> claims.get("jti", String.class));
+    }
+
+    /**
+     * 从 servlet 请求中获取 jwt
+     *
+     * @param request servlet 请求
+     * @return jwt
+     */
+    public String extractTokenFromHttpRequest(HttpServletRequest request) {
+        String jwtHeader = request.getHeader(header);
+        if (StrUtil.isNotBlank(jwtHeader) && jwtHeader.startsWith(tokenPrefix)) {
+            return jwtHeader.substring(tokenPrefix.length() + 1);
+        }
+        return null;
     }
 
     /**
