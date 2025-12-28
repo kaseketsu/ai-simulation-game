@@ -181,7 +181,7 @@ public class TokenServiceImpl implements TokenService {
                 redisManager.deleteValue(refreshKey);
             }
         } catch (Exception e) {
-            String errorMsg = String.format("刷新 token 失败，原因是: %s", e.getMessage());
+            String errorMsg = String.format("失效 token 失败，原因是: %s", e.getMessage());
             log.error(errorMsg, e);
             throw new BusinessException(ErrorCode.GENERATE_ERROR, errorMsg);
         }
