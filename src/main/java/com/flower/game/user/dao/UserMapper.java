@@ -9,7 +9,7 @@ import com.flower.game.user.models.entity.User;
  * </p>
  *
  * @author F1ower
- * @since 2025-12-26
+ * @since 2025-12-28
  */
 public interface UserMapper extends BaseMapper<User> {
 

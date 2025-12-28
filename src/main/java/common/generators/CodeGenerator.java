@@ -59,10 +59,13 @@ public class CodeGenerator {
                     .strategyConfig((scanner, builder) -> {
                         builder.addInclude(scanner.apply("请设置生成的表名，用英文逗号隔开: ")) // 设置需要生成的表名
                                 .entityBuilder()
+                                .logicDeleteColumnName("is_deleted")
+                                .logicDeletePropertyName("isDeleted")
                                 .enableLombok() // 启用 Lombok
                                 .enableTableFieldAnnotation() // 启用字段注解
                                 .controllerBuilder()
                                 .enableRestStyle(); // 启用 REST 风格
+
                     })
                     .templateEngine(new FreemarkerTemplateEngine()) // 使用 Freemarker 模板引擎
                     .execute();

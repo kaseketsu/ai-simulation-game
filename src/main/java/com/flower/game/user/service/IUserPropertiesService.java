@@ -1,7 +1,7 @@
 package com.flower.game.user.service;
 
+import generator.model.UserProperties;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.flower.game.user.models.entity.UserProperties;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.flower.game.user.models.entity.UserProperties;
  * </p>
  *
  * @author F1ower
- * @since 2025-12-26
+ * @since 2025-12-28
  */
 public interface IUserPropertiesService extends IService<UserProperties> {
 

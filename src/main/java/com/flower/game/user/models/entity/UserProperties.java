@@ -3,6 +3,7 @@ package com.flower.game.user.models.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author F1ower
- * @since 2025-12-26
+ * @since 2025-12-28
  */
 @Getter
 @Setter
@@ -98,4 +99,11 @@ public class UserProperties implements Serializable {
      */
     @TableField("user_id")
     private Long userId;
+
+    /**
+     * 是否删除
+     */
+    @TableLogic
+    @TableField("is_deleted")
+    private Integer isDeleted;
 }

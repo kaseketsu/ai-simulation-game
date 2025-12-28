@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户基础表
+ * 角色权限关联表
  * </p>
  *
  * @author F1ower
@@ -23,34 +23,28 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("user")
-public class User implements Serializable {
+@TableName("role_permission")
+public class RolePermission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户 id
+     * 关联表 id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 用户名
+     * 角色 id
      */
-    @TableField("user_name")
-    private String userName;
+    @TableField("role_id")
+    private Long roleId;
 
     /**
-     * 用户账号
+     * 权限 id
      */
-    @TableField("user_account")
-    private String userAccount;
-
-    /**
-     * 密码
-     */
-    @TableField("user_password")
-    private String userPassword;
+    @TableField("permission_id")
+    private Long permissionId;
 
     /**
      * 创建时间
@@ -82,10 +76,4 @@ public class User implements Serializable {
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
-
-    /**
-     * 用户状态, 0 - 正常, 1 - 禁用, 2 - 冻结
-     */
-    @TableField("user_state")
-    private Integer userState;
 }

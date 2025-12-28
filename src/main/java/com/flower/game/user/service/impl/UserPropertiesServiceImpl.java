@@ -1,10 +1,9 @@
 package com.flower.game.user.service.impl;
 
-
+import generator.model.UserProperties;
+import generator.dao.UserPropertiesMapper;
+import generator.service.IUserPropertiesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.flower.game.user.dao.UserPropertiesMapper;
-import com.flower.game.user.models.entity.UserProperties;
-import com.flower.game.user.service.IUserPropertiesService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author F1ower
- * @since 2025-12-26
+ * @since 2025-12-28
  */
 @Service
 public class UserPropertiesServiceImpl extends ServiceImpl<UserPropertiesMapper, UserProperties> implements IUserPropertiesService {

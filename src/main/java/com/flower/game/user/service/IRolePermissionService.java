@@ -1,16 +1,16 @@
 package com.flower.game.user.service;
 
-import generator.model.User;
+import generator.model.RolePermission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 用户基础表 服务类
+ * 角色权限关联表 服务类
  * </p>
  *
  * @author F1ower
  * @since 2025-12-28
  */
-public interface IUserService extends IService<User> {
+public interface IRolePermissionService extends IService<RolePermission> {
 
 }

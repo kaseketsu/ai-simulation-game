@@ -1,20 +1,20 @@
 package com.flower.game.user.service.impl;
 
-import generator.model.User;
-import generator.dao.UserMapper;
-import generator.service.IUserService;
+import generator.model.Role;
+import generator.dao.RoleMapper;
+import generator.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 用户基础表 服务实现类
+ * 角色表 服务实现类
  * </p>
  *
  * @author F1ower
  * @since 2025-12-28
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
 
 }

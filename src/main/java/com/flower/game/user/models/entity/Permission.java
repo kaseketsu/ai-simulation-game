@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 用户基础表
+ * 权限表
  * </p>
  *
  * @author F1ower
@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("user")
-public class User implements Serializable {
+@TableName("permission")
+public class Permission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,22 +35,16 @@ public class User implements Serializable {
     private Long id;
 
     /**
-     * 用户名
+     * 权限详情
      */
-    @TableField("user_name")
-    private String userName;
+    @TableField("permission_name")
+    private String permissionName;
 
     /**
-     * 用户账号
+     * 0 - 查看, 1 - 修改, 2 - 发布, 9 - 全部
      */
-    @TableField("user_account")
-    private String userAccount;
-
-    /**
-     * 密码
-     */
-    @TableField("user_password")
-    private String userPassword;
+    @TableField("permission_code")
+    private String permissionCode;
 
     /**
      * 创建时间
@@ -82,10 +76,4 @@ public class User implements Serializable {
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
-
-    /**
-     * 用户状态, 0 - 正常, 1 - 禁用, 2 - 冻结
-     */
-    @TableField("user_state")
-    private Integer userState;
 }

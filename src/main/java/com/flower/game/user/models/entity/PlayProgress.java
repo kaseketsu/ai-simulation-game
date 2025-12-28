@@ -3,7 +3,6 @@ package com.flower.game.user.models.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +10,11 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * <p>
- * 用户基础表
+ * 用户游玩进度表
  * </p>
  *
  * @author F1ower
@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("user")
-public class User implements Serializable {
+@TableName("play_progress")
+public class PlayProgress implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,16 +41,34 @@ public class User implements Serializable {
     private String userName;
 
     /**
-     * 用户账号
+     * 0 - 普通用户; 1 - vip; 9 - 管理员
      */
-    @TableField("user_account")
-    private String userAccount;
+    @TableField("user_role")
+    private String userRole;
 
     /**
-     * 密码
+     * 经营天数
      */
-    @TableField("user_password")
-    private String userPassword;
+    @TableField("open_days")
+    private Integer openDays;
+
+    /**
+     * 营业时段
+     */
+    @TableField("time_period")
+    private LocalTime timePeriod;
+
+    /**
+     * 营业额
+     */
+    @TableField("earned_money")
+    private Long earnedMoney;
+
+    /**
+     * 店铺等级
+     */
+    @TableField("store_level")
+    private Integer storeLevel;
 
     /**
      * 创建时间
@@ -77,15 +95,14 @@ public class User implements Serializable {
     private String modifier;
 
     /**
-     * 是否删除
+     * 用户 id
      */
-    @TableLogic
-    @TableField("is_deleted")
-    private Integer isDeleted;
+    @TableField("user_id")
+    private Long userId;
 
     /**
-     * 用户状态, 0 - 正常, 1 - 禁用, 2 - 冻结
+     * 是否删除
      */
-    @TableField("user_state")
-    private Integer userState;
+    @TableField("is_deleted")
+    private Integer isDeleted;
 }
