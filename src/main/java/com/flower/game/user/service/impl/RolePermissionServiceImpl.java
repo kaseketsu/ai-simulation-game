@@ -1,9 +1,9 @@
 package com.flower.game.user.service.impl;
 
-import generator.model.RolePermission;
-import generator.dao.RolePermissionMapper;
-import generator.service.IRolePermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.flower.game.user.dao.RolePermissionMapper;
+import com.flower.game.user.models.entity.RolePermission;
+import com.flower.game.user.service.IRolePermissionService;
 import org.springframework.stereotype.Service;
 
 /**

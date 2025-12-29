@@ -1,9 +1,9 @@
 package com.flower.game.user.service.impl;
 
-import generator.model.User;
-import generator.dao.UserMapper;
-import generator.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.flower.game.user.dao.UserMapper;
+import com.flower.game.user.models.entity.User;
+import com.flower.game.user.service.IUserService;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,5 +1,7 @@
 package com.flower.game.user.models.entity;
 
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,12 +11,15 @@ import java.util.List;
 /**
  * 自定义 userDetail
  */
+@Data
+@RequiredArgsConstructor
 public class MyUserDetails implements UserDetails {
+
 
     /**
      * 权限
      */
-    private List<String> permissions;
+    private List<MyAuthority> authorities;
 
     /**
      * 密码
@@ -29,41 +34,76 @@ public class MyUserDetails implements UserDetails {
     /**
      * 账号状态
      */
-    private String userState;
+    private Integer userState;
 
 
+    /**
+     * 获取角色集合
+     *
+     * @return 权限稽核
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return this.authorities;
     }
 
+    /**
+     * 获取密码
+     *
+     * @return 密码
+     */
     @Override
     public String getPassword() {
-        return "";
+        return this.password;
     }
 
+    /**
+     * 获取用户名
+     *
+     * @return 用户名
+     */
     @Override
     public String getUsername() {
-        return "";
+        return this.userName;
     }
 
+    /**
+     * 查看账号是某过期
+     *
+     * @return 是否过期
+     */
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return this.userState != 0;
     }
 
+    /**
+     * 查看账号是否上锁
+     *
+     * @return 是否上锁
+     */
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return this.userState != 0;
     }
 
+    /**
+     * 查看凭证是否过期（默认）
+     *
+     * @return 是否过期
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return UserDetails.super.isCredentialsNonExpired();
     }
 
+    /**
+     * 账号是否可用
+     *
+     * @return 是否可用
+     */
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return this.userState == 0;
     }
 }

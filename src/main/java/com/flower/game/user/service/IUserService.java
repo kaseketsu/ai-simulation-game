@@ -1,7 +1,7 @@
 package com.flower.game.user.service;
 
-import generator.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.flower.game.user.models.entity.User;
 
 /**
  * <p>
