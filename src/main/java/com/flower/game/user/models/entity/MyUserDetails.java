@@ -24,7 +24,7 @@ public class MyUserDetails implements UserDetails {
     /**
      * 密码
      */
-    private String password;
+    private String userPassword;
 
     /**
      * 账号
@@ -54,7 +54,7 @@ public class MyUserDetails implements UserDetails {
      */
     @Override
     public String getPassword() {
-        return this.password;
+        return this.userPassword;
     }
 
     /**

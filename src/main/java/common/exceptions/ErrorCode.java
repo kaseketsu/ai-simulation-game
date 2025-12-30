@@ -22,7 +22,8 @@ public enum ErrorCode {
     FILTER_ERROR("990300", "过滤失败"),
     ILLEGAL_USER("990301", "非法用户"),
     GENERATE_ERROR("990302", "生成失败"),
-    EXPIRE_ERROR("990303", "已过期");
+    EXPIRE_ERROR("990303", "已过期"),
+    NOT_FOUND_ERROR("990304", "未找到");
 
     /**
      * 错误码
