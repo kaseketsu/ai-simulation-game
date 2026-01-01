@@ -29,7 +29,7 @@ public class MyUserDetails implements UserDetails {
     /**
      * 账号
      */
-    private String userName;
+    private String userAccount;
 
     /**
      * 账号状态
@@ -58,13 +58,13 @@ public class MyUserDetails implements UserDetails {
     }
 
     /**
-     * 获取用户名
+     * 获取用户账号
      *
      * @return 用户名
      */
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.userAccount;
     }
 
     /**

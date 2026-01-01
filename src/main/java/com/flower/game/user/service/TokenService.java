@@ -2,8 +2,8 @@ package com.flower.game.user.service;
 
 
 import com.flower.game.user.models.dto.JwtResponse;
+import com.flower.game.user.models.entity.MyUserDetails;
 import lombok.NonNull;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +15,7 @@ public interface TokenService {
      * @param userDetails 用户详情
      * @return token 响应
      */
-    JwtResponse generateToken(@NonNull final UserDetails userDetails);
+    JwtResponse generateToken(@NonNull final MyUserDetails userDetails);
 
     /**
      * 根据刷新 token 拿 accessToken

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class MyUserDetailServiceImpl implements UserDetailsService {
 
     private final IUserService userService;
@@ -34,16 +36,16 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
     /**
      * 根据名称加载 userDetail
      *
-     * @param username 用户名
+     * @param userAccount 用户账号
      * @return MyUserDetails 自定义 userDetail
      */
     @ExceptionLog("获取用户详情失败")
     @Override
-    public MyUserDetails loadUserByUsername(@NonNull final String username) throws UsernameNotFoundException {
+    public MyUserDetails loadUserByUsername(@NonNull final String userAccount) throws UsernameNotFoundException {
         try {
-            Assert.notBlank(username, "用户名不能为空");
+            Assert.notBlank(userAccount, "用户账号不能为空");
             LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
-            userWrapper.eq(User::getUserName, username)
+            userWrapper.eq(User::getUserName, userAccount)
                     .eq(User::getIsDeleted, 0);
             User user = userService.getOne(userWrapper);
             Assert.notNull(user, "用户不存在");

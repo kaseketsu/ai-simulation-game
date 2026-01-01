@@ -1,6 +1,7 @@
 package common.filters;
 
 import cn.hutool.core.util.StrUtil;
+import com.flower.game.user.service.impl.MyUserDetailServiceImpl;
 import common.manager.JwtManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtManager jwtManager;
 
-    private final UserDetailsService userDetailsService;
+    private final MyUserDetailServiceImpl userDetailsService;
 
     /**
      * 实现权限认证

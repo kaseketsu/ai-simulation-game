@@ -1,5 +1,6 @@
 package common.config;
 
+import com.flower.game.user.service.impl.MyUserDetailServiceImpl;
 import common.filters.JwtAuthenticationFilter;
 import common.filters.JwtBlackListFilter;
 import io.jsonwebtoken.JwtBuilder;
@@ -35,7 +36,7 @@ public class SecurityConfig {
     @Value("${spring.security.ignore-urls}")
     private List<String> ignoreUrls;
 
-    private final UserDetailsService userDetailsService;
+    private final MyUserDetailServiceImpl userDetailsService;
 
     private final JwtBlackListFilter jwtBlackListFilter;
 

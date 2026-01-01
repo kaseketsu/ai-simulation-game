@@ -2,6 +2,7 @@ package com.flower.game.user.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.flower.game.user.models.dto.JwtResponse;
+import com.flower.game.user.models.entity.MyUserDetails;
 import com.flower.game.user.service.TokenService;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
@@ -11,7 +12,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -67,7 +67,7 @@ public class TokenServiceImpl implements TokenService {
      * @return token 响应
      */
     @Override
-    public JwtResponse generateToken(@NonNull final UserDetails userDetails) {
+    public JwtResponse generateToken(@NonNull final MyUserDetails userDetails) {
         try {
             // 生成 token
             String accessToken = jwtManager.generateAccessToken(userDetails);
