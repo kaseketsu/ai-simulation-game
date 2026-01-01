@@ -8,6 +8,9 @@ import lombok.Getter;
  * 前两位: 模块 99 - 通用 / 01 - 用户
  * 中间两位: 错误类型 00 - 成功 / 01 - 参数 / 02 - 系统 / 03 - 业务 / 04 - 权限
  * 最后两位: 具体错误 可自定义
+ *
+ * @author F1ower
+ * @since 2026-12-30
  */
 @Getter
 public enum ErrorCode {
@@ -23,7 +26,10 @@ public enum ErrorCode {
     ILLEGAL_USER("990301", "非法用户"),
     GENERATE_ERROR("990302", "生成失败"),
     EXPIRE_ERROR("990303", "已过期"),
-    NOT_FOUND_ERROR("990304", "未找到");
+    NOT_FOUND_ERROR("990304", "未找到"),
+
+    // ======= 用户模块错误 =======
+    LOGIN_ERROR("010300", "登录失败");
 
     /**
      * 错误码
