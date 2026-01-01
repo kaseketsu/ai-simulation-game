@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -60,6 +62,9 @@ public class TokenServiceImpl implements TokenService {
     @Value("${spring.security.black-list-expiration}")
     private long blackListExpiration;
 
+    @Value("${spring.jwt.access-token-prefix}")
+    private String accessTokenPrefix;
+
     /**
      * 根据用户信息生成 token
      *
@@ -77,6 +82,11 @@ public class TokenServiceImpl implements TokenService {
             String key = String.format("%s:%s", refreshTokenPrefix, jti);
             String value = String.format("%s:%s", userDetails.getUsername(), System.currentTimeMillis());
             redisManager.addValue(key, value, accessTokenExpire, TimeUnit.MILLISECONDS);
+            // 建立 userAccount -> jti 集合映射, 存入 accessToken 和 refreshToken，后续借此踢下线
+            Map<String, Object> accountMapping = new HashMap<>();
+            accountMapping.put(refreshTokenPrefix, jti);
+            accountMapping.put(accessToken, jwtManager.extractJti(accessToken));
+            redisManager.addMultiHash(userDetails.getUserAccount(), accountMapping);
             // 封装响应并返回
             JwtResponse jwtResponse = new JwtResponse();
             jwtResponse.setAccessToken(accessToken);
@@ -106,7 +116,7 @@ public class TokenServiceImpl implements TokenService {
             }
             String jti = jwtManager.extractJti(refreshToken);
             String key = String.format("%s:%s", refreshTokenPrefix, jti);
-            if (!redisManager.hasKey(key)) {
+            if (redisManager.hasKey(key)) {
                 throw new BusinessException(ErrorCode.EXPIRE_ERROR, "token 已过期");
             }
             // 校验 refreshToken 是否过期
@@ -132,6 +142,11 @@ public class TokenServiceImpl implements TokenService {
             } else {
                 throw new BusinessException(ErrorCode.EXPIRE_ERROR, "token 已过期");
             }
+            // 建立 userAccount -> jti 集合映射, 存入 accessToken 和 refreshToken，后续借此踢下线
+            Map<String, Object> accountMapping = new HashMap<>();
+            accountMapping.put(refreshTokenPrefix, jti);
+            accountMapping.put(accessToken, jwtManager.extractJti(accessToken));
+            redisManager.addMultiHash(userName, accountMapping);
             // 返回响应
             JwtResponse jwtResponse = new JwtResponse();
             jwtResponse.setAccessToken(accessToken);
@@ -147,7 +162,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /**
-     * 将某个 token 失效
+     * 将某个 token 失效（踢下线）
      * @param token 待失效 token
      */
     @Override
@@ -170,14 +185,14 @@ public class TokenServiceImpl implements TokenService {
                 return;
             }
             // 将 token 放入黑名单
-            String key = String.format("%s%s", blackListPrefix, jti);
+            String key = String.format("%s:%s", blackListPrefix, jti);
             expiration = Objects.isNull(expiration) ? blackListExpiration : expiration;
             timeUnit = Objects.isNull(timeUnit) ? TimeUnit.MICROSECONDS : timeUnit;
             String value = String.format("%s:%s", userDetails.getUsername(), System.currentTimeMillis());
             redisManager.addValue(key, value, expiration, timeUnit);
             // 如果是 refreshToken，同时删除 redis 持久化数据
             String refreshKey = String.format("%s:%s", refreshTokenPrefix, jti);
-            if (!redisManager.hasKey(refreshKey)) {
+            if (redisManager.hasKey(refreshKey)) {
                 redisManager.deleteValue(refreshKey);
             }
         } catch (Exception e) {

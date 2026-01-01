@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 /**
  * jwt 响应
+ *
+ * @author F1ower
+ * @since 2026-1-1
  */
 @Data
 public class JwtResponse implements Serializable {

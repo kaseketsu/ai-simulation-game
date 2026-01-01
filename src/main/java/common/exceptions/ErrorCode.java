@@ -27,9 +27,11 @@ public enum ErrorCode {
     GENERATE_ERROR("990302", "生成失败"),
     EXPIRE_ERROR("990303", "已过期"),
     NOT_FOUND_ERROR("990304", "未找到"),
+    TYPE_TRANSFER_ERROR("990101", "类型转换出错"),
 
     // ======= 用户模块错误 =======
-    LOGIN_ERROR("010300", "登录失败");
+    LOGIN_ERROR("010300", "登录失败"),
+    REFRESH_ERROR("010301", "获取新 token 失败");
 
     /**
      * 错误码

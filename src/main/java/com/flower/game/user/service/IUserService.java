@@ -1,8 +1,7 @@
 package com.flower.game.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.flower.game.user.models.dto.JwtResponse;
-import com.flower.game.user.models.dto.UserLoginRequest;
+import com.flower.game.user.models.dto.*;
 import com.flower.game.user.models.entity.User;
 import lombok.NonNull;
 
@@ -23,4 +22,27 @@ public interface IUserService extends IService<User> {
      * @return jwt
      */
     JwtResponse userLogin(@NonNull final UserLoginRequest loginRequest);
+
+    /**
+     * 获取新的 accessToken，并更新 refreshToken
+     *
+     * @param refreshRequest 刷新请求
+     * @return 新的 token
+     */
+    JwtResponse refreshToken(@NonNull final TokenRefreshRequest refreshRequest);
+
+
+    /**
+     * 踢用户下线
+     *
+     * @param userAccount 用户账号
+     */
+    void invalidateToken(@NonNull final String userAccount);
+
+    /**
+     * 用户主动下线
+     *
+     * @param logoutRequest 下线请求
+     */
+    void userLogOut(@NonNull final UserLogOutRequest logoutRequest);
 }
