@@ -22,5 +22,5 @@ public interface IUserService extends IService<User> {
      * @param loginRequest 登录请求
      * @return jwt
      */
-    public JwtResponse userLogin(@NonNull final UserLoginRequest loginRequest);
+    JwtResponse userLogin(@NonNull final UserLoginRequest loginRequest);
 }

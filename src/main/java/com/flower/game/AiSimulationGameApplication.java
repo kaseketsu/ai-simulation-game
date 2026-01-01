@@ -6,13 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.yaml.snakeyaml.Yaml;
 
-@SpringBootApplication(scanBasePackages = {"com.flower.game, common"})
-@MapperScan("com.flower.game.**")
+@SpringBootApplication(scanBasePackages = {"com.flower.game", "common"})
+@MapperScan("com.flower.game.**.dao")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AiSimulationGameApplication {
     public static void main(String[] args) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AGA 启动成功！<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         SpringApplication.run(AiSimulationGameApplication.class, args);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> AGA 启动成功！<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     }
 
 }
