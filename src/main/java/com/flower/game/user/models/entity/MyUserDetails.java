@@ -38,7 +38,7 @@ public class MyUserDetails implements UserDetails {
 
 
     /**
-     * 获取角色集合
+     * 获取角色集合和权限集合
      *
      * @return 权限稽核
      */

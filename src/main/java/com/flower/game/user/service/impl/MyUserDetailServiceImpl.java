@@ -31,10 +31,6 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
 
     private final IRoleService roleService;
 
-    private final IRolePermissionService rolePermissionService;
-
-    private final IPermissionService permissionService;
-
     /**
      * 根据名称加载 userDetail
      *
@@ -68,15 +64,6 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
             List<MyAuthority> authorities = roles.stream().map(r -> {
                 MyAuthority myAuthority = new MyAuthority();
                 myAuthority.setRoleCode(r.getRoleCode());
-                // 获取 permission
-                LambdaQueryWrapper<RolePermission> rpWrapper = new LambdaQueryWrapper<>();
-                rpWrapper.eq(RolePermission::getRoleId, r.getId())
-                        .eq(RolePermission::getIsDeleted, 0);
-                List<RolePermission> rps = rolePermissionService.list(rpWrapper);
-                List<Long> permissionIds = rps.stream().map(RolePermission::getPermissionId).toList();
-                List<Permission> permissions = permissionService.listByIds(permissionIds);
-                List<String> permissionCodes = permissions.stream().map(Permission::getPermissionCode).toList();
-                myAuthority.setPermissionCodes(permissionCodes);
                 return myAuthority;
             }).toList();
             // 返回 userDetails

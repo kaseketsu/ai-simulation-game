@@ -17,11 +17,6 @@ public class MyAuthority implements GrantedAuthority {
     private String roleCode;
 
     /**
-     * 权限
-     */
-    private List<String> permissionCodes;
-
-    /**
      * 获取角色
      *
      * @return 角色
