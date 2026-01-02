@@ -4,9 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.user.models.entity.*;
-import com.flower.game.user.service.IRoleService;
-import com.flower.game.user.service.IUserRoleService;
-import com.flower.game.user.service.IUserService;
+import com.flower.game.user.service.*;
 import common.annotations.ExceptionLog;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
@@ -32,6 +30,10 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
     private final IUserRoleService userRoleService;
 
     private final IRoleService roleService;
+
+    private final IRolePermissionService rolePermissionService;
+
+    private final IPermissionService permissionService;
 
     /**
      * 根据名称加载 userDetail
@@ -65,7 +67,16 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
             // 转换为 authorities
             List<MyAuthority> authorities = roles.stream().map(r -> {
                 MyAuthority myAuthority = new MyAuthority();
-                myAuthority.setRole(r.getRoleName());
+                myAuthority.setRoleCode(r.getRoleCode());
+                // 获取 permission
+                LambdaQueryWrapper<RolePermission> rpWrapper = new LambdaQueryWrapper<>();
+                rpWrapper.eq(RolePermission::getRoleId, r.getId())
+                        .eq(RolePermission::getIsDeleted, 0);
+                List<RolePermission> rps = rolePermissionService.list(rpWrapper);
+                List<Long> permissionIds = rps.stream().map(RolePermission::getPermissionId).toList();
+                List<Permission> permissions = permissionService.listByIds(permissionIds);
+                List<String> permissionCodes = permissions.stream().map(Permission::getPermissionCode).toList();
+                myAuthority.setPermissionCodes(permissionCodes);
                 return myAuthority;
             }).toList();
             // 返回 userDetails
