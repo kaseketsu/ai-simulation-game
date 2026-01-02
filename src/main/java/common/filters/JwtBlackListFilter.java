@@ -24,12 +24,13 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtBlackListFilter extends OncePerRequestFilter {
 
-    private final RedisManager redisManager;
+    @Resource
+    private RedisManager redisManager;
 
-    private final JwtManager jwtManager;
+    @Resource
+    private JwtManager jwtManager;
 
     /**
      * 黑名单过滤

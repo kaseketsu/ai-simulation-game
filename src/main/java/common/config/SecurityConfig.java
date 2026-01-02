@@ -4,11 +4,15 @@ import com.flower.game.user.service.impl.MyUserDetailServiceImpl;
 import common.filters.JwtAuthenticationFilter;
 import common.filters.JwtBlackListFilter;
 import io.jsonwebtoken.JwtBuilder;
+import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,18 +35,21 @@ import java.util.List;
  * spring security 配置类
  */
 @Configuration
-@RequiredArgsConstructor
 @EnableMethodSecurity
+@ConfigurationProperties(prefix = "spring.security")
+@Setter
 public class SecurityConfig {
 
-    @Value("${spring.security.ignore-urls}")
     private List<String> ignoreUrls;
 
-    private final MyUserDetailServiceImpl userDetailsService;
+    @Resource
+    private MyUserDetailServiceImpl userDetailsService;
 
-    private final JwtBlackListFilter jwtBlackListFilter;
+    @Resource
+    private JwtBlackListFilter jwtBlackListFilter;
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Resource
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /**
      * 动态盐值编码器（默认强度 10）
@@ -119,7 +126,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtBlackListFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(jwtBlackListFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(daoAuthenticationProvider());
         return http.build();

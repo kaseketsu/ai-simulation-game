@@ -1,32 +1,27 @@
 package com.flower.game.user.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flower.game.user.dao.UserMapper;
 import com.flower.game.user.models.dto.*;
-import com.flower.game.user.models.entity.MyUserDetails;
 import com.flower.game.user.models.entity.User;
 import com.flower.game.user.service.IUserService;
 import com.flower.game.user.service.TokenService;
 import common.annotations.ExceptionLog;
-import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
+import common.manager.MyAuthenticationManager;
 import common.manager.RedisManager;
 import common.utils.ParamsCheckUtils;
 import common.utils.ThrowUtils;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Resource;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -40,18 +35,19 @@ import java.util.concurrent.TimeUnit;
  * @since 2025-12-28
  */
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    private final AuthenticationManager authenticationManager;
+    @Resource
+    private MyAuthenticationManager myAuthenticationManager;
 
-    private final MyUserDetailServiceImpl myUserDetailService;
+    @Resource
+    private TokenService tokenService;
 
-    private final TokenService tokenService;
+    @Resource
+    private RedisManager redisManager;
 
-    private final RedisManager redisManager;
-
-    private final PasswordEncoder passwordEncoder;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Value("${spring.jwt.access-token-prefix}")
     private String accessTokenPrefix;
@@ -110,11 +106,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 获取用户名和密码，用 AuthenticationManger 进行校验
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAccount, userPassword));
-        // 获取用户信息
-        MyUserDetails myUserDetails = myUserDetailService.loadUserByUsername(userAccount);
+        myAuthenticationManager.authenticate(userAccount, userPassword);
         // 获取并返回 jwt
-        return tokenService.generateToken(myUserDetails);
+        return tokenService.generateToken(userAccount);
     }
 
     /**
@@ -131,7 +125,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 根据 refreshToken 获取新的 token
         return tokenService.refreshToken(refreshToken);
     }
-
 
 
     /**

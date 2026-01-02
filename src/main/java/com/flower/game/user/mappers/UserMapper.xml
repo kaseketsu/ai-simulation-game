@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.flower.game.user.dao.UserMapper">
-
+    <select id="selectByUserAccount" resultType="com.flower.game.user.models.entity.User">
+        SELECT
+        id, user_name, user_account, user_password, create_time, update_time, creator, modifier, is_deleted,
+        user_state
+        FROM ai_simulation_game.user
+        WHERE
+        is_deleted = 0
+        <if test="userAccount != null and userAccount != ''">
+            AND user_account = #{userAccount, jdbcType = VARCHAR}
+        </if>
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.flower.game.user.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.flower.game.user.models.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,11 @@ import com.flower.game.user.models.entity.User;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    /**
+     * 根据账号获取用户详情
+     *
+     * @param userAccount 账号
+     * @return 用户详情
+     */
+    public User selectByUserAccount(@Param("userAccount") String userAccount);
 }

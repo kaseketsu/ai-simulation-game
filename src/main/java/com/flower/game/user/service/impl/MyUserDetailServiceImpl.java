@@ -3,11 +3,13 @@ package com.flower.game.user.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.flower.game.user.dao.UserMapper;
 import com.flower.game.user.models.entity.*;
 import com.flower.game.user.service.*;
 import common.annotations.ExceptionLog;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
+import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,15 +23,17 @@ import java.util.List;
  * 自定义 security userDetailService 实现
  */
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class MyUserDetailServiceImpl implements UserDetailsService {
 
-    private final IUserService userService;
+    @Resource
+    private UserMapper userMapper;
 
-    private final IUserRoleService userRoleService;
+    @Resource
+    private IUserRoleService userRoleService;
 
-    private final IRoleService roleService;
+    @Resource
+    private IRoleService roleService;
 
     /**
      * 根据名称加载 userDetail
@@ -42,10 +46,7 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
     public MyUserDetails loadUserByUsername(@NonNull final String userAccount) throws UsernameNotFoundException {
         try {
             Assert.notBlank(userAccount, "用户账号不能为空");
-            LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
-            userWrapper.eq(User::getUserName, userAccount)
-                    .eq(User::getIsDeleted, 0);
-            User user = userService.getOne(userWrapper);
+            User user = userMapper.selectByUserAccount(userAccount);
             Assert.notNull(user, "用户不存在");
             // 封装用户详情
             MyUserDetails myUserDetails = new MyUserDetails();

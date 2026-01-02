@@ -8,12 +8,11 @@ import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.manager.JwtManager;
 import common.manager.RedisManager;
+import jakarta.annotation.Resource;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,15 +21,17 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class TokenServiceImpl implements TokenService {
 
-    private final JwtManager jwtManager;
+    @Resource
+    private JwtManager jwtManager;
 
-    private final RedisManager redisManager;
+    @Resource
+    private RedisManager redisManager;
 
-    private final UserDetailsService userDetailsService;
+    @Resource
+    private MyUserDetailServiceImpl userDetailsService;
 
     /**
      * 刷新 token 前缀
@@ -68,12 +69,14 @@ public class TokenServiceImpl implements TokenService {
     /**
      * 根据用户信息生成 token
      *
-     * @param userDetails 用户详情
+     * @param userAccount 用户账号
      * @return token 响应
      */
     @Override
-    public JwtResponse generateToken(@NonNull final MyUserDetails userDetails) {
+    public JwtResponse generateToken(@NonNull final String userAccount) {
         try {
+            // 获得用户详情
+            MyUserDetails userDetails = userDetailsService.loadUserByUsername(userAccount);
             // 生成 token
             String accessToken = jwtManager.generateAccessToken(userDetails);
             String refreshToken = jwtManager.generateRefreshToken(userDetails);
@@ -163,6 +166,7 @@ public class TokenServiceImpl implements TokenService {
 
     /**
      * 将某个 token 失效（踢下线）
+     *
      * @param token 待失效 token
      */
     @Override

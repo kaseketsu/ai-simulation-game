@@ -12,10 +12,10 @@ public interface TokenService {
     /**
      * 生成 access / refresh token
      *
-     * @param userDetails 用户详情
+     * @param userAccount 用户账号
      * @return token 响应
      */
-    JwtResponse generateToken(@NonNull final MyUserDetails userDetails);
+    JwtResponse generateToken(@NonNull final String userAccount);
 
     /**
      * 根据刷新 token 拿 accessToken

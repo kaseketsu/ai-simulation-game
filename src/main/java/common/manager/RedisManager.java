@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.ParamsCheckUtils;
+import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,6 @@ import java.util.concurrent.TimeUnit;
  * @since 2026-1-1
  */
 @Component
-@RequiredArgsConstructor
 public class RedisManager {
 
     @Value("${spring.security.black-list-prefix}")
@@ -32,7 +32,8 @@ public class RedisManager {
     /**
      * k - v 存储
      */
-    private final RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 添加 redis 键值
