@@ -2,6 +2,7 @@ package com.flower.game.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flower.game.user.dao.UserMapper;
 import com.flower.game.user.models.dto.*;
@@ -13,14 +14,19 @@ import common.annotations.ExceptionLog;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.manager.RedisManager;
+import common.utils.ParamsCheckUtils;
+import common.utils.ThrowUtils;
+import jakarta.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     private final RedisManager redisManager;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Value("${spring.jwt.access-token-prefix}")
     private String accessTokenPrefix;
 
@@ -53,6 +61,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Value("${spring.jwt.default-kick-out}")
     private Long defaultKickOut;
+
+    /**
+     * 用户注册
+     *
+     * @param userRegisterRequest 注册请求
+     */
+    @Override
+    @ExceptionLog("用户注册失败")
+    public void userRegister(@Nonnull UserRegisterRequest userRegisterRequest) {
+        // 获取参数
+        String userName = userRegisterRequest.getUserName();
+        String userAccount = userRegisterRequest.getUserAccount();
+        String userPassword = userRegisterRequest.getUserPassword();
+        String checkPassword = userRegisterRequest.getCheckPassword();
+        // 查看用户是否存在
+        LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
+        userWrapper.eq(User::getUserAccount, userAccount)
+                .eq(User::getIsDeleted, 0);
+        User user = getOne(userWrapper);
+        ThrowUtils.throwIf(Objects.nonNull(user), ErrorCode.PARAM_ERROR, "用户已存在");
+        // 空值校验
+        ParamsCheckUtils.checkAll(userAccount, userPassword, checkPassword);
+        // 长度检验
+        ParamsCheckUtils.lengthCheck(6, 12, userName, userAccount, userPassword, checkPassword);
+        // 密码校验
+        ThrowUtils.throwIf(!StrUtil.equals(userPassword, checkPassword), ErrorCode.PARAM_ERROR, "密码和确认密码不一致");
+        // 密码加密
+        String encodedPassword = passwordEncoder.encode(userPassword);
+        // 存入数据库
+        User userDO = new User();
+        userDO.setUserName(userName);
+        userDO.setUserAccount(userAccount);
+        userDO.setUserPassword(encodedPassword);
+        boolean saveRes = save(userDO);
+        ThrowUtils.throwIf(!saveRes, ErrorCode.OPERATION_ERROR, "用户注册失败");
+    }
 
     /**
      * 用户登录

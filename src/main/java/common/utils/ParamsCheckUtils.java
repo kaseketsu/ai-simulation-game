@@ -29,6 +29,55 @@ public class ParamsCheckUtils {
     }
 
     /**
+     * 对于参数长度进行校验（批量）
+     *
+     * @param minLength 最短长度
+     * @param maxLength 最长长度
+     * @param objects   餐食
+     */
+    @ExceptionLog("长度错误")
+    public static void lengthCheck(int minLength, int maxLength, String... objects) {
+        checkAll((Object) objects);
+        for (String object : objects) {
+            if (object.length() < minLength || object.length() > maxLength) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "长度应在 %s - %s 之间".formatted(minLength, maxLength));
+            }
+        }
+    }
+
+    /**
+     * 对于参数长度进行校验（批量）
+     *
+     * @param minLength 最短长度
+     * @param objects   餐食
+     */
+    @ExceptionLog("长度错误")
+    public static void minLengthCheck(int minLength, String... objects) {
+        checkAll((Object) objects);
+        for (String object : objects) {
+            if (object.length() < minLength) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "长度应大于 %s".formatted(minLength));
+            }
+        }
+    }
+
+    /**
+     * 对于参数长度进行校验（批量）
+     *
+     * @param maxLength 最大长度
+     * @param objects   餐食
+     */
+    @ExceptionLog("长度错误")
+    public static void maxLengthCheck(int maxLength, String... objects) {
+        checkAll((Object) objects);
+        for (String object : objects) {
+            if (object.length() > maxLength) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "长度应小于 %s".formatted(maxLength));
+            }
+        }
+    }
+
+    /**
      * 判断当前参数是否是指定类型
      *
      * @param object 参数

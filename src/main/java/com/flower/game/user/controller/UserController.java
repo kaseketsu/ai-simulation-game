@@ -9,6 +9,7 @@ import common.baseEntities.BaseResponse;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.ResultUtils;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final IUserService userService;
+
+    /**
+     * 用户注册
+     *
+     * @param userRegisterRequest 用户注册请求
+     * @return jwt
+     */
+    @PostMapping("/register")
+    public BaseResponse<String> userRegister(@Valid @Nonnull @RequestBody UserRegisterRequest userRegisterRequest) {
+        try {
+            Assert.notNull(userRegisterRequest, "请求参数不能为空");
+            userService.userRegister(userRegisterRequest);
+            return ResultUtils.success("注册成功");
+        } catch (Exception ex) {
+            throw new BusinessException(ErrorCode.LOGIN_ERROR);
+        }
+    }
 
     /**
      * 用户登录
