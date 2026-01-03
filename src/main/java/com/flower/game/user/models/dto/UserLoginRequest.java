@@ -21,12 +21,10 @@ public class UserLoginRequest implements Serializable {
     /**
      * 用户账号
      */
-    @NotBlank(message = "用户账号不能为空")
     private String userAccount;
 
     /**
      * 用户密码
      */
-    @NotBlank(message = "用户密码不能为空")
     private String userPassword;
 }

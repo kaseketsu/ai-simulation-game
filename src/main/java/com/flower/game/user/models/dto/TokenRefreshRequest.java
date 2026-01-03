@@ -21,6 +21,5 @@ public class TokenRefreshRequest implements Serializable {
     /**
      * 刷新用 token
      */
-    @NotBlank(message = "token 不能为空")
     private String refreshToken;
 }

@@ -9,7 +9,7 @@ import common.baseEntities.BaseResponse;
 public class ResultUtils {
 
     public static <T> BaseResponse<T> success(T data) {
-        return new BaseResponse<>(data);
+        return new BaseResponse<>(data, ErrorCode.SUCCESS.getCode(), ErrorCode.SUCCESS.getMessage());
     }
 
     public static <T> BaseResponse<T> success(T data, String message) {

@@ -21,6 +21,5 @@ public class InvalidateTokenRequest implements Serializable {
     /**
      * 用户账号
      */
-    @NotBlank(message = "用户账号不能为空")
     private String userAccount;
 }

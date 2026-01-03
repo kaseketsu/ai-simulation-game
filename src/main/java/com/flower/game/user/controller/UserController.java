@@ -39,14 +39,10 @@ public class UserController {
      * @return jwt
      */
     @PostMapping("/register")
-    public BaseResponse<String> userRegister(@Valid @Nonnull @RequestBody UserRegisterRequest userRegisterRequest) {
-        try {
-            Assert.notNull(userRegisterRequest, "请求参数不能为空");
-            userService.userRegister(userRegisterRequest);
-            return ResultUtils.success("注册成功");
-        } catch (Exception ex) {
-            throw new BusinessException(ErrorCode.LOGIN_ERROR);
-        }
+    public BaseResponse<String> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+        Assert.notNull(userRegisterRequest, "请求参数不能为空");
+        userService.userRegister(userRegisterRequest);
+        return ResultUtils.success("注册成功");
     }
 
     /**
@@ -56,14 +52,10 @@ public class UserController {
      * @return jwt
      */
     @PostMapping("/login")
-    public BaseResponse<JwtResponse> userLogin(@Valid @NonNull @RequestBody UserLoginRequest loginRequest) {
-        try {
-            Assert.notNull(loginRequest, "请求参数不能为空");
-            JwtResponse jwtResponse = userService.userLogin(loginRequest);
-            return ResultUtils.success(jwtResponse);
-        } catch (Exception ex) {
-            throw new BusinessException(ErrorCode.LOGIN_ERROR);
-        }
+    public BaseResponse<JwtResponse> userLogin(@RequestBody UserLoginRequest loginRequest) {
+        Assert.notNull(loginRequest, "请求参数不能为空");
+        JwtResponse jwtResponse = userService.userLogin(loginRequest);
+        return ResultUtils.success(jwtResponse);
     }
 
     /**
@@ -73,14 +65,10 @@ public class UserController {
      * @return 新的 token
      */
     @PostMapping("/refresh")
-    public BaseResponse<JwtResponse> refreshToken(@Valid @NonNull @RequestBody TokenRefreshRequest refreshRequest) {
-        try {
-            Assert.notNull(refreshRequest, "请求参数不能为空");
-            JwtResponse jwtResponse = userService.refreshToken(refreshRequest);
-            return ResultUtils.success(jwtResponse);
-        } catch (Exception ex) {
-            throw new BusinessException(ErrorCode.LOGIN_ERROR);
-        }
+    public BaseResponse<JwtResponse> refreshToken(@RequestBody TokenRefreshRequest refreshRequest) {
+        Assert.notNull(refreshRequest, "请求参数不能为空");
+        JwtResponse jwtResponse = userService.refreshToken(refreshRequest);
+        return ResultUtils.success(jwtResponse);
     }
 
     /**
@@ -90,14 +78,10 @@ public class UserController {
      * @return res
      */
     @PostMapping("/logout")
-    public BaseResponse<String> userLogout(@Valid @NonNull @RequestBody UserLogOutRequest logOutRequest) {
-        try {
-            Assert.notNull(logOutRequest, "请求参数不能为空");
-            userService.userLogOut(logOutRequest);
-            return ResultUtils.success("账号已下线");
-        } catch (Exception ex) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR);
-        }
+    public BaseResponse<String> userLogout(@RequestBody UserLogOutRequest logOutRequest) {
+        Assert.notNull(logOutRequest, "请求参数不能为空");
+        userService.userLogOut(logOutRequest);
+        return ResultUtils.success("账号已下线");
     }
 
     /**
@@ -107,13 +91,9 @@ public class UserController {
      * @return res
      */
     @PostMapping("/invalidate")
-    public BaseResponse<String> invalidateToken(@Valid @NonNull @RequestBody InvalidateTokenRequest invalidateTokenRequest) {
-        try {
-            Assert.notNull(invalidateTokenRequest, "请求参数不能为空");
-            userService.invalidateToken(invalidateTokenRequest.getUserAccount());
-            return ResultUtils.success("账号已下线");
-        } catch (Exception ex) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR);
-        }
+    public BaseResponse<String> invalidateToken(@RequestBody InvalidateTokenRequest invalidateTokenRequest) {
+        Assert.notNull(invalidateTokenRequest, "请求参数不能为空");
+        userService.invalidateToken(invalidateTokenRequest.getUserAccount());
+        return ResultUtils.success("账号已下线");
     }
 }

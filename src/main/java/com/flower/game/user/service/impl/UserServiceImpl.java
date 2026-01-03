@@ -71,14 +71,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
+        // 空值校验
+        ParamsCheckUtils.checkAll(userAccount, userPassword, checkPassword);
         // 查看用户是否存在
         LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
         userWrapper.eq(User::getUserAccount, userAccount)
                 .eq(User::getIsDeleted, 0);
-        User user = getOne(userWrapper);
-        ThrowUtils.throwIf(Objects.nonNull(user), ErrorCode.PARAM_ERROR, "用户已存在");
-        // 空值校验
-        ParamsCheckUtils.checkAll(userAccount, userPassword, checkPassword);
+        long count = count(userWrapper);
+        ThrowUtils.throwIf(count > 0, ErrorCode.PARAM_ERROR, "用户已存在");
         // 长度检验
         ParamsCheckUtils.lengthCheck(6, 12, userName, userAccount, userPassword, checkPassword);
         // 密码校验

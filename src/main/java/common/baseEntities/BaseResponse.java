@@ -1,13 +1,13 @@
 package common.baseEntities;
 
 import common.exceptions.ErrorCode;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 基础想要实体类
  * @param <T>
  */
-@Setter
+@Data
 public class BaseResponse<T> {
 
     private T data;
