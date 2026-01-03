@@ -186,3 +186,23 @@ alter table user_role
     add is_deleted int default 0 not null comment '是否删除';
 
 
+-- 创建码表
+
+CREATE TABLE IF NOT EXISTS sys_code
+(
+    id            BIGINT       NOT NULL AUTO_INCREMENT COMMENT '码表 id',
+    code_category VARCHAR(32)  UNIQUE NOT NULL COMMENT '码值类型',
+    code_key      VARCHAR(32)  NOT NULL COMMENT '码值 key',
+    code_value    VARCHAR(32)  NOT NULL COMMENT '码值 value',
+    code_desc     VARCHAR(128) NOT NULL COMMENT '码值描述',
+    create_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator       VARCHAR(16)  NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier      VARCHAR(16)  NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    PRIMARY KEY (id),
+    INDEX idx_code_key (code_key),
+    INDEX idx_code_cat_code_key (code_category, code_key)
+) ENGINE = InnoDB
+  COLLATE = utf8mb4_0900_as_cs COMMENT = '码值表';
+
+

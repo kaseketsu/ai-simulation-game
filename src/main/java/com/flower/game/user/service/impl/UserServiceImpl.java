@@ -3,13 +3,17 @@ package com.flower.game.user.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.flower.game.auth.models.entity.Role;
+import com.flower.game.auth.service.IRoleService;
 import com.flower.game.user.dao.UserMapper;
 import com.flower.game.user.models.dto.*;
 import com.flower.game.user.models.entity.User;
 import com.flower.game.user.models.entity.UserRole;
+import com.flower.game.user.service.IUserRoleService;
 import com.flower.game.user.service.IUserService;
 import com.flower.game.user.service.TokenService;
 import common.annotations.ExceptionLog;
+import common.enums.RoleEnum;
 import common.exceptions.ErrorCode;
 import common.manager.MyAuthenticationManager;
 import common.manager.RedisManager;
@@ -19,7 +23,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Resource;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +53,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private IRoleService roleService;
+
+    @Resource
+    private IUserRoleService userRoleService;
 
     @Value("${spring.jwt.access-token-prefix}")
     private String accessTokenPrefix;
@@ -98,6 +107,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 默认角色是 user
         UserRole userRole = new UserRole();
         userRole.setUserId(userDO.getId());
+        LambdaQueryWrapper<Role> roleWrapper = new LambdaQueryWrapper<>();
+        roleWrapper.eq(Role::getRoleCode, RoleEnum.USER.getRoleCode())
+                .eq(Role::getIsDeleted, 0);
+        Role role = roleService.getOne(roleWrapper);
+        userRole.setRoleId(role.getId());
+        userRoleService.save(userRole);
     }
 
     /**

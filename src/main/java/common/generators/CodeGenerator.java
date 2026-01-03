@@ -38,10 +38,10 @@ public class CodeGenerator {
                 log.error("输出目录创建失败");
             }
             // 设置数据库
-            Scanner sc = new Scanner(System.in);
-            System.out.println("请输入数据库名: ");
-            String dataBase = sc.nextLine();
-            url = "%s/%s".formatted(url, dataBase);
+//            Scanner sc = new Scanner(System.in);
+//            System.out.println("请输入数据库名: ");
+//            String dataBase = sc.nextLine();
+//            url = "%s/%s".formatted(url, dataBase);
             // 设置输出目录
             FastAutoGenerator.create(url, username, String.valueOf(password))
                     .globalConfig((scanner,builder) -> {
