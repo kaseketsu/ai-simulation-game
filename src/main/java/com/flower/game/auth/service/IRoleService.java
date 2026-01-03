@@ -1,6 +1,7 @@
 package com.flower.game.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.flower.game.auth.models.dto.RoleAddRequest;
 import com.flower.game.auth.models.entity.Role;
 
 /**
@@ -13,4 +14,10 @@ import com.flower.game.auth.models.entity.Role;
  */
 public interface IRoleService extends IService<Role> {
 
+    /**
+     * 添加角色
+     *
+     * @param addRequest 添加请求
+     */
+    void addRole(RoleAddRequest addRequest);
 }

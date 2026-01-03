@@ -28,10 +28,17 @@ public enum ErrorCode {
     EXPIRE_ERROR("990303", "已过期"),
     NOT_FOUND_ERROR("990304", "未找到"),
     TYPE_TRANSFER_ERROR("990101", "类型转换出错"),
+    ALREADY_EXIST_ERROR("990203", "已存在"),
 
     // ======= 用户模块错误 =======
     LOGIN_ERROR("010300", "登录失败"),
-    REFRESH_ERROR("010301", "获取新 token 失败");
+    REFRESH_ERROR("010301", "获取新 token 失败"),
+    REGISTER_ERROR("010302", "注册失败"),
+    LOG_OUT_ERROR("010303", "下线失败"),
+    INVALIDATE_ERROR("010304", "下线失败"),
+
+    // ======= 权限模块错误 =======
+    ROLE_ADD_ERROR("020200", "角色添加失败");
 
     /**
      * 错误码

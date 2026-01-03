@@ -34,6 +34,7 @@ public class UserController {
      * @return jwt
      */
     @PostMapping("/register")
+    @ApiErrorCode(ErrorCode.REGISTER_ERROR)
     public BaseResponse<String> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         Assert.notNull(userRegisterRequest, "请求参数不能为空");
         userService.userRegister(userRegisterRequest);
@@ -61,6 +62,7 @@ public class UserController {
      * @return 新的 token
      */
     @PostMapping("/refresh")
+    @ApiErrorCode(ErrorCode.REFRESH_ERROR)
     public BaseResponse<JwtResponse> refreshToken(@RequestBody TokenRefreshRequest refreshRequest) {
         Assert.notNull(refreshRequest, "请求参数不能为空");
         JwtResponse jwtResponse = userService.refreshToken(refreshRequest);
@@ -74,6 +76,7 @@ public class UserController {
      * @return res
      */
     @PostMapping("/logout")
+    @ApiErrorCode(ErrorCode.LOG_OUT_ERROR)
     public BaseResponse<String> userLogout(@RequestBody UserLogOutRequest logOutRequest) {
         Assert.notNull(logOutRequest, "请求参数不能为空");
         userService.userLogOut(logOutRequest);
@@ -87,6 +90,7 @@ public class UserController {
      * @return res
      */
     @PostMapping("/invalidate")
+    @ApiErrorCode(ErrorCode.INVALIDATE_ERROR)
     public BaseResponse<String> invalidateToken(@RequestBody InvalidateTokenRequest invalidateTokenRequest) {
         Assert.notNull(invalidateTokenRequest, "请求参数不能为空");
         userService.invalidateToken(invalidateTokenRequest.getUserAccount());
