@@ -1,7 +1,7 @@
-package com.flower.game.user.dao;
+package com.flower.game.auth.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flower.game.user.models.entity.Permission;
+import com.flower.game.auth.models.entity.Permission;
 
 /**
  * <p>

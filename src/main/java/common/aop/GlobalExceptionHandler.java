@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * 全局异常拦截器
+ * 全局异常拦截器（暂时不需要）
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public <T> BaseResponse<T> handleException(Exception e) {
-        return ResultUtils.fail(ErrorCode.SYSTEM_ERROR, e.getMessage());
+        return ResultUtils.fail(ErrorCode.SYSTEM_ERROR);
     }
 
     /**

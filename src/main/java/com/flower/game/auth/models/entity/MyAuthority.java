@@ -1,9 +1,7 @@
-package com.flower.game.user.models.entity;
+package com.flower.game.auth.models.entity;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.util.List;
 
 /**
  * 自定义 grandAuthority

@@ -2,18 +2,13 @@ package com.flower.game.user.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.flower.game.user.models.dto.*;
-import com.flower.game.user.service.IRoleService;
 import com.flower.game.user.service.IUserService;
-import common.annotations.ExceptionLog;
+import common.annotations.ApiErrorCode;
 import common.baseEntities.BaseResponse;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.ResultUtils;
-import jakarta.annotation.Nonnull;
-import jakarta.validation.Valid;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +47,7 @@ public class UserController {
      * @return jwt
      */
     @PostMapping("/login")
+    @ApiErrorCode(ErrorCode.LOGIN_ERROR)
     public BaseResponse<JwtResponse> userLogin(@RequestBody UserLoginRequest loginRequest) {
         Assert.notNull(loginRequest, "请求参数不能为空");
         JwtResponse jwtResponse = userService.userLogin(loginRequest);

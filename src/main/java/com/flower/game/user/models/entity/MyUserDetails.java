@@ -1,5 +1,6 @@
 package com.flower.game.user.models.entity;
 
+import com.flower.game.auth.models.entity.MyAuthority;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

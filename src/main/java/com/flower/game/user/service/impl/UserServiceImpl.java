@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flower.game.user.dao.UserMapper;
 import com.flower.game.user.models.dto.*;
 import com.flower.game.user.models.entity.User;
+import com.flower.game.user.models.entity.UserRole;
 import com.flower.game.user.service.IUserService;
 import com.flower.game.user.service.TokenService;
 import common.annotations.ExceptionLog;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Objects;
@@ -65,6 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     @ExceptionLog("用户注册失败")
+    @Transactional(rollbackFor = Exception.class)
     public void userRegister(@Nonnull UserRegisterRequest userRegisterRequest) {
         // 获取参数
         String userName = userRegisterRequest.getUserName();
@@ -92,6 +95,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         userDO.setUserPassword(encodedPassword);
         boolean saveRes = save(userDO);
         ThrowUtils.throwIf(!saveRes, ErrorCode.OPERATION_ERROR, "用户注册失败");
+        // 默认角色是 user
+        UserRole userRole = new UserRole();
+        userRole.setUserId(userDO.getId());
     }
 
     /**

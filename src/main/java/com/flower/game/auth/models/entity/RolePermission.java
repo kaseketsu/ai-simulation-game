@@ -1,4 +1,4 @@
-package com.flower.game.user.models.entity;
+package com.flower.game.auth.models.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

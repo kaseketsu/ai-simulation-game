@@ -20,5 +20,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @param userAccount 账号
      * @return 用户详情
      */
-    public User selectByUserAccount(@Param("userAccount") String userAccount);
+    User selectByUserAccount(@Param("userAccount") String userAccount);
 }

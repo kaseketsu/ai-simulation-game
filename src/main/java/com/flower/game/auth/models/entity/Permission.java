@@ -1,4 +1,4 @@
-package com.flower.game.user.models.entity;
+package com.flower.game.auth.models.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 角色表
+ * 权限表
  * </p>
  *
  * @author F1ower
@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("role")
-public class Role implements Serializable {
+@TableName("permission")
+public class Permission implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,16 +35,16 @@ public class Role implements Serializable {
     private Long id;
 
     /**
-     * 0 - 普通用户; 1 - vip; 9 - 管理员
+     * 权限详情
      */
-    @TableField("role_code")
-    private String roleCode;
+    @TableField("permission_name")
+    private String permissionName;
 
     /**
-     * 角色名，普通用户, vip, 管理员
+     * 0 - 查看, 1 - 修改, 2 - 发布, 9 - 全部
      */
-    @TableField("role_name")
-    private String roleName;
+    @TableField("permission_code")
+    private String permissionCode;
 
     /**
      * 创建时间
