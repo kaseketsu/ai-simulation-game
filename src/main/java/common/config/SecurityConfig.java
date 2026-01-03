@@ -122,8 +122,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers(ignoreUrls.toArray(new String[0])).permitAll()
-                                .anyRequest().authenticated()
+                        // 开发阶段方便配置
+                        auth -> auth.anyRequest().permitAll()
+//                        auth -> auth.requestMatchers(ignoreUrls.toArray(new String[0])).permitAll()
+//                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtBlackListFilter, UsernamePasswordAuthenticationFilter.class)

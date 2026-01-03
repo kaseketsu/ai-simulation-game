@@ -20,10 +20,6 @@ public class ResultUtils {
         return new BaseResponse<>(data, code, message);
     }
 
-    public static <T> BaseResponse<T> success(String message) {
-        return new BaseResponse<>(message);
-    }
-
     public static <T> BaseResponse<T> fail(ErrorCode errorCode) {
         return new BaseResponse<>(errorCode);
     }
