@@ -8,7 +8,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.yaml.snakeyaml.Yaml;
 
 @SpringBootApplication(scanBasePackages = {"com.flower.game", "common"}, exclude = FreeMarkerAutoConfiguration.class)
-@MapperScan("com.flower.game.**.dao")
+@MapperScan({"com.flower.game.**.dao", "common.dao"})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AiSimulationGameApplication {
     public static void main(String[] args) {

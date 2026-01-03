@@ -47,6 +47,12 @@ public class Role implements Serializable {
     private String roleName;
 
     /**
+     * 角色描述
+     */
+    @TableField("role_desc")
+    private String roleDesc;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")

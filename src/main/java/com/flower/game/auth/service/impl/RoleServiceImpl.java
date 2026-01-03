@@ -36,6 +36,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         Assert.notNull(addRequest, "请求参数为空");
         String roleName = addRequest.getRoleName();
         String roleCode = addRequest.getRoleCode();
+        String roleDesc = addRequest.getRoleDesc();
         ParamsCheckUtils.checkAll(roleName, roleCode);
         // 查看 roleCode 是否重复
         LambdaQueryWrapper<Role> roleWrapper = new LambdaQueryWrapper<>();
@@ -47,6 +48,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         Role role = new Role();
         role.setRoleName(roleName);
         role.setRoleCode(roleCode);
+        role.setRoleDesc(roleDesc);
         boolean saveRes = this.save(role);
         ThrowUtils.throwIf(!saveRes, ErrorCode.ROLE_ADD_ERROR, "角色保存失败");
     }
