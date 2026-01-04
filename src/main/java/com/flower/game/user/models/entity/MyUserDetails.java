@@ -75,7 +75,7 @@ public class MyUserDetails implements UserDetails {
      */
     @Override
     public boolean isAccountNonExpired() {
-        return this.userState != 0;
+        return this.userState == 0;
     }
 
     /**
@@ -85,7 +85,7 @@ public class MyUserDetails implements UserDetails {
      */
     @Override
     public boolean isAccountNonLocked() {
-        return this.userState != 0;
+        return this.userState == 0;
     }
 
     /**

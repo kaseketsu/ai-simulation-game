@@ -123,7 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     @ExceptionLog("用户登录失败")
-    public JwtResponse userLogin(@NonNull UserLoginRequest loginRequest) {
+    public JwtResponse  userLogin(@NonNull UserLoginRequest loginRequest) {
         // 获取用户名和密码，用 AuthenticationManger 进行校验
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
