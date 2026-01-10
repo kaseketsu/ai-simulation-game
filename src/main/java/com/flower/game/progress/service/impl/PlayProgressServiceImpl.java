@@ -2,7 +2,7 @@ package com.flower.game.progress.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flower.game.progress.dao.PlayProgressMapper;
-import com.flower.game.progress.model.PlayProgress;
+import com.flower.game.progress.model.entity.PlayProgress;
 import com.flower.game.progress.service.IPlayProgressService;
 import org.springframework.stereotype.Service;
 

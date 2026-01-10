@@ -1,7 +1,7 @@
-package com.flower.game.user.service;
+package com.flower.game.progress.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.flower.game.user.models.entity.UserProperties;
+import com.flower.game.progress.model.entity.UserProperties;
 
 /**
  * <p>

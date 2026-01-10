@@ -1,7 +1,7 @@
 package com.flower.game.progress.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flower.game.progress.model.PlayProgress;
+import com.flower.game.progress.model.entity.PlayProgress;
 
 /**
  * <p>

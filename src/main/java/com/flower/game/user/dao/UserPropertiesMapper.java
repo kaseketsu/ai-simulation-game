@@ -1,7 +1,7 @@
 package com.flower.game.user.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flower.game.user.models.entity.UserProperties;
+import com.flower.game.progress.model.entity.UserProperties;
 
 /**
  * <p>
