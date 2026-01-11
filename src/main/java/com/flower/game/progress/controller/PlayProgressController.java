@@ -4,7 +4,12 @@ import com.flower.game.progress.model.dto.PlayProgressQueryRequest;
 import com.flower.game.progress.model.dto.PlayProgressSaveRequest;
 import com.flower.game.progress.model.entity.PlayProgress;
 import com.flower.game.progress.model.vo.PlayProgressVO;
+import com.flower.game.progress.service.IPlayProgressService;
+import common.annotations.ApiErrorCode;
 import common.baseEntities.BaseResponse;
+import common.exceptions.ErrorCode;
+import common.utils.ResultUtils;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/playProgress")
 public class PlayProgressController {
 
+    @Resource
+    private IPlayProgressService playProgressService;
+
     /**
      * 用户游玩进度保存
      *
@@ -29,8 +37,10 @@ public class PlayProgressController {
      * @return 自定义响应
      */
     @PostMapping("save/playProgress")
+    @ApiErrorCode(ErrorCode.SAVE_ERROR)
     public BaseResponse<String> savePlayProgress(@RequestBody PlayProgressSaveRequest request) {
-        return null;
+        playProgressService.savePlayProgress(request);
+        return ResultUtils.success("游戏进度保存成功");
     }
 
     /**
@@ -40,8 +50,10 @@ public class PlayProgressController {
      * @return 游玩进度
      */
     @PostMapping("query/playProgress")
+    @ApiErrorCode(ErrorCode.QUERY_ERROR)
     public BaseResponse<PlayProgressVO> queryPlayProgress(@RequestBody PlayProgressQueryRequest request) {
-        return null;
+        PlayProgressVO playProgressVO = playProgressService.queryPlayProgress(request);
+        return ResultUtils.success(playProgressVO);
     }
 
 }

@@ -5,6 +5,7 @@ import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /**
@@ -24,6 +25,27 @@ public class ParamsCheckUtils {
         for (Object object : objects) {
             if (object == null) {
                 throw new BusinessException(ErrorCode.PARAM_ERROR, "参数不能为空");
+            }
+        }
+    }
+
+    /**
+     * 检查某个 obj 的每个参数
+     *
+     * @param object obj
+     */
+    @ExceptionLog("空值错误")
+    public static void checkObj(Object object) {
+        ThrowUtils.throwIf(Objects.isNull(object), ErrorCode.PARAM_ERROR, "参数不能为空");
+        // 获取每个 field，检查是否为 null
+        Field[] fields = object.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object fValue = field.get(object);
+                ThrowUtils.throwIf(Objects.isNull(fValue), ErrorCode.PARAM_ERROR, "%s 参数为空".formatted(field.getName()));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("获取参数属性失败, 原因是: %s".formatted(e.getMessage()));
             }
         }
     }
