@@ -101,6 +101,12 @@ public class UserProperties implements Serializable {
     private Long userId;
 
     /**
+     * 商店名称
+     */
+    @TableField("store_name")
+    private String storeName;
+
+    /**
      * 是否删除
      */
     @TableLogic

@@ -24,6 +24,11 @@ public class PlayProgressVO implements Serializable {
     private Integer openDays;
 
     /**
+     * 商店名称
+     */
+    private String storeName;
+
+    /**
      * 营业时段
      */
     private LocalTime timePeriod;
