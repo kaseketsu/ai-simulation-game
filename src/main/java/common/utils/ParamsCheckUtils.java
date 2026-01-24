@@ -1,0 +1,129 @@
+package common.utils;
+
+import common.annotations.ExceptionLog;
+import common.exceptions.BusinessException;
+import common.exceptions.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
+
+import java.lang.reflect.Field;
+import java.util.Objects;
+
+/**
+ * 参数判空工具类
+ *
+ * @author F1ower
+ * @since 2026-1-1
+ */
+@Slf4j
+public class ParamsCheckUtils {
+
+    /**
+     * 对于空值进行统一校验和抛异常
+     */
+    @ExceptionLog("空值错误")
+    public static void checkAll(Object... objects) {
+        for (Object object : objects) {
+            if (object == null) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "参数不能为空");
+            }
+        }
+    }
+
+    /**
+     * 检查某个 obj 的每个参数
+     *
+     * @param object obj
+     */
+    @ExceptionLog("空值错误")
+    public static void checkObj(Object object) {
+        ThrowUtils.throwIf(Objects.isNull(object), ErrorCode.PARAM_ERROR, "参数不能为空");
+        // 获取每个 field，检查是否为 null
+        Field[] fields = object.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object fValue = field.get(object);
+                ThrowUtils.throwIf(Objects.isNull(fValue), ErrorCode.PARAM_ERROR, "%s 参数为空".formatted(field.getName()));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("获取参数属性失败, 原因是: %s".formatted(e.getMessage()));
+            }
+        }
+    }
+
+    /**
+     * 对于参数长度进行校验（批量）
+     *
+     * @param minLength 最短长度
+     * @param maxLength 最长长度
+     * @param objects   餐食
+     */
+    @ExceptionLog("长度错误")
+    public static void lengthCheck(int minLength, int maxLength, String... objects) {
+        checkAll((Object) objects);
+        for (String object : objects) {
+            if (object.length() < minLength || object.length() > maxLength) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "长度应在 %s - %s 之间".formatted(minLength, maxLength));
+            }
+        }
+    }
+
+    /**
+     * 对于参数长度进行校验（批量）
+     *
+     * @param minLength 最短长度
+     * @param objects   餐食
+     */
+    @ExceptionLog("长度错误")
+    public static void minLengthCheck(int minLength, String... objects) {
+        checkAll((Object) objects);
+        for (String object : objects) {
+            if (object.length() < minLength) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "长度应大于 %s".formatted(minLength));
+            }
+        }
+    }
+
+    /**
+     * 对于参数长度进行校验（批量）
+     *
+     * @param maxLength 最大长度
+     * @param objects   餐食
+     */
+    @ExceptionLog("长度错误")
+    public static void maxLengthCheck(int maxLength, String... objects) {
+        checkAll((Object) objects);
+        for (String object : objects) {
+            if (object.length() > maxLength) {
+                throw new BusinessException(ErrorCode.PARAM_ERROR, "长度应小于 %s".formatted(maxLength));
+            }
+        }
+    }
+
+    /**
+     * 判断当前参数是否是指定类型
+     *
+     * @param object 参数
+     * @param type   类型
+     * @return Y / N
+     */
+    public static <T> boolean isSpecifiedType(Object object, Class<T> type) {
+        if (Objects.isNull(object) || Objects.isNull(type) || !type.isInstance(object)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 判断当前参数是否是指定类型
+     *
+     * @param object 参数
+     * @param type   类型
+     * @return Y
+     */
+    public static <T> boolean isSpecifiedTypeThrow(Object object, Class<T> type) {
+        if (Objects.isNull(object) || Objects.isNull(type) || !type.isInstance(object)) {
+            throw new BusinessException(ErrorCode.TYPE_TRANSFER_ERROR);
+        }
+        return true;
+    }
+}
