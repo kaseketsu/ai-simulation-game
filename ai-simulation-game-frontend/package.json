@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "openapi2ts": "openapi2ts",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -17,7 +18,9 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+    "axios": "^1.13.2",
     "pinia": "^3.0.4",
+    "tslib": "^2.8.1",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4"
   },

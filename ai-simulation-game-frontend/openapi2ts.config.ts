@@ -1,4 +1,6 @@
+// openapi 基本配置
 export default {
-  schemaPath: 'http://petstore.swagger.io/v2/swagger.json',
-  serversPath: './servers',
+  requestLibPath:"import request from './axios.config'",
+  schemaPath: 'http://localhost:8080/v3/api-docs',
+  serversPath: './src',
 }

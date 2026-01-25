@@ -11,8 +11,7 @@ spring:
       - /register
     # 黑名单 jwt-token 前缀
     black-list-prefix: 'jwt:blacklist:'
-    # refresh-token 前缀
-    refresh-token-prefix: 'jwt:refresh:'
+    black-list-expiration: 86400000
   data:
     redis:
       # 服务器地址（开发中用本机）
@@ -21,6 +20,7 @@ spring:
       password:
       database: 0
       connect-timeout: 1800
+      default-expiration: 1800000
       # 连接池配置
       lettuce:
         pool:
@@ -31,6 +31,10 @@ spring:
     secret: 8e9f2a7d3c1b5e8a9d7b3c8f2e9a7d8c9b7e3a8d9c7b8e9a3d8c7b9e8a3d7c8b9
     access-token-expire: 900000
     refresh-token-expire: 604800000
+    access-token-prefix: 'jwt:access:'
+    # refresh-token 前缀
+    refresh-token-prefix: 'jwt:refresh:'
+    default-kick-out: 30000
     # 请求头前缀
     token-prefix: Bearer
     # 铅球头名称

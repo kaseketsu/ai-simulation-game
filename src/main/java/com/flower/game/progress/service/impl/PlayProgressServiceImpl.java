@@ -36,9 +36,6 @@ import java.util.Objects;
 public class PlayProgressServiceImpl extends ServiceImpl<PlayProgressMapper, PlayProgress> implements IPlayProgressService {
 
     @Resource
-    private IPlayProgressService playProgressService;
-
-    @Resource
     private IUserPropertiesService userPropertiesService;
 
     /**
@@ -61,7 +58,7 @@ public class PlayProgressServiceImpl extends ServiceImpl<PlayProgressMapper, Pla
         BeanUtil.copyProperties(request, playProgress);
         BeanUtil.copyProperties(request, userProperties);
         // 写入 playProgress 表
-        playProgressService.save(playProgress);
+        this.save(playProgress);
         // 写入 userProperties 表
         userPropertiesService.save(userProperties);
     }
@@ -82,7 +79,7 @@ public class PlayProgressServiceImpl extends ServiceImpl<PlayProgressMapper, Pla
         LambdaQueryWrapper<PlayProgress> pgWrapper = new LambdaQueryWrapper<>();
         pgWrapper.eq(PlayProgress::getUserId, userId)
                 .eq(PlayProgress::getIsDeleted, 0);
-        PlayProgress playProgress = playProgressService.getOne(pgWrapper);
+        PlayProgress playProgress = this.getOne(pgWrapper);
         // 如果游玩进度为空，说明是新建用户, 返回 null
         if (Objects.isNull(playProgress)) {
             return null;
