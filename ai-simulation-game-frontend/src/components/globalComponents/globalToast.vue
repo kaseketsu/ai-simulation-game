@@ -9,13 +9,9 @@
     >
       <div
         v-if="visible"
-        class="fixed top-4 z-50 flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-900/95 backdrop-blur-sm border border-zinc-500 shadow-lg"
+        class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-3 justify-center rounded-lg bg-zinc-900/95 backdrop-blur-sm  shadow-lg"
         :class="typeClass"
       >
-        <!-- 图标 -->
-        <span class="text-[0.55rem]">
-          {{ type === 'error' ? '❌' : type === 'success' ? '✅' : '⚠️' }}
-        </span>
         <!-- 提示文字 -->
         <span class="text-[0.45rem] text-white">{{ message }}</span>
       </div>
@@ -24,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 
 // 定义props
 const props = defineProps({
@@ -39,7 +35,7 @@ const props = defineProps({
   type: {
     type: String,
     default: 'error', // error/success/warning
-    validator: (v: string) => ['error', 'success', 'warning'].includes(v),
+    validator: (v: string) => ['error', 'success', 'warning', 'info'].includes(v),
   },
   duration: {
     type: Number,
@@ -57,13 +53,16 @@ watch(
   (val) => {
     switch (val) {
       case 'error':
-        typeClass.value = 'border-l-2 border-pink-500'; // 粉色边框（呼应渐变的pink）
+        typeClass.value = 'border-l-2 border-red-500';
         break;
       case 'success':
         typeClass.value = 'border-l-2 border-green-500';
         break;
       case 'warning':
         typeClass.value = 'border-l-2 border-yellow-500';
+        break;
+      case 'info':
+        typeClass.value = 'border-l-2 border-white-500';
         break;
     }
   },

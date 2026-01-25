@@ -30,22 +30,26 @@
               <input
                 type="text"
                 placeholder="账号 / 邮箱"
+                v-model="formData.userAccount"
                 class="w-25 py-1.5 px-2 bg-zinc-900 border border-zinc-700 rounded text-[0.45rem] text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
               <input
                 type="text"
                 placeholder="密码"
+                v-model="formData.password"
                 class="w-25 py-1.5 px-2 bg-zinc-900 text-white border border-zinc-700 rounded text-[0.45rem] placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
               <input
                 v-show="!isLoginModal"
                 type="text"
+                v-model="formData.passwordConfirm"
                 placeholder="确认密码"
                 class="w-25 py-1.5 px-2 bg-zinc-900 text-white border border-zinc-700 rounded text-[0.45rem] placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
               <button
                 class="w-15 rounded bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 px-2 h-4.5 text-white text-[0.45rem] mt-1.5 hover:opacity-90 transition-all duration-200 ease-in-out hover:cursor-pointer disabled:cursor-not-allowed"
                 :disabled="isLoading"
+                @click="handleRegiOrLogin"
               >
                 {{ isLoginModal ? '登录' : '注册' }}
               </button>
@@ -72,6 +76,8 @@
 <script setup lang="ts">
 // 接收父组件传递变量
 import { reactive, ref } from 'vue'
+import toast from '@/utils/toastUtil.ts'
+import { userLogin } from '@/api/userController.ts'
 
 const props = defineProps({
   visible: {
@@ -84,6 +90,9 @@ const isLoading = ref(false)
 // 接收父组件传递事件
 const emit = defineEmits(['close'])
 const handleClose = () => {
+  formData.userAccount = ''
+  formData.password = ''
+  formData.passwordConfirm = ''
   emit('close')
 }
 // 登录 modal 属性
@@ -97,7 +106,7 @@ const formData = reactive({
 // 切换登录 / 注册
 const toggleLoginModal = () => {
   // 如果当前正在 loading，不允许用户切换
-  if (isLoginModal.value) {
+  if (isLoading.value) {
     return
   }
   isLoginModal.value = !isLoginModal.value
@@ -106,9 +115,28 @@ const toggleLoginModal = () => {
   formData.passwordConfirm = ''
 }
 // 处理注册 / 登录
-const handleRegiOrLogin = () => {
+const handleRegiOrLogin = async () => {
   // 参数校验
   if (!formData.userAccount || !formData.password) {
+    toast.error('账号或密码不能为空')
+  }
+  try {
+    // 调用后端接口
+    if (isLoginModal.value) {
+      // 请求后端登录接口
+      const res = await userLogin({
+        userAccount: formData.userAccount,
+        userPassword: formData.password,
+      })
+      // 判断是否成功
+      if (res.data.code === 990000) {
+        toast.success('登录成功')
+      } else {
+        toast.error('登录失败, 原因是: ' + e.getMessage())
+      }
+    }
+  } catch (e) {
+    toast.error('登录失败, 原因是: ' + e.getMessage())
   }
 }
 </script>

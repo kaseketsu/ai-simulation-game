@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { BASE_URL } from './env'
+import { BASE_URL } from '../env.ts'
 
 // 自定义 axios 实例
 const myAxios = axios.create({

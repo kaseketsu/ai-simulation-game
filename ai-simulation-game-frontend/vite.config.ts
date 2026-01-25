@@ -13,6 +13,12 @@ export default defineConfig({
     tailwindcss(),
     vueDevTools(),
   ],
+  server: {
+    sourcemap: true
+  },
+  build: {
+    sourcemap: false
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
