@@ -1,6 +1,7 @@
 package com.flower.game.user.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flower.game.auth.models.entity.Role;
@@ -20,7 +21,6 @@ import common.utils.ThrowUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Resource;
 import lombok.NonNull;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +44,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 //    @Resource
 //    private RedisManager redisManager;
 
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
     @Resource
     private IRoleService roleService;
@@ -89,7 +87,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 密码校验
         ThrowUtils.throwIf(!StrUtil.equals(userPassword, checkPassword), ErrorCode.PARAM_ERROR, "密码和确认密码不一致");
         // 密码加密
-        String encodedPassword = passwordEncoder.encode(userPassword);
+//        String encodedPassword = passwordEncoder.encode(userPassword);
+        final String salt = "F1ower";
+        String encodedPassword = DigestUtil.sha256Hex(salt + userPassword);
         // 存入数据库
         User userDO = new User();
         userDO.setUserName(userName);

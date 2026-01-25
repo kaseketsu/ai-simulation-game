@@ -119,8 +119,14 @@ const handleRegiOrLogin = async () => {
   // 参数校验
   if (!formData.userAccount || !formData.password) {
     toast.error('账号或密码不能为空')
+    return
   }
+  isLoading.value = true
   try {
+    console.log('请求参数：', {
+      userAccount: formData.userAccount,
+      userPassword: formData.password
+    })
     // 调用后端接口
     if (isLoginModal.value) {
       // 请求后端登录接口
@@ -128,15 +134,16 @@ const handleRegiOrLogin = async () => {
         userAccount: formData.userAccount,
         userPassword: formData.password,
       })
+      console.log(res.data)
       // 判断是否成功
       if (res.data.code === 990000) {
         toast.success('登录成功')
       } else {
-        toast.error('登录失败, 原因是: ' + e.getMessage())
+        toast.error('登录失败, 原因是: ' + e.message)
       }
     }
   } catch (e) {
-    toast.error('登录失败, 原因是: ' + e.getMessage())
+    toast.error('登录失败, 原因是: ' + e.message)
   }
 }
 </script>
