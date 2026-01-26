@@ -8,6 +8,7 @@ import common.baseEntities.BaseResponse;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.ResultUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,9 +50,9 @@ public class UserController {
      */
     @PostMapping("/login")
     @ApiErrorCode(ErrorCode.LOGIN_ERROR)
-    public BaseResponse<String> userLogin(@RequestBody UserLoginRequest loginRequest) {
+    public BaseResponse<String> userLogin(@RequestBody UserLoginRequest loginRequest, HttpServletRequest request) {
         Assert.notNull(loginRequest, "请求参数不能为空");
-        userService.userLogin(loginRequest);
+        userService.userLogin(loginRequest, request);
         return ResultUtils.success("登录成功");
     }
 

@@ -34,14 +34,14 @@
                 class="w-25 py-1.5 px-2 bg-zinc-900 border border-zinc-700 rounded text-[0.45rem] text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
               <input
-                type="text"
+                type="password"
                 placeholder="密码"
                 v-model="formData.password"
                 class="w-25 py-1.5 px-2 bg-zinc-900 text-white border border-zinc-700 rounded text-[0.45rem] placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
               <input
                 v-show="!isLoginModal"
-                type="text"
+                type="password"
                 v-model="formData.passwordConfirm"
                 placeholder="确认密码"
                 class="w-25 py-1.5 px-2 bg-zinc-900 text-white border border-zinc-700 rounded text-[0.45rem] placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
@@ -136,14 +136,17 @@ const handleRegiOrLogin = async () => {
       })
       console.log(res.data)
       // 判断是否成功
-      if (res.data.code === 990000) {
+      if (res.data.code === '990000') {
         toast.success('登录成功')
+        handleClose()
       } else {
-        toast.error('登录失败, 原因是: ' + e.message)
+        toast.error('登录失败')
       }
     }
   } catch (e) {
     toast.error('登录失败, 原因是: ' + e.message)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>

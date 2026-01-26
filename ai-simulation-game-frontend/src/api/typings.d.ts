@@ -5,12 +5,6 @@ declare namespace API {
     message?: string
   }
 
-  type BaseResponseJwtResponse = {
-    data?: JwtResponse
-    code?: string
-    message?: string
-  }
-
   type BaseResponsePlayProgressVO = {
     data?: PlayProgressVO
     code?: string
@@ -44,17 +38,6 @@ declare namespace API {
     timePeriod?: string
     earnedMoney?: number
     storeLevel?: number
-  }
-
-  type InvalidateTokenRequest = {
-    userAccount?: string
-  }
-
-  type JwtResponse = {
-    accessToken?: string
-    accessTokenExpire?: number
-    refreshToken?: string
-    refreshTokenExpire?: number
   }
 
   type PlayProgressQueryRequest = {
@@ -100,17 +83,9 @@ declare namespace API {
     codeValue?: string
   }
 
-  type TokenRefreshRequest = {
-    refreshToken?: string
-  }
-
   type UserLoginRequest = {
     userAccount?: string
     userPassword?: string
-  }
-
-  type UserLogOutRequest = {
-    userAccount?: string
   }
 
   type UserRegisterRequest = {

@@ -5,6 +5,7 @@ import com.flower.game.user.models.dto.*;
 import com.flower.game.user.models.entity.User;
 import io.jsonwebtoken.Jwt;
 import jakarta.annotation.Nonnull;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 
 /**
@@ -31,7 +32,7 @@ public interface IUserService extends IService<User> {
      * @param loginRequest 登录请求
      * @return jwt
      */
-    void userLogin(@NonNull final UserLoginRequest loginRequest);
+    void userLogin(@NonNull final UserLoginRequest loginRequest, HttpServletRequest request);
 
 //    /**
 //     * 获取新的 accessToken，并更新 refreshToken

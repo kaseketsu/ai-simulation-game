@@ -20,9 +20,12 @@ import common.utils.ParamsCheckUtils;
 import common.utils.ThrowUtils;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 /**
  * <p>
@@ -116,7 +119,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     @ExceptionLog("用户登录失败")
-    public void  userLogin(@NonNull UserLoginRequest loginRequest) {
+    public void  userLogin(@NonNull UserLoginRequest loginRequest, HttpServletRequest request) {
         // 获取用户名和密码，用 AuthenticationManger 进行校验
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
@@ -129,8 +132,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
         userWrapper.eq(User::getUserAccount, userAccount)
                 .eq(User::getIsDeleted, 0);
-        long count = this.count(userWrapper);
-        ThrowUtils.throwIf(count <= 0, ErrorCode.NOT_FOUND_ERROR, "账号或密码错误");
+        User user = this.getOne(userWrapper);
+        ThrowUtils.throwIf(Objects.isNull(user), ErrorCode.NOT_FOUND_ERROR, "账号或密码错误");
+        // todo: 开发阶段暂时用 request.getSession
+        request.setAttribute(RoleEnum.USER.getRoleCode(), user);
     }
 
 //    /**
