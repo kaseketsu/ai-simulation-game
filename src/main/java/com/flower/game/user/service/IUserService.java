@@ -25,7 +25,7 @@ public interface IUserService extends IService<User> {
      *
      * @param userRegisterRequest 注册请求
      */
-    void userRegister(@Nonnull final UserRegisterRequest userRegisterRequest);
+    void userRegister(@Nonnull final UserRegisterRequest userRegisterRequest, HttpServletRequest request);
 
     /**
      * 用户登录

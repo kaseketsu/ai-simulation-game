@@ -74,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     @ExceptionLog("用户注册失败")
     @Transactional(rollbackFor = Exception.class)
-    public void userRegister(@Nonnull UserRegisterRequest userRegisterRequest) {
+    public void userRegister(@Nonnull UserRegisterRequest userRegisterRequest, HttpServletRequest request) {
         // 获取参数
         String userName = userRegisterRequest.getUserName();
         String userAccount = userRegisterRequest.getUserAccount();
@@ -111,6 +111,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Role role = roleService.getOne(roleWrapper);
         userRole.setRoleId(role.getId());
         userRoleService.save(userRole);
+        // 放入 requestSession
+        request.getSession().setAttribute(RoleEnum.USER.getRoleCode(), userDO);
     }
 
     /**

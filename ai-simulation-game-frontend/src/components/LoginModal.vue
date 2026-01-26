@@ -77,7 +77,7 @@
 // 接收父组件传递变量
 import { reactive, ref } from 'vue'
 import toast from '@/utils/toastUtil.ts'
-import { userLogin } from '@/api/userController.ts'
+import { userLogin, userRegister } from '@/api/userController.ts'
 
 const props = defineProps({
   visible: {
@@ -123,10 +123,6 @@ const handleRegiOrLogin = async () => {
   }
   isLoading.value = true
   try {
-    console.log('请求参数：', {
-      userAccount: formData.userAccount,
-      userPassword: formData.password
-    })
     // 调用后端接口
     if (isLoginModal.value) {
       // 请求后端登录接口
@@ -134,13 +130,26 @@ const handleRegiOrLogin = async () => {
         userAccount: formData.userAccount,
         userPassword: formData.password,
       })
-      console.log(res.data)
       // 判断是否成功
       if (res.data.code === '990000') {
         toast.success('登录成功')
         handleClose()
       } else {
         toast.error('登录失败')
+      }
+    } else {
+      // 调用后端注册接口
+      const res = await userRegister({
+        userName: formData.userAccount,
+        userAccount: formData.userAccount,
+        userPassword: formData.password,
+        checkPassword: formData.passwordConfirm,
+      })
+      if (res.data.code === '990000') {
+        toast.success('注册成功')
+        handleClose()
+      } else {
+        toast.error('注册失败')
       }
     }
   } catch (e) {

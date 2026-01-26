@@ -2,6 +2,14 @@
 /* eslint-disable */
 import request from '@/request.ts'
 
+/** 此处后端没有提供注释 POST /user/fetchLoginUser */
+export async function fetchLoginUser(options?: { [key: string]: any }) {
+  return request<API.BaseResponseLoginUserVO>('/user/fetchLoginUser', {
+    method: 'POST',
+    ...(options || {}),
+  })
+}
+
 /** 此处后端没有提供注释 POST /user/login */
 export async function userLogin(body: API.UserLoginRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseString>('/user/login', {

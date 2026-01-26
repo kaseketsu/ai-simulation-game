@@ -37,9 +37,9 @@ public class UserController {
      */
     @PostMapping("/register")
     @ApiErrorCode(ErrorCode.REGISTER_ERROR)
-    public BaseResponse<String> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<String> userRegister(@RequestBody UserRegisterRequest userRegisterRequest, HttpServletRequest request) {
         Assert.notNull(userRegisterRequest, "请求参数不能为空");
-        userService.userRegister(userRegisterRequest);
+        userService.userRegister(userRegisterRequest, request);
         return ResultUtils.success("注册成功");
     }
 

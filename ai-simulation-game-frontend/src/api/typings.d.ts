@@ -5,6 +5,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseLoginUserVO = {
+    data?: LoginUserVO
+    code?: string
+    message?: string
+  }
+
   type BaseResponsePlayProgressVO = {
     data?: PlayProgressVO
     code?: string
@@ -38,6 +44,13 @@ declare namespace API {
     timePeriod?: string
     earnedMoney?: number
     storeLevel?: number
+  }
+
+  type LoginUserVO = {
+    userName?: string
+    userAccount?: string
+    userAvatar?: string
+    userState?: number
   }
 
   type PlayProgressQueryRequest = {
