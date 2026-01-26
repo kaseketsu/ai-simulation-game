@@ -53,6 +53,12 @@ public class User implements Serializable {
     private String userPassword;
 
     /**
+     * 用户头像
+     */
+    @TableField("user_avatar")
+    private String userAvatar;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")

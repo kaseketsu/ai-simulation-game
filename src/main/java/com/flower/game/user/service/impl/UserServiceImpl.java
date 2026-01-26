@@ -1,5 +1,6 @@
 package com.flower.game.user.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -11,6 +12,7 @@ import com.flower.game.user.models.dto.UserLoginRequest;
 import com.flower.game.user.models.dto.UserRegisterRequest;
 import com.flower.game.user.models.entity.User;
 import com.flower.game.user.models.entity.UserRole;
+import com.flower.game.user.models.vo.LoginUserVO;
 import com.flower.game.user.service.IUserRoleService;
 import com.flower.game.user.service.IUserService;
 import common.annotations.ExceptionLog;
@@ -22,6 +24,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
+import org.springframework.beans.factory.parsing.BeanEntry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,8 +94,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         ThrowUtils.throwIf(!StrUtil.equals(userPassword, checkPassword), ErrorCode.PARAM_ERROR, "密码和确认密码不一致");
         // 密码加密
 //        String encodedPassword = passwordEncoder.encode(userPassword);
-        final String salt = "F1ower";
-        String encodedPassword = DigestUtil.sha256Hex(salt + userPassword);
+        String encodedPassword = fetchEncryptedPassWord(userPassword);
         // 存入数据库
         User userDO = new User();
         userDO.setUserName(userName);
@@ -119,7 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Override
     @ExceptionLog("用户登录失败")
-    public void  userLogin(@NonNull UserLoginRequest loginRequest, HttpServletRequest request) {
+    public void userLogin(@NonNull UserLoginRequest loginRequest, HttpServletRequest request) {
         // 获取用户名和密码，用 AuthenticationManger 进行校验
         String userAccount = loginRequest.getUserAccount();
         String userPassword = loginRequest.getUserPassword();
@@ -134,8 +136,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .eq(User::getIsDeleted, 0);
         User user = this.getOne(userWrapper);
         ThrowUtils.throwIf(Objects.isNull(user), ErrorCode.NOT_FOUND_ERROR, "账号或密码错误");
+        // 校验密码
+        String encryptedPassWord = fetchEncryptedPassWord(userPassword);
+        ThrowUtils.throwIf(!encryptedPassWord.equals(user.getUserPassword()), ErrorCode.AUTHORIZE_ERROR, "账号或密码错误");
         // todo: 开发阶段暂时用 request.getSession
-        request.setAttribute(RoleEnum.USER.getRoleCode(), user);
+        request.getSession().setAttribute(RoleEnum.USER.getRoleCode(), user);
+    }
+
+    /**
+     * 获取登录用户信息
+     *
+     * @return 登录用户信息
+     */
+    @Override
+    @ExceptionLog("获取登录用户信息失败")
+    public LoginUserVO fetchLoginUser(HttpServletRequest request) {
+        //从 session 拿登录信息
+        User user = (User) request.getSession().getAttribute(RoleEnum.USER.getRoleCode());
+        // 转为 loginUserVO
+        LoginUserVO loginUserVO = new LoginUserVO();
+        BeanUtil.copyProperties(user, loginUserVO);
+        return loginUserVO;
+    }
+
+    /**
+     * 获取加密后的密码
+     *
+     * @param userPassword 用户密码
+     * @return 加密密码
+     */
+    private String fetchEncryptedPassWord(String userPassword) {
+        final String salt = "F1ower";
+        return DigestUtil.sha256Hex(salt + userPassword);
     }
 
 //    /**

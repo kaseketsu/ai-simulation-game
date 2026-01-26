@@ -3,6 +3,7 @@ package com.flower.game.user.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.flower.game.user.models.dto.*;
 import com.flower.game.user.models.entity.User;
+import com.flower.game.user.models.vo.LoginUserVO;
 import io.jsonwebtoken.Jwt;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +34,13 @@ public interface IUserService extends IService<User> {
      * @return jwt
      */
     void userLogin(@NonNull final UserLoginRequest loginRequest, HttpServletRequest request);
+
+    /**
+     * 获取登录用户信息
+     *
+     * @return 登录用户信息
+     */
+    LoginUserVO fetchLoginUser(HttpServletRequest request);
 
 //    /**
 //     * 获取新的 accessToken，并更新 refreshToken

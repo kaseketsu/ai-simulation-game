@@ -2,6 +2,7 @@ package com.flower.game.user.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.flower.game.user.models.dto.*;
+import com.flower.game.user.models.vo.LoginUserVO;
 import com.flower.game.user.service.IUserService;
 import common.annotations.ApiErrorCode;
 import common.baseEntities.BaseResponse;
@@ -54,6 +55,17 @@ public class UserController {
         Assert.notNull(loginRequest, "请求参数不能为空");
         userService.userLogin(loginRequest, request);
         return ResultUtils.success("登录成功");
+    }
+
+    /**
+     * 获取登录用户信息
+     * @return 登录用户 vo
+     */
+    @PostMapping("/fetchLoginUser")
+    @ApiErrorCode(ErrorCode.LOGIN_ERROR)
+    public BaseResponse<LoginUserVO> fetchLoginUser(HttpServletRequest request) {
+        LoginUserVO loginUserVO = userService.fetchLoginUser(request);
+        return ResultUtils.success(loginUserVO);
     }
 
 //    /**
