@@ -2,7 +2,7 @@
   <!-- 导航栏 -->
   <nav class="relative">
     <!-- 顶部区域 -->
-    <div class="absolute right-2">
+    <div class="absolute right-1/10">
       <span
         v-if="!isLogin"
         class="text-white/80 font-medium text-[0.6rem] tracking-widest hover:text-white/100 cursor-pointer"
@@ -32,10 +32,10 @@ const handleOpen = () => {
   visible.value = true
 }
 // 关闭弹窗
-const close = () => {
+const close = async () => {
   visible.value = false
   // 关闭弹窗后再获取一次用户信息
-  userLoginStore.fetchUserDetail()
+  await userLoginStore.fetchUserDetail()
   changeLogStatus()
 }
 // 用户登录态

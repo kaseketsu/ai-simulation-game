@@ -33,12 +33,14 @@
                 v-model="formData.userAccount"
                 class="w-25 py-1.5 px-2 bg-zinc-900 border border-zinc-700 rounded text-[0.45rem] text-white placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
+              <!-- 密码输入框 + 眼睛按钮（核心新增） -->
               <input
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 placeholder="密码"
                 v-model="formData.password"
-                class="w-25 py-1.5 px-2 bg-zinc-900 text-white border border-zinc-700 rounded text-[0.45rem] placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
+                class="w-25 py-1.5 px-2 pr-7 bg-zinc-900 text-white border border-zinc-700 rounded text-[0.45rem] placeholder:text-zinc-500 focus:outline-none focus:border-blue-500 transition-colors duration-200 ease-in-out h-4.5"
               />
+              <!-- 眼睛按钮：定位到输入框右侧 -->
               <input
                 v-show="!isLoginModal"
                 type="password"
@@ -85,6 +87,8 @@ const props = defineProps({
     default: false,
   },
 })
+// 是否展示密码
+const showPassword = ref(false)
 // 是否加载中
 const isLoading = ref(false)
 // 接收父组件传递事件
@@ -110,6 +114,10 @@ const toggleLoginModal = () => {
     return
   }
   isLoginModal.value = !isLoginModal.value
+  clearModal()
+}
+// 清空输入框数据
+const clearModal = () => {
   formData.userAccount = ''
   formData.password = ''
   formData.passwordConfirm = ''
@@ -150,6 +158,7 @@ const handleRegiOrLogin = async () => {
         handleClose()
       } else {
         toast.error('注册失败')
+        clearModal()
       }
     }
   } catch (e) {
