@@ -67,11 +67,11 @@ public class GameEntranceService {
         // 新建游玩进度和用户属性
         PlayProgress initPlayProgress = new PlayProgress();
         BeanUtil.copyProperties(initRequest, initPlayProgress);
-        playProgress.setOpenDays(1);
+        initPlayProgress.setOpenDays(1);
         // 设置起始时间为 9:00
-        playProgress.setTimePeriod(LocalTime.of(9, 0));
-        playProgress.setEarnedMoney(1000L);
-        playProgress.setStoreLevel(1);
+        initPlayProgress.setTimePeriod(LocalTime.of(9, 0));
+        initPlayProgress.setEarnedMoney(1000L);
+        initPlayProgress.setStoreLevel(1);
         UserProperties userProperties = new UserProperties();
         BeanUtil.copyProperties(initRequest, userProperties);
         // 添加入数据库

@@ -12,6 +12,11 @@ import lombok.Data;
 public class LoginUserVO {
 
     /**
+     * 用户 id
+     */
+    Long userId;
+
+    /**
      * 用户名
      */
     private String userName;
@@ -26,6 +31,10 @@ public class LoginUserVO {
      */
     private String userAvatar;
 
+    /**
+     * 用户角色
+     */
+    private String userRole;
 
     /**
      * 用户状态, 0 - 正常, 1 - 禁用, 2 - 冻结

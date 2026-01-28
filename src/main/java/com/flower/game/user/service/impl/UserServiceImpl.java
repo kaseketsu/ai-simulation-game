@@ -157,6 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = (User) request.getSession().getAttribute(RoleEnum.USER.getRoleCode());
         // 转为 loginUserVO
         LoginUserVO loginUserVO = new LoginUserVO();
+        loginUserVO.setUserId(user.getId());
         BeanUtil.copyProperties(user, loginUserVO);
         return loginUserVO;
     }
