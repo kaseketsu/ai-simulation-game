@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.Objects;
-
+import cn.hutool.json.JSONUtil;
 /**
  * 游戏初始化业务类
  *
@@ -70,6 +70,7 @@ public class GameEntranceService {
         initPlayProgress.setOpenDays(1);
         // 设置起始时间为 9:00
         initPlayProgress.setTimePeriod(LocalTime.of(9, 0));
+        log.info("游戏初始化游玩进度: {}", JSONUtil.toJsonPrettyStr(initPlayProgress));
         initPlayProgress.setEarnedMoney(1000L);
         initPlayProgress.setStoreLevel(1);
         UserProperties userProperties = new UserProperties();

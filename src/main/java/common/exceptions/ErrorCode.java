@@ -44,7 +44,10 @@ public enum ErrorCode {
     ROLE_ADD_ERROR("020200", "角色添加失败"),
 
     // ======= 游戏入口模块错误 =======
-    GAME_INIT_ERROR("030300", "游戏初始化失败");
+    GAME_INIT_ERROR("030300", "游戏初始化失败"),
+
+    // ======= 游戏角色模块错误 =======
+    CHARACTER_LEVEL_UP_ERROR("040300", "角色等级升级失败");
 
     /**
      * 错误码
