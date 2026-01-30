@@ -230,3 +230,90 @@ CREATE TABLE `spiritual_materials_base`
   COLLATE = utf8mb4_0900_as_cs COMMENT ='灵材基础信息表';
 
 
+USE ai_simulation_game;
+
+-- 批量插入灵材数据：灵谷(类型0) 10条
+INSERT INTO spiritual_materials_base (name, type, rarity, url, price, store_type, material_grade, created_by, updated_by, is_deleted)
+VALUES
+    ('星纹灵谷', 0, 1, '', 68.00, 0, 1, 'SYS', 'SYS', 0),
+    ('云穗仙谷', 0, 2, '', 298.00, 0, 1, 'SYS', 'SYS', 0),
+    ('翠影灵谷', 0, 2, '', 358.00, 1, 2, 'SYS', 'SYS', 0),
+    ('金脉灵谷', 0, 3, '', 998.00, 1, 2, 'SYS', 'SYS', 0),
+    ('月华灵谷', 0, 3, '', 1298.00, 0, 3, 'SYS', 'SYS', 0),
+    ('玄霜灵谷', 0, 3, '', 1498.00, 1, 3, 'SYS', 'SYS', 0),
+    ('九阳灵谷', 0, 4, '', 5898.00, 0, 2, 'SYS', 'SYS', 0),
+    ('星河仙谷', 0, 4, '', 8998.00, 1, 3, 'SYS', 'SYS', 0),
+    ('青纹灵谷', 0, 1, '', 88.00, 1, 1, 'SYS', 'SYS', 0),
+    ('紫府灵谷', 0, 2, '', 328.00, 0, 2, 'SYS', 'SYS', 0);
+
+-- 批量插入灵材数据：灵蔬(类型1) 10条
+INSERT INTO spiritual_materials_base (name, type, rarity, url, price, store_type, material_grade, created_by, updated_by, is_deleted)
+VALUES
+    ('冰蕊灵蔬', 1, 1, '', 78.00, 1, 1, 'SYS', 'SYS', 0),
+    ('翠纹仙蔬', 1, 2, '', 318.00, 0, 1, 'SYS', 'SYS', 0),
+    ('玄玉灵蔬', 1, 2, '', 368.00, 1, 2, 'SYS', 'SYS', 0),
+    ('炎心灵蔬', 1, 3, '', 1098.00, 0, 2, 'SYS', 'SYS', 0),
+    ('清露灵蔬', 1, 3, '', 1398.00, 1, 3, 'SYS', 'SYS', 0),
+    ('雷纹灵蔬', 1, 3, '', 1598.00, 0, 3, 'SYS', 'SYS', 0),
+    ('瑶池仙蔬', 1, 4, '', 6298.00, 1, 2, 'SYS', 'SYS', 0),
+    ('鸿蒙灵蔬', 1, 4, '', 9598.00, 0, 3, 'SYS', 'SYS', 0),
+    ('青雾灵蔬', 1, 1, '', 98.00, 0, 1, 'SYS', 'SYS', 0),
+    ('幻彩灵蔬', 1, 2, '', 348.00, 1, 2, 'SYS', 'SYS', 0);
+
+-- 批量插入灵材数据：灵肉(类型2) 10条
+INSERT INTO spiritual_materials_base (name, type, rarity, url, price, store_type, material_grade, created_by, updated_by, is_deleted)
+VALUES
+    ('玄兽灵肉', 2, 1, '', 128.00, 0, 1, 'SYS', 'SYS', 0),
+    ('焰虎灵肉', 2, 2, '', 498.00, 1, 1, 'SYS', 'SYS', 0),
+    ('冰熊灵肉', 2, 2, '', 558.00, 0, 2, 'SYS', 'SYS', 0),
+    ('雷蛟灵肉', 2, 3, '', 1898.00, 1, 2, 'SYS', 'SYS', 0),
+    ('金麟灵肉', 2, 3, '', 2298.00, 0, 3, 'SYS', 'SYS', 0),
+    ('风凰灵肉', 2, 3, '', 2598.00, 1, 3, 'SYS', 'SYS', 0),
+    ('麒麟灵肉', 2, 4, '', 8998.00, 0, 2, 'SYS', 'SYS', 0),
+    ('混沌兽肉', 2, 4, '', 15998.00, 1, 3, 'SYS', 'SYS', 0),
+    ('黑狼灵肉', 2, 1, '', 148.00, 1, 1, 'SYS', 'SYS', 0),
+    ('碧蟒灵肉', 2, 2, '', 528.00, 0, 2, 'SYS', 'SYS', 0);
+
+-- 批量插入灵材数据：灵茶(类型3) 10条
+INSERT INTO spiritual_materials_base (name, type, rarity, url, price, store_type, material_grade, created_by, updated_by, is_deleted)
+VALUES
+    ('青雾灵茶', 3, 1, '', 98.00, 1, 1, 'SYS', 'SYS', 0),
+    ('白露仙茶', 3, 2, '', 398.00, 0, 1, 'SYS', 'SYS', 0),
+    ('紫韵灵茶', 3, 2, '', 458.00, 1, 2, 'SYS', 'SYS', 0),
+    ('金芽灵茶', 3, 3, '', 1298.00, 0, 2, 'SYS', 'SYS', 0),
+    ('月华仙茶', 3, 3, '', 1698.00, 1, 3, 'SYS', 'SYS', 0),
+    ('鸿蒙灵茶', 3, 3, '', 1898.00, 0, 3, 'SYS', 'SYS', 0),
+    ('瑶池仙茶', 3, 4, '', 6998.00, 1, 2, 'SYS', 'SYS', 0),
+    ('天道灵茶', 3, 4, '', 12998.00, 0, 3, 'SYS', 'SYS', 0),
+    ('绿萼灵茶', 3, 1, '', 118.00, 0, 1, 'SYS', 'SYS', 0),
+    ('丹枫灵茶', 3, 2, '', 428.00, 1, 2, 'SYS', 'SYS', 0);
+
+-- 批量插入灵材数据：灵果(类型4) 10条
+INSERT INTO spiritual_materials_base (name, type, rarity, url, price, store_type, material_grade, created_by, updated_by, is_deleted)
+VALUES
+    ('青纹灵果', 4, 1, '', 118.00, 0, 1, 'SYS', 'SYS', 0),
+    ('红珠灵果', 4, 2, '', 458.00, 1, 1, 'SYS', 'SYS', 0),
+    ('冰魄灵果', 4, 2, '', 518.00, 0, 2, 'SYS', 'SYS', 0),
+    ('火麟灵果', 4, 3, '', 1698.00, 1, 2, 'SYS', 'SYS', 0),
+    ('紫府仙果', 4, 3, '', 2098.00, 0, 3, 'SYS', 'SYS', 0),
+    ('星纹灵果', 4, 3, '', 2398.00, 1, 3, 'SYS', 'SYS', 0),
+    ('九转仙果', 4, 4, '', 7998.00, 0, 2, 'SYS', 'SYS', 0),
+    ('混沌圣果', 4, 4, '', 14998.00, 1, 3, 'SYS', 'SYS', 0),
+    ('黄玉灵果', 4, 1, '', 138.00, 1, 1, 'SYS', 'SYS', 0),
+    ('碧霞灵果', 4, 2, '', 488.00, 0, 2, 'SYS', 'SYS', 0);
+
+-- 批量插入灵材数据：灵酿(类型5) 10条
+INSERT INTO spiritual_materials_base (name, type, rarity, url, price, store_type, material_grade, created_by, updated_by, is_deleted)
+VALUES
+    ('清露灵酿', 5, 1, '', 158.00, 1, 1, 'SYS', 'SYS', 0),
+    ('桂花仙酿', 5, 2, '', 598.00, 0, 1, 'SYS', 'SYS', 0),
+    ('青梅灵酿', 5, 2, '', 658.00, 1, 2, 'SYS', 'SYS', 0),
+    ('赤霞仙酿', 5, 3, '', 2198.00, 0, 2, 'SYS', 'SYS', 0),
+    ('玉液灵酿', 5, 3, '', 2598.00, 1, 3, 'SYS', 'SYS', 0),
+    ('琼浆仙酿', 5, 3, '', 2898.00, 0, 3, 'SYS', 'SYS', 0),
+    ('龙涎灵酿', 5, 4, '', 9998.00, 1, 2, 'SYS', 'SYS', 0),
+    ('鸿蒙圣酿', 5, 4, '', 18998.00, 0, 3, 'SYS', 'SYS', 0),
+    ('竹叶灵酿', 5, 1, '', 178.00, 0, 1, 'SYS', 'SYS', 0),
+    ('玫瑰灵酿', 5, 2, '', 628.00, 1, 2, 'SYS', 'SYS', 0);
+
+
