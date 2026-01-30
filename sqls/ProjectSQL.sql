@@ -190,19 +190,43 @@ alter table user_role
 
 CREATE TABLE IF NOT EXISTS sys_code
 (
-    id            BIGINT       NOT NULL AUTO_INCREMENT COMMENT '码表 id',
-    code_category VARCHAR(32)  UNIQUE NOT NULL COMMENT '码值类型',
-    code_key      VARCHAR(32)  NOT NULL COMMENT '码值 key',
-    code_value    VARCHAR(32)  NOT NULL COMMENT '码值 value',
-    code_desc     VARCHAR(128) NOT NULL COMMENT '码值描述',
-    create_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    creator       VARCHAR(16)  NOT NULL DEFAULT 'SYS' COMMENT '创建人',
-    modifier      VARCHAR(16)  NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    id            BIGINT             NOT NULL AUTO_INCREMENT COMMENT '码表 id',
+    code_category VARCHAR(32) UNIQUE NOT NULL COMMENT '码值类型',
+    code_key      VARCHAR(32)        NOT NULL COMMENT '码值 key',
+    code_value    VARCHAR(32)        NOT NULL COMMENT '码值 value',
+    code_desc     VARCHAR(128)       NOT NULL COMMENT '码值描述',
+    create_time   DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time   DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    creator       VARCHAR(16)        NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    modifier      VARCHAR(16)        NOT NULL DEFAULT 'SYS' COMMENT '修改人',
     PRIMARY KEY (id),
     INDEX idx_code_key (code_key),
     INDEX idx_code_cat_code_key (code_category, code_key)
 ) ENGINE = InnoDB
   COLLATE = utf8mb4_0900_as_cs COMMENT = '码值表';
+
+-- 灵材基础库表
+CREATE TABLE `spiritual_materials_base`
+(
+    `id`             INT                                    NOT NULL AUTO_INCREMENT COMMENT '灵材唯一ID',
+    `name`           VARCHAR(64) COLLATE utf8mb4_0900_as_cs NOT NULL COMMENT '灵材名称',
+    `type`           INT                                    NOT NULL COMMENT '灵材类型 (0 - 灵谷, 1 - 灵蔬, 2 - 灵肉, 3 - 灵茶, 4 - 灵果, 5 - 灵酿)',
+    `rarity`         INT                                    NOT NULL COMMENT '稀有度 (1 - 普通, 2 - 稀有, 3 - 传世, 4 - 至尊)',
+    `url`            VARCHAR(128)                           NOT NULL COMMENT '灵材图片 url',
+    `price`          DECIMAL(10, 2)                         NOT NULL COMMENT '灵材价格',
+    `store_type`     INT                                    NOT NULL COMMENT '店铺类型 (0 - 固本类, 1 - 淬灵类)',
+    `material_grade` INT                                    NOT NULL COMMENT '灵材品阶 (1 - 低阶, 2 - 中阶, 3 - 高阶)',
+    `created_at`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `created_by`     VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    `updated_by`     VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    `is_deleted`     INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
+    PRIMARY KEY (`id`),
+    KEY idx_name (`name`),
+    KEY idx_rarity(`rarity`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_as_cs COMMENT ='灵材基础信息表';
 
 

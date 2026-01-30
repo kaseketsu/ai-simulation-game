@@ -47,7 +47,10 @@ public enum ErrorCode {
     GAME_INIT_ERROR("030300", "游戏初始化失败"),
 
     // ======= 游戏角色模块错误 =======
-    CHARACTER_LEVEL_UP_ERROR("040300", "角色等级升级失败");
+    CHARACTER_LEVEL_UP_ERROR("040300", "角色等级升级失败"),
+
+    // ======= 基础库模块错误 =======
+    BASE_LIB_ERROR("050300", "基础库操作失败");
 
     /**
      * 错误码
