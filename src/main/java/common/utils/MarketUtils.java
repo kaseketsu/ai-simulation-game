@@ -72,8 +72,9 @@ public class MarketUtils {
      * @return 波动比例
      */
     public static double fetchWavePriceRatio() {
-        // 0.1 - 0.9
-        return Math.max(RANDOM.nextDouble() + 0.1, 0.9);
+        // -0.3 - 0.7
+        // 0.7 - 1.7 倍价格
+        return RANDOM.nextDouble() - 0.3;
     }
 
     /**

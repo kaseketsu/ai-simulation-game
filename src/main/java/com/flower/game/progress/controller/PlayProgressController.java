@@ -55,5 +55,5 @@ public class PlayProgressController {
         PlayProgressVO playProgressVO = playProgressService.queryPlayProgress(request);
         return ResultUtils.success(playProgressVO);
     }
-
+    
 }

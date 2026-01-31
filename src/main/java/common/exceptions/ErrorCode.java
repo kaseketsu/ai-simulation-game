@@ -50,7 +50,10 @@ public enum ErrorCode {
     CHARACTER_LEVEL_UP_ERROR("040300", "角色等级升级失败"),
 
     // ======= 基础库模块错误 =======
-    BASE_LIB_ERROR("050300", "基础库操作失败");
+    BASE_LIB_ERROR("050300", "基础库操作失败"),
+
+    // ======= 游戏进度模块错误 =======
+    COMPUTE_ERROR("060300", "数据计算错误");
 
     /**
      * 错误码
