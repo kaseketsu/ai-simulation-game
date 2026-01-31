@@ -3,6 +3,7 @@ package com.flower.game.base.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.flower.game.base.dao.SpiritualMaterialsBaseMapper;
 import com.flower.game.base.models.entity.SpiritualMaterialsBase;
+import com.flower.game.base.service.ISpiritualMaterialsBaseService;
 import org.springframework.stereotype.Service;
 
 /**
