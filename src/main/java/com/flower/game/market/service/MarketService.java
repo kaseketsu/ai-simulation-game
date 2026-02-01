@@ -13,5 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MarketService {
 
-
+    /**
+     * 根据前端传递 type 不同，展示不同 type 的所有，分页
+     */
 }
