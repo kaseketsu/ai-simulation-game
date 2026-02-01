@@ -11,7 +11,6 @@ import common.exceptions.ErrorCode;
 import common.manager.RedisManager;
 import common.page.PageVO;
 import common.utils.PageUtils;
-import common.utils.ThreadLocalUtils;
 import common.utils.ThrowUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +47,7 @@ public class MarketService {
     public PageVO<SpiritualMaterialAllCat> fetchSpiritualMaterial(SpiritualMaterialBaseRequest request) {
         // 校验参数
         int type = request.getType();
-        ThrowUtils.throwIf(type < 0 || type > 5, ErrorCode.PARAM_ERROR, "灵材种类不存在");
+        ThrowUtils.throwIf(type < 0 || type > 6, ErrorCode.PARAM_ERROR, "灵材种类不存在");
         // 从 redis 拿对应种类的灵材
         String key = redisKey + type;
         boolean isExist = redisManager.hasKey(key);

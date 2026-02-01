@@ -8,6 +8,7 @@ import com.flower.game.base.models.entity.SpiritualMaterialsBase;
 import com.flower.game.base.service.ISpiritualMaterialsBaseService;
 import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
 import common.annotations.ExceptionLog;
+import common.constant.MarketConstant;
 import common.manager.RedisManager;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -92,8 +93,10 @@ public class SpiritualMaterialLocalService {
         log.info("灵材按 groupId 分类成功!");
         // 按照 type 进行分类
         log.info("灵材开始按 type 分类....");
+        List<SpiritualMaterialAllCat> all = new ArrayList<>();
         Map<Integer, List<SpiritualMaterialAllCat>> catListByType = new HashMap<>();
         for (SpiritualMaterialAllCat cat: catByGroupId.values()) {
+            all.add(cat);
             int type = cat.getType();
             catListByType.computeIfAbsent(type, k -> new ArrayList<>()).add(cat);
         }
@@ -109,6 +112,12 @@ public class SpiritualMaterialLocalService {
             String js = JSONUtil.toJsonStr(spiritualMaterialForRedis);
             redisManager.addValueWithOutExpiration(catKey, js);
         }
+        // 所有灵材
+        SpiritualMaterialForRedis spiritualMaterialForRedis = new SpiritualMaterialForRedis();
+        spiritualMaterialForRedis.setCatList(all);
+        String js = JSONUtil.toJsonStr(spiritualMaterialForRedis);
+        String catKey = redisKey + MarketConstant.ALL_TYPE;
+        redisManager.addValue(catKey, js);
         log.info("灵材存入 redis 成功!");
         log.info("灵材初始化成功!");
     }
