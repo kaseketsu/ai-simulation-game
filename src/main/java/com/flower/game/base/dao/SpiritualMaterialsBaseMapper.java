@@ -9,7 +9,7 @@ import com.flower.game.base.models.entity.SpiritualMaterialsBase;
  * </p>
  *
  * @author F1ower
- * @since 2026-01-30
+ * @since 2026-02-01
  */
 public interface SpiritualMaterialsBaseMapper extends BaseMapper<SpiritualMaterialsBase> {
 

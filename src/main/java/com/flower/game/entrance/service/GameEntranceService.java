@@ -29,7 +29,7 @@ import cn.hutool.json.JSONUtil;
 public class GameEntranceService {
 
     @Resource
-    private IPlayProgressService playProgressService;
+    private IPlayProgressService IPlayProgressService;
 
     @Resource
     private IUserPropertiesService userPropertiesService;
@@ -49,7 +49,7 @@ public class GameEntranceService {
         LambdaQueryWrapper<PlayProgress> pqWrapper = new LambdaQueryWrapper<>();
         pqWrapper.eq(PlayProgress::getUserId, initRequest.getUserId())
                 .eq(PlayProgress::getIsDeleted, 0);
-        PlayProgress playProgress = playProgressService.getOne(pqWrapper);
+        PlayProgress playProgress = IPlayProgressService.getOne(pqWrapper);
         boolean played = Objects.nonNull(playProgress);
         // 删除游玩进度
         if (played) {
@@ -61,7 +61,7 @@ public class GameEntranceService {
             if (Objects.nonNull(userProperties)) {
                 userProperties.setIsDeleted(1);
             }
-            playProgressService.updateById(playProgress);
+            IPlayProgressService.updateById(playProgress);
             userPropertiesService.updateById(userProperties);
         }
         // 新建游玩进度和用户属性
@@ -76,7 +76,7 @@ public class GameEntranceService {
         UserProperties userProperties = new UserProperties();
         BeanUtil.copyProperties(initRequest, userProperties);
         // 添加入数据库
-        playProgressService.save(initPlayProgress);
+        IPlayProgressService.save(initPlayProgress);
         userPropertiesService.save(userProperties);
         // 返回初始化信息
         GameInitStateVO gameInitStateVO = new GameInitStateVO();

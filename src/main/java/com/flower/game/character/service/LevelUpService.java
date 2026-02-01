@@ -39,7 +39,7 @@ public class LevelUpService {
     private IUserPropertiesService userPropertiesService;
 
     @Resource
-    private IPlayProgressService playProgressService;
+    private IPlayProgressService IPlayProgressService;
 
     /**
      * 等级升级
@@ -68,12 +68,12 @@ public class LevelUpService {
         final LambdaQueryWrapper<PlayProgress> userProgressQueryWrapper = new LambdaQueryWrapper<>();
         userProgressQueryWrapper.eq(PlayProgress::getUserId, levelUpRequest.getUserId())
                 .eq(PlayProgress::getIsDeleted, 0);
-        final PlayProgress userProgress = playProgressService.getOne(userProgressQueryWrapper);
+        final PlayProgress userProgress = IPlayProgressService.getOne(userProgressQueryWrapper);
         log.info("用户游玩进度升级前: {}", JSONUtil.toJsonPrettyStr(userProgress));
         ThrowUtils.throwIf(Objects.isNull(userProgress), ErrorCode.NOT_FOUND_ERROR, "用户游玩进度不存在");
         // 更新游玩进度等级
         userProgress.setStoreLevel(userProgress.getStoreLevel() + levelUpRequest.getLevelUpCount());
         log.info("用户游玩进度升级后: {}", JSONUtil.toJsonPrettyStr(userProgress));
-        playProgressService.updateById(userProgress);
+        IPlayProgressService.updateById(userProgress);
     }
 }

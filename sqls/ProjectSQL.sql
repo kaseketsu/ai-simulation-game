@@ -317,3 +317,159 @@ VALUES
     ('玫瑰灵酿', 5, 2, '', 628.00, 1, 2, 'SYS', 'SYS', 0);
 
 
+
+
+
+
+
+
+
+
+USE ai_simulation_game;
+
+-- 批量插入灵材基础数据（总计96条，6个type各16条）
+INSERT INTO spiritual_materials_base (name, type, url, store_type, group_id, price, rarity, is_deleted)
+VALUES
+-- ======================================
+-- type0：灵谷（4组：1-4，16条）| 固本(0)：1/3组，淬灵(1)：2/4组
+-- ======================================
+-- 1组：青禾灵谷系列（group1，固本0）
+('青禾灵谷', 0, '/spiritual/type0/group1/rarity1.png', 0, 1, 1000, 1, 0),
+('碧纹青禾谷', 0, '/spiritual/type0/group1/rarity2.png', 0, 1, 2000, 2, 0),
+('紫金灵谷穗', 0, '/spiritual/type0/group1/rarity3.png', 0, 1, 5000, 3, 0),
+('鸿蒙灵谷种', 0, '/spiritual/type0/group1/rarity4.png', 0, 1, 15000, 4, 0),
+-- 2组：黄云粟米系列（group2，淬灵1）
+('黄云粟米', 0, '/spiritual/type0/group2/rarity1.png', 1, 2, 900, 1, 0),
+('玄光粟米粒', 0, '/spiritual/type0/group2/rarity2.png', 1, 2, 1800, 2, 0),
+('九转粟米芯', 0, '/spiritual/type0/group2/rarity3.png', 1, 2, 4500, 3, 0),
+('混沌粟米魂', 0, '/spiritual/type0/group2/rarity4.png', 1, 2, 13500, 4, 0),
+-- 3组：赤焰麦种系列（group3，固本0）
+('赤焰麦种', 0, '/spiritual/type0/group3/rarity1.png', 0, 3, 1100, 1, 0),
+('炎纹赤焰麦', 0, '/spiritual/type0/group3/rarity2.png', 0, 3, 2200, 2, 0),
+('焚天麦芒穗', 0, '/spiritual/type0/group3/rarity3.png', 0, 3, 5500, 3, 0),
+('洪荒麦源种', 0, '/spiritual/type0/group3/rarity4.png', 0, 3, 16500, 4, 0),
+-- 4组：寒水稻禾系列（group4，淬灵1）
+('寒水稻禾', 0, '/spiritual/type0/group4/rarity1.png', 1, 4, 950, 1, 0),
+('冰魄稻禾茎', 0, '/spiritual/type0/group4/rarity2.png', 1, 4, 1900, 2, 0),
+('凝霜稻禾穗', 0, '/spiritual/type0/group4/rarity3.png', 1, 4, 4750, 3, 0),
+('极寒稻禾根', 0, '/spiritual/type0/group4/rarity4.png', 1, 4, 14250, 4, 0),
+
+-- ======================================
+-- type1：灵蔬（4组：5-8，16条）| 固本(0)：5/7组，淬灵(1)：6/8组
+-- ======================================
+-- 5组：清芯灵菜系列（group5，固本0）
+('清芯灵菜', 1, '/spiritual/type1/group5/rarity1.png', 0, 5, 1000, 1, 0),
+('翠纹清芯菜', 1, '/spiritual/type1/group5/rarity2.png', 0, 5, 2000, 2, 0),
+('紫韵清芯茎', 1, '/spiritual/type1/group5/rarity3.png', 0, 5, 5000, 3, 0),
+('先天清芯芯', 1, '/spiritual/type1/group5/rarity4.png', 0, 5, 15000, 4, 0),
+-- 6组：赤焰灵芹系列（group6，淬灵1）
+('赤焰灵芹', 1, '/spiritual/type1/group6/rarity1.png', 1, 6, 900, 1, 0),
+('火纹灵芹段', 1, '/spiritual/type1/group6/rarity2.png', 1, 6, 1800, 2, 0),
+('焚天灵芹芯', 1, '/spiritual/type1/group6/rarity3.png', 1, 6, 4500, 3, 0),
+('混沌灵芹魂', 1, '/spiritual/type1/group6/rarity4.png', 1, 6, 13500, 4, 0),
+-- 7组：碧叶灵苔系列（group7，固本0）
+('碧叶灵苔', 1, '/spiritual/type1/group7/rarity1.png', 0, 7, 1100, 1, 0),
+('玉纹碧叶苔', 1, '/spiritual/type1/group7/rarity2.png', 0, 7, 2200, 2, 0),
+('仙韵碧叶芯', 1, '/spiritual/type1/group7/rarity3.png', 0, 7, 5500, 3, 0),
+('鸿蒙碧叶种', 1, '/spiritual/type1/group7/rarity4.png', 0, 7, 16500, 4, 0),
+-- 8组：墨影灵菇系列（group8，淬灵1）
+('墨影灵菇', 1, '/spiritual/type1/group8/rarity1.png', 1, 8, 950, 1, 0),
+('玄纹墨影菇', 1, '/spiritual/type1/group8/rarity2.png', 1, 8, 1900, 2, 0),
+('暗影墨影伞', 1, '/spiritual/type1/group8/rarity3.png', 1, 8, 4750, 3, 0),
+('幽冥墨影菌', 1, '/spiritual/type1/group8/rarity4.png', 1, 8, 14250, 4, 0),
+
+-- ======================================
+-- type2：灵肉（4组：9-12，16条）| 固本(0)：9/11组，淬灵(1)：10/12组
+-- ======================================
+-- 9组：青纹兽脯系列（group9，固本0）
+('青纹兽脯', 2, '/spiritual/type2/group9/rarity1.png', 0, 9, 1000, 1, 0),
+('碧鳞兽腱肉', 2, '/spiritual/type2/group9/rarity2.png', 0, 9, 2000, 2, 0),
+('紫金兽心肉', 2, '/spiritual/type2/group9/rarity3.png', 0, 9, 5000, 3, 0),
+('鸿蒙兽本源肉',2,'/spiritual/type2/group9/rarity4.png',0,9,15000,4,0),
+-- 10组：赤火狐肉系列（group10，淬灵1）
+('赤火狐肉', 2, '/spiritual/type2/group10/rarity1.png',1,10,900,1,0),
+('炎焰狐腿肉', 2, '/spiritual/type2/group10/rarity2.png',1,10,1800,2,0),
+('焚天狐心髓', 2, '/spiritual/type2/group10/rarity3.png',1,10,4500,3,0),
+('混沌狐灵肉', 2, '/spiritual/type2/group10/rarity4.png',1,10,13500,4,0),
+-- 11组：玄水蛟肉系列（group11，固本0）
+('玄水蛟肉', 2, '/spiritual/type2/group11/rarity1.png',0,11,1100,1,0),
+('冰魄蛟腱肉', 2, '/spiritual/type2/group11/rarity2.png',0,11,2200,2,0),
+('凝霜蛟丹肉', 2, '/spiritual/type2/group11/rarity3.png',0,11,5500,3,0),
+('洪荒蛟本源肉',2,'/spiritual/type2/group11/rarity4.png',0,11,16500,4,0),
+-- 12组：墨影豹肉系列（group12，淬灵1）
+('墨影豹肉', 2, '/spiritual/type2/group12/rarity1.png',1,12,950,1,0),
+('暗影豹里脊', 2, '/spiritual/type2/group12/rarity2.png',1,12,1900,2,0),
+('幽冥豹骨血', 2, '/spiritual/type2/group12/rarity3.png',1,12,4750,3,0),
+('炼狱豹魂肉', 2, '/spiritual/type2/group12/rarity4.png',1,12,14250,4,0),
+
+-- ======================================
+-- type3：灵茶（4组：13-16，16条）| 固本(0)：13/15组，淬灵(1)：14/16组
+-- ======================================
+-- 13组：清露灵茶系列（group13，固本0）
+('清露灵茶', 3, '/spiritual/type3/group13/rarity1.png',0,13,1000,1,0),
+('碧芽灵茶尖', 3, '/spiritual/type3/group13/rarity2.png',0,13,2000,2,0),
+('紫金灵茶膏', 3, '/spiritual/type3/group13/rarity3.png',0,13,5000,3,0),
+('先天灵茶蕊', 3, '/spiritual/type3/group13/rarity4.png',0,13,15000,4,0),
+-- 14组：赤焰灵茶系列（group14，淬灵1）
+('赤焰灵茶', 3, '/spiritual/type3/group14/rarity1.png',1,14,900,1,0),
+('炎叶灵茶片', 3, '/spiritual/type3/group14/rarity2.png',1,14,1800,2,0),
+('焚天灵茶粉', 3, '/spiritual/type3/group14/rarity3.png',1,14,4500,3,0),
+('混沌灵茶魂', 3, '/spiritual/type3/group14/rarity4.png',1,14,13500,4,0),
+-- 15组：玄霜灵茶系列（group15，固本0）
+('玄霜灵茶', 3, '/spiritual/type3/group15/rarity1.png',0,15,1100,1,0),
+('冰芽灵茶芯', 3, '/spiritual/type3/group15/rarity2.png',0,15,2200,2,0),
+('仙韵灵茶液', 3, '/spiritual/type3/group15/rarity3.png',0,15,5500,3,0),
+('鸿蒙灵茶种', 3, '/spiritual/type3/group15/rarity4.png',0,15,16500,4,0),
+-- 16组：墨韵灵茶系列（group16，淬灵1）
+('墨韵灵茶', 3, '/spiritual/type3/group16/rarity1.png',1,16,950,1,0),
+('玄纹灵茶叶', 3, '/spiritual/type3/group16/rarity2.png',1,16,1900,2,0),
+('暗影灵茶膏', 3, '/spiritual/type3/group16/rarity3.png',1,16,4750,3,0),
+('幽冥灵茶精', 3, '/spiritual/type3/group16/rarity4.png',1,16,14250,4,0),
+
+-- ======================================
+-- type4：灵果（4组：17-20，16条）| 固本(0)：17/19组，淬灵(1)：18/20组
+-- ======================================
+-- 17组：青韵灵果系列（group17，固本0）
+('青韵灵果', 4, '/spiritual/type4/group17/rarity1.png',0,17,1000,1,0),
+('碧纹灵果实', 4, '/spiritual/type4/group17/rarity2.png',0,17,2000,2,0),
+('紫金灵果核', 4, '/spiritual/type4/group17/rarity3.png',0,17,5000,3,0),
+('先天灵果魂', 4, '/spiritual/type4/group17/rarity4.png',0,17,15000,4,0),
+-- 18组：赤火灵桃系列（group18，淬灵1）
+('赤火灵桃', 4, '/spiritual/type4/group18/rarity1.png',1,18,900,1,0),
+('炎纹灵桃肉', 4, '/spiritual/type4/group18/rarity2.png',1,18,1800,2,0),
+('焚天灵桃核', 4, '/spiritual/type4/group18/rarity3.png',1,18,4500,3,0),
+('混沌灵桃源', 4, '/spiritual/type4/group18/rarity4.png',1,18,13500,4,0),
+-- 19组：冰魄灵梨系列（group19，固本0）
+('冰魄灵梨', 4, '/spiritual/type4/group19/rarity1.png',0,19,1100,1,0),
+('凝霜灵梨肉', 4, '/spiritual/type4/group19/rarity2.png',0,19,2200,2,0),
+('极寒灵梨核', 4, '/spiritual/type4/group19/rarity3.png',0,19,5500,3,0),
+('洪荒灵梨种', 4, '/spiritual/type4/group19/rarity4.png',0,19,16500,4,0),
+-- 20组：墨影灵柿系列（group20，淬灵1）
+('墨影灵柿', 4, '/spiritual/type4/group20/rarity1.png',1,20,950,1,0),
+('玄纹灵柿肉', 4, '/spiritual/type4/group20/rarity2.png',1,20,1900,2,0),
+('暗影灵柿核', 4, '/spiritual/type4/group20/rarity3.png',1,20,4750,3,0),
+('幽冥灵柿精', 4, '/spiritual/type4/group20/rarity4.png',1,20,14250,4,0),
+
+-- ======================================
+-- type5：灵酿（4组：21-24，16条）| 固本(0)：21/23组，淬灵(1)：22/24组
+-- ======================================
+-- 21组：清韵灵酿系列（group21，固本0）
+('清韵灵酿', 5, '/spiritual/type5/group21/rarity1.png',0,21,1000,1,0),
+('碧纹灵酿液', 5, '/spiritual/type5/group21/rarity2.png',0,21,2000,2,0),
+('紫金灵酿浆', 5, '/spiritual/type5/group21/rarity3.png',0,21,5000,3,0),
+('先天灵酿髓', 5, '/spiritual/type5/group21/rarity4.png',0,21,15000,4,0),
+-- 22组：赤火灵酒系列（group22，淬灵1）
+('赤火灵酒', 5, '/spiritual/type5/group22/rarity1.png',1,22,900,1,0),
+('炎焰灵酒浆', 5, '/spiritual/type5/group22/rarity2.png',1,22,1800,2,0),
+('焚天灵酒髓', 5, '/spiritual/type5/group22/rarity3.png',1,22,4500,3,0),
+('混沌灵酒魂', 5, '/spiritual/type5/group22/rarity4.png',1,22,13500,4,0),
+-- 23组：玄霜灵醪系列（group23，固本0）
+('玄霜灵醪', 5, '/spiritual/type5/group23/rarity1.png',0,23,1100,1,0),
+('冰魄灵醪液', 5, '/spiritual/type5/group23/rarity2.png',0,23,2200,2,0),
+('仙韵灵醪浆', 5, '/spiritual/type5/group23/rarity3.png',0,23,5500,3,0),
+('鸿蒙灵醪源', 5, '/spiritual/type5/group23/rarity4.png',0,23,16500,4,0),
+-- 24组：墨韵灵醴系列（group24，淬灵1）
+('墨韵灵醴', 5, '/spiritual/type5/group24/rarity1.png',1,24,950,1,0),
+('玄纹灵醴液', 5, '/spiritual/type5/group24/rarity2.png',1,24,1900,2,0),
+('暗影灵醴浆', 5, '/spiritual/type5/group24/rarity3.png',1,24,4750,3,0),
+('幽冥灵醴精', 5, '/spiritual/type5/group24/rarity4.png',1,24,14250,4,0);

@@ -2,11 +2,11 @@ package com.flower.game.base.service;
 
 import java.util.List;
 
+import com.flower.game.base.models.dto.BaseSpiritualMaterialsAddReq;
+import com.flower.game.base.models.entity.SpiritualMaterialsBase;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.flower.game.base.models.dto.BaseSpritualMaterialsAddReq;
-import com.flower.game.base.models.entity.SpiritualMaterialsBase;
 
 import cn.hutool.core.bean.BeanUtil;
 import common.annotations.ExceptionLog;
@@ -17,7 +17,7 @@ import jakarta.annotation.Resource;
 
 /**
  * 基础库服务
- * 
+ *
  * @author Flower
  * @since 2026-01-30
  */
@@ -33,7 +33,7 @@ public class BaseLibService {
      * @param req 添加请求参数
      */
     @ExceptionLog("添加基础灵材失败")
-    public void addBaseSpiritualMaterials(final BaseSpritualMaterialsAddReq req) {
+    public void addBaseSpiritualMaterials(final BaseSpiritualMaterialsAddReq req) {
         // 校验参数
         ParamsCheckUtils.checkObj(req);
         // 根据 name 查看是否已存在
@@ -53,7 +53,7 @@ public class BaseLibService {
      * @param reqList 添加请求参数列表
      */
     @ExceptionLog("批量添加基础灵材失败")
-    public void batchAddBaseSpiritualMaterials(final List<BaseSpritualMaterialsAddReq> reqList) {
+    public void batchAddBaseSpiritualMaterials(final List<BaseSpiritualMaterialsAddReq> reqList) {
         // 校验参数
         ParamsCheckUtils.checkObj(reqList);
         // 转换为灵材实体列表
@@ -70,7 +70,7 @@ public class BaseLibService {
      * @param req 添加请求参数
      * @return 灵材实体
      */
-    private SpiritualMaterialsBase convertToSpiritualMaterialsBase(BaseSpritualMaterialsAddReq req) {
+    private SpiritualMaterialsBase convertToSpiritualMaterialsBase(BaseSpiritualMaterialsAddReq req) {
         return BeanUtil.copyProperties(req, SpiritualMaterialsBase.class);
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author F1ower
- * @since 2026-01-30
+ * @since 2026-02-01
  */
 @Service
 public class SpiritualMaterialsBaseServiceImpl extends ServiceImpl<SpiritualMaterialsBaseMapper, SpiritualMaterialsBase> implements ISpiritualMaterialsBaseService {

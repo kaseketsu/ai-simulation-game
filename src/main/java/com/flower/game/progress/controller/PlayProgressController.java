@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayProgressController {
 
     @Resource
-    private IPlayProgressService playProgressService;
+    private IPlayProgressService IPlayProgressService;
 
     /**
      * 用户游玩进度保存
@@ -39,7 +39,7 @@ public class PlayProgressController {
     @PostMapping("save/playProgress")
     @ApiErrorCode(ErrorCode.SAVE_ERROR)
     public BaseResponse<String> savePlayProgress(@RequestBody PlayProgressSaveRequest request) {
-        playProgressService.savePlayProgress(request);
+        IPlayProgressService.savePlayProgress(request);
         return ResultUtils.success("游戏进度保存成功");
     }
 
@@ -52,7 +52,7 @@ public class PlayProgressController {
     @PostMapping("query/playProgress")
     @ApiErrorCode(ErrorCode.QUERY_ERROR)
     public BaseResponse<PlayProgressVO> queryPlayProgress(@RequestBody PlayProgressQueryRequest request) {
-        PlayProgressVO playProgressVO = playProgressService.queryPlayProgress(request);
+        PlayProgressVO playProgressVO = IPlayProgressService.queryPlayProgress(request);
         return ResultUtils.success(playProgressVO);
     }
     
