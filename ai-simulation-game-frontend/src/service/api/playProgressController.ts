@@ -1,6 +1,21 @@
 // @ts-ignore
 /* eslint-disable */
-import request from "@/request";
+import request from "@/request.ts";
+
+/** 此处后端没有提供注释 POST /playProgress/compute/dailyInfo */
+export async function computeDailyInfo(
+  body: API.DailyInfoComputeRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseString>("/playProgress/compute/dailyInfo", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
 
 /** 此处后端没有提供注释 POST /playProgress/query/playProgress */
 export async function queryPlayProgress(

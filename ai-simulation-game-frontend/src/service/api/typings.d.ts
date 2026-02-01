@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageVOSpiritualMaterialAllCat = {
+    data?: PageVOSpiritualMaterialAllCat;
+    code?: string;
+    message?: string;
+  };
+
   type BaseResponsePlayProgressVO = {
     data?: PlayProgressVO;
     code?: string;
@@ -21,6 +27,20 @@ declare namespace API {
     data?: string;
     code?: string;
     message?: string;
+  };
+
+  type BaseSpiritualMaterialsAddReq = {
+    name?: string;
+    type?: number;
+    rarity?: number;
+    url?: string;
+    price?: number;
+    storeType?: number;
+    materialGrade?: number;
+  };
+
+  type DailyInfoComputeRequest = {
+    openDays?: number;
   };
 
   type GameInitRequest = {
@@ -46,6 +66,14 @@ declare namespace API {
     storeLevel?: number;
   };
 
+  type LevelUpRequest = {
+    userId?: number;
+    levelUpCount?: number;
+    senseUp?: number;
+    speakingSkillUp?: number;
+    cookingSkillUp?: number;
+  };
+
   type LoginUserVO = {
     userId?: number;
     userName?: string;
@@ -53,6 +81,14 @@ declare namespace API {
     userAvatar?: string;
     userRole?: string;
     userState?: number;
+  };
+
+  type PageVOSpiritualMaterialAllCat = {
+    currentPage?: number;
+    pageSize?: number;
+    total?: number;
+    pages?: number;
+    records?: SpiritualMaterialAllCat[];
   };
 
   type PlayProgressQueryRequest = {
@@ -90,6 +126,28 @@ declare namespace API {
     roleName?: string;
     roleCode?: string;
     roleDesc?: string;
+  };
+
+  type SpiritualMaterialAllCat = {
+    type?: number;
+    normalName?: string;
+    normalUrl?: string;
+    normalPrice?: number;
+    rareName?: string;
+    rareUrl?: string;
+    rarePrice?: number;
+    superRareName?: string;
+    superRareUrl?: string;
+    superRarePrice?: number;
+    mythicalName?: string;
+    mythicalUrl?: string;
+    mythicalPrice?: number;
+  };
+
+  type SpiritualMaterialBaseRequest = {
+    currentPage?: number;
+    pageSize?: number;
+    type?: number;
   };
 
   type SysCodeAddRequest = {
