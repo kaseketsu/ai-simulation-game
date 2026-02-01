@@ -30,9 +30,14 @@ public class PageVO<T> implements Serializable {
     private Integer pageSize = 10;
 
     /**
-     * 总页数
+     * 总记录数
      */
     private Long total;
+
+    /**
+     * 总页数
+     */
+    private int pages;
 
     /**
      * 记录列表

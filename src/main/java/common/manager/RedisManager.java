@@ -59,6 +59,17 @@ public class RedisManager {
     }
 
     /**
+     * 添加 redis 键值（无过期时间）
+     *
+     * @param key   键
+     * @param value 值
+     */
+    public void addValueWithOutExpiration(@NonNull final String key, @NonNull final Object value) {
+        ParamsCheckUtils.checkAll(key, value);
+        redisTemplate.opsForValue().setIfAbsent(key, value);
+    }
+
+    /**
      * 添加 hash 键值对到 redis
      *
      * @param key      键
@@ -239,6 +250,14 @@ public class RedisManager {
         return redisTemplate.hasKey("%s:%s".formatted(blacklistPrefix, jti));
     }
 
+    /**
+     * 移除指定 k - v
+     *
+     * @param key 键
+     */
+    public void removeKey(String key) {
+        redisTemplate.delete(key);
+    }
 
 }
 

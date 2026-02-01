@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.base.models.entity.SpiritualMaterialAllCat;
 import com.flower.game.base.models.entity.SpiritualMaterialsBase;
 import com.flower.game.base.service.ISpiritualMaterialsBaseService;
+import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
 import common.annotations.ExceptionLog;
 import common.manager.RedisManager;
 import jakarta.annotation.PostConstruct;
@@ -102,8 +103,11 @@ public class SpiritualMaterialLocalService {
         for (Map.Entry<Integer, List<SpiritualMaterialAllCat>> entry: catListByType.entrySet()) {
             Integer type = entry.getKey();
             String catKey = redisKey + type;
-            String js = JSONUtil.toJsonStr(entry.getValue());
-            redisManager.addValue(catKey, js);
+            List<SpiritualMaterialAllCat> cats = entry.getValue();
+            SpiritualMaterialForRedis spiritualMaterialForRedis = new SpiritualMaterialForRedis();
+            spiritualMaterialForRedis.setCatList(cats);
+            String js = JSONUtil.toJsonStr(spiritualMaterialForRedis);
+            redisManager.addValueWithOutExpiration(catKey, js);
         }
         log.info("灵材存入 redis 成功!");
         log.info("灵材初始化成功!");

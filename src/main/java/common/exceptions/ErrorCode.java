@@ -53,7 +53,10 @@ public enum ErrorCode {
     BASE_LIB_ERROR("050300", "基础库操作失败"),
 
     // ======= 游戏进度模块错误 =======
-    COMPUTE_ERROR("060300", "数据计算错误");
+    COMPUTE_ERROR("060300", "数据计算错误"),
+
+    // ======= 灵材采买模块错误 =======
+    SPIRITUAL_MATERIAL_QUERY_ERROR("070300", "灵材查询失败");
 
     /**
      * 错误码

@@ -1,9 +1,11 @@
 package com.flower.game.progress.controller;
 
+import com.flower.game.progress.model.dto.DailyInfoComputeRequest;
 import com.flower.game.progress.model.dto.PlayProgressQueryRequest;
 import com.flower.game.progress.model.dto.PlayProgressSaveRequest;
 import com.flower.game.progress.model.entity.PlayProgress;
 import com.flower.game.progress.model.vo.PlayProgressVO;
+import com.flower.game.progress.service.GamePlayProgressService;
 import com.flower.game.progress.service.IPlayProgressService;
 import common.annotations.ApiErrorCode;
 import common.baseEntities.BaseResponse;
@@ -30,6 +32,9 @@ public class PlayProgressController {
     @Resource
     private IPlayProgressService IPlayProgressService;
 
+    @Resource
+    private GamePlayProgressService gamePlayProgressService;
+
     /**
      * 用户游玩进度保存
      *
@@ -55,5 +60,19 @@ public class PlayProgressController {
         PlayProgressVO playProgressVO = IPlayProgressService.queryPlayProgress(request);
         return ResultUtils.success(playProgressVO);
     }
-    
+
+
+    /**
+     * 计算当天的必要信息
+     *
+     * @param request 计算请求
+     * @return 自定义响应
+     */
+    @PostMapping("compute/dailyInfo")
+    @ApiErrorCode(ErrorCode.COMPUTE_ERROR)
+    public BaseResponse<String> computeDailyInfo(@RequestBody DailyInfoComputeRequest request) {
+        // 计算当亲的信息
+        gamePlayProgressService.computeDailyRatio(request);
+        return ResultUtils.success("每日信息计算完毕");
+    }
 }

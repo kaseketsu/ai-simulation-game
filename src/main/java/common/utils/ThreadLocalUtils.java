@@ -38,6 +38,32 @@ public class ThreadLocalUtils {
     }
 
     /**
+     * 移除 map 中的指定 key
+     *
+     * @param key 键
+     */
+    public static void removeKey(String key) {
+        if (isEmpty() || StrUtil.isBlank(key)) {
+            return;
+        }
+        Map<Object, Object> map = threadLocal.get();
+        map.remove(key);
+    }
+
+    /**
+     * 判断 key 是否存在
+     *
+     * @param key 键
+     * @return 是否存在
+     */
+    public static boolean hasKey(String key) {
+        if (isEmpty() || StrUtil.isBlank(key)) {
+            return false;
+        }
+        return get(key) != null;
+    }
+
+    /**
      * 添加键值对
      *
      * @param key   键
