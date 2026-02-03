@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.flower.game.base.models.entity.SpiritualMaterialAllCat;
 import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
 import com.flower.game.entrance.service.SpiritualMaterialLocalService;
+import com.flower.game.market.models.dto.BuyMaterialRequest;
 import com.flower.game.market.models.dto.SpiritualMaterialBaseRequest;
 import common.annotations.ExceptionLog;
 import common.constant.MarketConstant;
@@ -44,7 +45,7 @@ public class MarketService {
      * @param request 基础灵材查询请求
      */
     @ExceptionLog("获取基础灵材失败")
-    public PageVO<SpiritualMaterialAllCat> fetchSpiritualMaterial(SpiritualMaterialBaseRequest request) {
+    public PageVO<SpiritualMaterialAllCat> fetchSpiritualMaterial(final SpiritualMaterialBaseRequest request) {
         // 校验参数
         int type = request.getType();
         ThrowUtils.throwIf(type < 0 || type > 6, ErrorCode.PARAM_ERROR, "灵材种类不存在");
@@ -63,7 +64,7 @@ public class MarketService {
         // 获取 List
         List<SpiritualMaterialAllCat> catList = materialForRedis.getCatList();
         // 获取当日波动
-        Double ratio =  redisManager.getValue(MarketConstant.WAVE_RATIO, Double.class);
+        Double ratio = redisManager.getValue(MarketConstant.WAVE_RATIO, Double.class);
         double waveRatios = ratio == null ? 1.0 : ratio;
         for (SpiritualMaterialAllCat c : catList) {
             // 重新计算价格
@@ -72,5 +73,14 @@ public class MarketService {
         }
         // 分页
         return PageUtils.buildPageVO(catList, request.getPageSize(), request.getCurrentPage());
+    }
+
+    /**
+     * 购买灵材
+     *
+     * @param request 购买请求
+     */
+    public void buyMaterial(final BuyMaterialRequest request) {
+
     }
 }
