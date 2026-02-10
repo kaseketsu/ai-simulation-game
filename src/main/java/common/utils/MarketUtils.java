@@ -65,7 +65,7 @@ public class MarketUtils {
     /**
      * 神话每点眼光提升
      */
-    private static final Integer MYTHICAL_UP = 10;
+    private static final Integer MYTHICAL_UP = 1;
 
     /**
      * 根据眼光计算比例
@@ -112,15 +112,20 @@ public class MarketUtils {
         // random 随机 [0 - 1000]
         int[] res = new int[4];
         for (int i = 0; i < total; i++) {
+            // 换一个 seed
+            RANDOM.setSeed(RANDOM.nextInt(114514));
             int number = RANDOM.nextInt(1001);
+            log.info("弟 {} 次，数值为: {}", i, number);
             if (number < intervals[0]) {
                 res[0]++;
             } else if (number < intervals[1]) {
                 res[1]++;
             } else if (number < intervals[2]) {
                 res[2]++;
+                log.info("弟 {} 次，数值为: {}，获得超稀有！", i, number);
             } else {
                 res[3]++;
+                log.info("弟 {} 次，数值为: {}，获得神话！", i, number);
             }
         }
         return res;
