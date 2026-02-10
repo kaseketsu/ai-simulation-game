@@ -54,6 +54,7 @@ public enum ErrorCode {
 
     // ======= 游戏进度模块错误 =======
     COMPUTE_ERROR("060300", "数据计算错误"),
+    SPIRITUAL_REPO_QUERY_ERROR("060301", "灵材仓库查询失败"),
 
     // ======= 灵材采买模块错误 =======
     SPIRITUAL_MATERIAL_QUERY_ERROR("070300", "灵材查询失败"),

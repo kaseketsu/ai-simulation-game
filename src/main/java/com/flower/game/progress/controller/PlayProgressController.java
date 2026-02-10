@@ -3,14 +3,18 @@ package com.flower.game.progress.controller;
 import com.flower.game.progress.model.dto.DailyInfoComputeRequest;
 import com.flower.game.progress.model.dto.PlayProgressQueryRequest;
 import com.flower.game.progress.model.dto.PlayProgressSaveRequest;
+import com.flower.game.progress.model.dto.SpiritualRepoQueryRequest;
 import com.flower.game.progress.model.entity.PlayProgress;
 import com.flower.game.progress.model.vo.PlayProgressVO;
+import com.flower.game.progress.model.vo.SpiritualRepoInfoVO;
 import com.flower.game.progress.service.GamePlayProgressService;
 import com.flower.game.progress.service.IPlayProgressService;
 import common.annotations.ApiErrorCode;
 import common.baseEntities.BaseResponse;
 import common.exceptions.ErrorCode;
+import common.page.PageVO;
 import common.utils.ResultUtils;
+import common.utils.ThrowUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,5 +78,20 @@ public class PlayProgressController {
         // 计算当亲的信息
         gamePlayProgressService.computeDailyRatio(request);
         return ResultUtils.success("每日信息计算完毕");
+    }
+
+    /**
+     * 查询灵材仓库
+     *
+     * @param queryRequest 查询请求
+     * @return 灵材仓库信息
+     */
+    @PostMapping("list/SpiritualRepo")
+    @ApiErrorCode(ErrorCode.SPIRITUAL_REPO_QUERY_ERROR)
+    public BaseResponse<PageVO<SpiritualRepoInfoVO>> listSpiritualRepoByPage(@RequestBody SpiritualRepoQueryRequest queryRequest) {
+        // 校验参数
+        ThrowUtils.throwIf(queryRequest == null, ErrorCode.PARAM_ERROR, "灵材仓库查询请求不能为空");
+        PageVO<SpiritualRepoInfoVO> spiritualRepoInfoVOPageVO = gamePlayProgressService.listSpiritualRepoByPage(queryRequest);
+        return ResultUtils.success(spiritualRepoInfoVOPageVO);
     }
 }
