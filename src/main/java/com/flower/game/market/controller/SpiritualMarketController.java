@@ -2,6 +2,7 @@ package com.flower.game.market.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.flower.game.base.models.entity.SpiritualMaterialAllCat;
+import com.flower.game.market.models.dto.BuyMaterialRequest;
 import com.flower.game.market.models.dto.SpiritualMaterialBaseRequest;
 import com.flower.game.market.service.MarketService;
 import common.annotations.ApiErrorCode;
@@ -43,5 +44,21 @@ public class SpiritualMarketController {
         // 获取分页数据
         PageVO<SpiritualMaterialAllCat> pageVO = marketService.fetchSpiritualMaterial(request);
         return ResultUtils.success(pageVO);
+    }
+
+    /**
+     * 灵材购买
+     *
+     * @param request 购买请求
+     * @return 自定义响应
+     */
+    @PostMapping("buy/spiritualMaterial")
+    @ApiErrorCode(ErrorCode.SPIRITUAL_MATERIAL_BUY_ERROR)
+    public BaseResponse<String> buySpiritualMaterial(@RequestBody BuyMaterialRequest request) {
+        // 校验参数
+        ThrowUtils.throwIf(request == null, ErrorCode.PARAM_ERROR, "灵材购买请求不能为空");
+        // 购买灵材
+        marketService.buyMaterial(request);
+        return ResultUtils.success("灵材购买成功");
     }
 }

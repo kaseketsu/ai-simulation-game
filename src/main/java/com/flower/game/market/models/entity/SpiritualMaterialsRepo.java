@@ -32,19 +32,19 @@ public class SpiritualMaterialsRepo implements Serializable {
      * 灵材唯一ID
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 用户 id
      */
     @TableField("user_id")
-    private Integer userId;
+    private Long userId;
 
     /**
      * 灵材基础库 id
      */
     @TableField("base_id")
-    private Integer baseId;
+    private Long baseId;
 
     /**
      * 创建时间
@@ -69,6 +69,12 @@ public class SpiritualMaterialsRepo implements Serializable {
      */
     @TableField("modifier")
     private String modifier;
+
+    /**
+     * 灵材数量
+     */
+    @TableField("count")
+    private Integer count;
 
     /**
      * 是否删除 (0 - 否, 1 - 是)

@@ -30,5 +30,10 @@ public class BuyMaterialRequest implements Serializable {
     /**
      * 购买数量
      */
-    private Long count;
+    private Integer count;
+
+    /**
+     * 价格
+     */
+    private Long price;
 }

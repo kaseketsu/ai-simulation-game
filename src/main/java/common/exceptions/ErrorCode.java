@@ -56,7 +56,9 @@ public enum ErrorCode {
     COMPUTE_ERROR("060300", "数据计算错误"),
 
     // ======= 灵材采买模块错误 =======
-    SPIRITUAL_MATERIAL_QUERY_ERROR("070300", "灵材查询失败");
+    SPIRITUAL_MATERIAL_QUERY_ERROR("070300", "灵材查询失败"),
+    MONEY_NOT_ENOUGH_ERROR("070301", "余额不足"),
+    SPIRITUAL_MATERIAL_BUY_ERROR("070302", "灵材购买失败");
 
     /**
      * 错误码

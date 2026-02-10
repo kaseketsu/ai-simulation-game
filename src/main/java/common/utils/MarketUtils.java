@@ -73,9 +73,9 @@ public class MarketUtils {
      * @param sense 眼光
      * @return 比例
      */
-    public static double fetchPriceRatio(int sense) {
+    public static Double fetchPriceRatio(int sense) {
         // 1 - (1 / (1 + sense * 0.1)))
-        return 1.0 - (1.0 / (1.0 + sense * 0.1));
+        return Math.max(1.0 - 0.02 * sense, 0.2);
     }
 
     /**
@@ -101,7 +101,7 @@ public class MarketUtils {
         // 计算比例
         int rare = Math.min(RARE_RATIO + sense * RARE_UP, RARE_UPPERBOUND);
         int super_rare = Math.min(SUPER_RARE_RATIO + sense * SUPER_RARE_UP, SUPER_RARE_UPPERBOUND);
-        int mythical = Math.min(MYTHICAL_RATIO + sense *, MYTHICAL_UP, MYTHICAL_UPPERBOUND);
+        int mythical = Math.min(MYTHICAL_RATIO + sense * MYTHICAL_UP, MYTHICAL_UPPERBOUND);
         int normal = BASE_RATIO - (rare + super_rare + mythical);
         // 构造区间
         int[] intervals = new int[4];
