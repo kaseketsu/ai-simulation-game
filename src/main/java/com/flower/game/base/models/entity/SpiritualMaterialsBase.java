@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
  * 灵材基础信息表
  * </p>
  *
- * @author F1ower
- * @since 2026-02-01
+ * @author F1owe
+ * @since 2026-02-11
  */
 @Getter
 @Setter
@@ -71,12 +71,6 @@ public class SpiritualMaterialsBase implements Serializable {
     private Long groupId;
 
     /**
-     * 图片描述
-     */
-    @TableField("desc")
-    private String desc;
-
-    /**
      * 更新时间
      */
     @TableField("updated_time")
@@ -112,4 +106,10 @@ public class SpiritualMaterialsBase implements Serializable {
      */
     @TableField("rarity")
     private Integer rarity;
+
+    /**
+     * 灵材评价，用于 ai 生成
+     */
+    @TableField("description")
+    private String description;
 }

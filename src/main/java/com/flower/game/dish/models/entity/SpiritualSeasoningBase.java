@@ -47,6 +47,12 @@ public class SpiritualSeasoningBase implements Serializable {
     private String url;
 
     /**
+     * 描述信息
+     */
+    @TableField("description")
+    private String description;
+
+    /**
      * 创建时间
      */
     @TableField("create_time")
