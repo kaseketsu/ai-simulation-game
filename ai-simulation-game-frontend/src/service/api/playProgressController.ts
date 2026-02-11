@@ -17,6 +17,24 @@ export async function computeDailyInfo(
   });
 }
 
+/** 此处后端没有提供注释 POST /playProgress/list/SpiritualRepo */
+export async function listSpiritualRepoByPage(
+  body: API.SpiritualRepoQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageVOSpiritualRepoInfoVO>(
+    "/playProgress/list/SpiritualRepo",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: body,
+      ...(options || {}),
+    }
+  );
+}
+
 /** 此处后端没有提供注释 POST /playProgress/query/playProgress */
 export async function queryPlayProgress(
   body: API.PlayProgressQueryRequest,

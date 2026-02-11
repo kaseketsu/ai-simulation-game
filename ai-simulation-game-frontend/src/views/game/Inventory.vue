@@ -21,7 +21,11 @@
     </div>
 
     <!-- Inventory Grid -->
-    <div v-if="filteredInventory.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+    <div v-if="loading" class="flex justify-center items-center h-64">
+        <div class="animate-spin text-4xl">☯️</div>
+    </div>
+
+    <div v-else-if="filteredInventory.length > 0" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
       <div 
         v-for="item in filteredInventory" 
         :key="item.id"
@@ -38,9 +42,15 @@
              </div>
         </div>
         <h3 class="font-serif text-amber-100 truncate">{{ item.name }}</h3>
-        <p class="text-xs text-stone-500 mt-1">{{ getCategoryName(item.type) }}</p>
-      </div>
-    </div>
+         <p class="text-xs text-stone-500 mt-1">
+             <span v-if="item.rarity === 1">普通</span>
+             <span v-else-if="item.rarity === 2" class="text-blue-400">稀有</span>
+             <span v-else-if="item.rarity === 3" class="text-purple-400">传世</span>
+             <span v-else-if="item.rarity === 4" class="text-orange-400">神话</span>
+             <span v-else>未知</span>
+         </p>
+       </div>
+     </div>
 
     <!-- Empty State -->
     <div v-else class="text-center text-stone-500 mt-20">
@@ -50,14 +60,41 @@
        </p>
        <p v-if="currentCategory === -1" class="text-sm mt-2 opacity-60">快去灵市采买些灵材吧...</p>
     </div>
+
+    <!-- Pagination -->
+    <div v-if="total > 0" class="flex justify-center items-center gap-4 mt-8 pb-8">
+        <button 
+            @click="handlePageChange(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="px-3 py-1 bg-stone-800 border border-stone-700 rounded text-stone-400 hover:text-amber-400 hover:border-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        >
+            上一页
+        </button>
+        <span class="text-stone-500 text-sm">
+            第 <span class="text-amber-500 font-bold">{{ currentPage }}</span> / {{ Math.ceil(total / pageSize) || 1 }} 页
+        </span>
+        <button 
+            @click="handlePageChange(currentPage + 1)"
+            :disabled="currentPage * pageSize >= total"
+            class="px-3 py-1 bg-stone-800 border border-stone-700 rounded text-stone-400 hover:text-amber-400 hover:border-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        >
+            下一页
+        </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useGameStore } from '@/stores/game'
+import { listSpiritualRepoByPage } from '@/service/api/playProgressController'
 
 const gameStore = useGameStore()
+const loading = ref(false)
+const inventoryItems = ref<any[]>([])
+const currentPage = ref(1)
+const pageSize = ref(50)
+const total = ref(0)
 
 const categories = [
   { id: -1, name: '全部' },
@@ -71,16 +108,57 @@ const categories = [
 
 const currentCategory = ref(-1)
 
+// Note: API does not support filtering by type yet, so we only filter locally on the current page
+// or we just show all items if category filtering is not possible.
+// For now, let's just return all items if type information is missing in response.
 const filteredInventory = computed(() => {
-  const items = gameStore.inventory || []
+  const items = inventoryItems.value || []
   if (currentCategory.value === -1) {
     return items
   }
-  return items.filter((item: any) => item.type === currentCategory.value)
+  // Try to filter if item has type property (it might not)
+  return items.filter((item: any) => {
+      if (item.type !== undefined) {
+          return item.type === currentCategory.value
+      }
+      return true // If no type info, show it anyway to avoid empty list
+  })
 })
 
-function getCategoryName(type: number) {
-  const cat = categories.find(c => c.id === type)
-  return cat ? cat.name : '未知'
+async function handlePageChange(page: number) {
+    if (page < 1 || (page > 1 && (page - 1) * pageSize.value >= total.value)) return
+    currentPage.value = page
+    await fetchInventory()
 }
+
+async function fetchInventory() {
+    if (!gameStore.player.userId) return
+    
+    loading.value = true
+    try {
+        const res = await listSpiritualRepoByPage({
+            userId: gameStore.player.userId,
+            currentPage: currentPage.value,
+            pageSize: pageSize.value
+        })
+        
+        if (res.code === '990000' && res.data) {
+            inventoryItems.value = res.data.records || []
+            total.value = res.data.total || 0
+        } else {
+            inventoryItems.value = []
+            total.value = 0
+        }
+    } catch (error) {
+        console.error('Failed to fetch inventory:', error)
+        inventoryItems.value = []
+        total.value = 0
+    } finally {
+        loading.value = false
+    }
+}
+
+onMounted(() => {
+    fetchInventory()
+})
 </script>

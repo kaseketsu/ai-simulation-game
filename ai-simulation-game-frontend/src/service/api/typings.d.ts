@@ -17,6 +17,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageVOSpiritualRepoInfoVO = {
+    data?: PageVOSpiritualRepoInfoVO;
+    code?: string;
+    message?: string;
+  };
+
   type BaseResponsePlayProgressVO = {
     data?: PlayProgressVO;
     code?: string;
@@ -37,6 +43,13 @@ declare namespace API {
     price?: number;
     storeType?: number;
     materialGrade?: number;
+  };
+
+  type BuyMaterialRequest = {
+    userId?: number;
+    name?: string;
+    count?: number;
+    price?: number;
   };
 
   type DailyInfoComputeRequest = {
@@ -89,6 +102,14 @@ declare namespace API {
     total?: number;
     pages?: number;
     records?: SpiritualMaterialAllCat[];
+  };
+
+  type PageVOSpiritualRepoInfoVO = {
+    currentPage?: number;
+    pageSize?: number;
+    total?: number;
+    pages?: number;
+    records?: SpiritualRepoInfoVO[];
   };
 
   type PlayProgressQueryRequest = {
@@ -148,6 +169,20 @@ declare namespace API {
     currentPage?: number;
     pageSize?: number;
     type?: number;
+  };
+
+  type SpiritualRepoInfoVO = {
+    id?: number;
+    rarity?: number;
+    name?: string;
+    url?: string;
+    count?: number;
+  };
+
+  type SpiritualRepoQueryRequest = {
+    currentPage?: number;
+    pageSize?: number;
+    userId?: number;
   };
 
   type SysCodeAddRequest = {
