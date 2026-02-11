@@ -71,6 +71,12 @@ public class SpiritualMaterialsBase implements Serializable {
     private Long groupId;
 
     /**
+     * 图片描述
+     */
+    @TableField("desc")
+    private String desc;
+
+    /**
      * 更新时间
      */
     @TableField("updated_time")

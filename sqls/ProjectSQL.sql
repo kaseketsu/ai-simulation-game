@@ -230,6 +230,24 @@ CREATE TABLE `spiritual_materials_base`
   COLLATE = utf8mb4_0900_as_cs COMMENT ='灵材基础信息表';
 
 
+-- 调味料基础库表
+CREATE TABLE `spiritual_seasoning_base`
+(
+    `id`             INT                                    NOT NULL AUTO_INCREMENT COMMENT '调味料唯一ID',
+    `name`           VARCHAR(64) COLLATE utf8mb4_0900_as_cs NOT NULL COMMENT '调味料名称',
+    `url`            VARCHAR(128)                           NOT NULL COMMENT '调味料图片 url',
+    `create_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `creator`     VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    `modifier`     VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    `is_deleted`     INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
+    PRIMARY KEY (`id`),
+    KEY idx_name (`name`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_as_cs COMMENT ='调味料基础信息表';
+
+
 USE ai_simulation_game;
 
 -- 批量插入灵材数据：灵谷(类型0) 10条
