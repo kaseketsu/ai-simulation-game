@@ -208,7 +208,8 @@ public class RedisManager {
      * @return 值
      */
     public <T> T getValue(String key, Class<T> clazz) {
-        return (T) redisTemplate.opsForValue().get(key);
+        Object res = redisTemplate.opsForValue().get(key);
+        return clazz.cast(res);
     }
 
     /**

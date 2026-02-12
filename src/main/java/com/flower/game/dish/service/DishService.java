@@ -3,6 +3,7 @@ package com.flower.game.dish.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.flower.game.base.models.entity.SpiritualMaterialsBase;
+import com.flower.game.dish.models.dto.SeasoningAddRequest;
 import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
 import common.annotations.ExceptionLog;
@@ -30,9 +31,9 @@ public class DishService {
     @ExceptionLog("批量添加灵膳失败")
     public void addSeasoningByBatch(SeasoningBatchAddRequest request) {
         // 获取请求
-        List<SeasoningBatchAddRequest> requestList = request.getRequestList();
+        List<SeasoningAddRequest> requestList = request.getRequestList();
         // 判断参数
-        if (CollUtil.isNotEmpty(requestList)) {
+        if (CollUtil.isEmpty(requestList)) {
             return;
         }
         // 批量转化

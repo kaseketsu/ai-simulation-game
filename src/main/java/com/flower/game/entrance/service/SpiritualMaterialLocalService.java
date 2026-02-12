@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.base.models.entity.SpiritualMaterialAllCat;
 import com.flower.game.base.models.entity.SpiritualMaterialsBase;
 import com.flower.game.base.service.ISpiritualMaterialsBaseService;
+import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
+import com.flower.game.dish.service.ISpiritualSeasoningBaseService;
+import com.flower.game.entrance.models.entity.SeasoningsForRedis;
 import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
 import common.annotations.ExceptionLog;
 import common.constant.MarketConstant;
@@ -40,11 +43,14 @@ public class SpiritualMaterialLocalService {
     @Value("${spring.spiritual.redis-key}")
     private String redisKey;
 
+    @Resource
+    private ISpiritualSeasoningBaseService iSpiritualSeasoningBaseService;
+
     /**
-     * 初始化灵材
+     * 初始化灵材和调味料
      */
     @PostConstruct
-    @ExceptionLog("灵材初始化失败")
+    @ExceptionLog("灵材与调味料初始化失败")
     public void init() {
         log.info("灵材初始化开始....");
         LambdaQueryWrapper<SpiritualMaterialsBase> baseWrapper = new LambdaQueryWrapper<>();
@@ -118,7 +124,22 @@ public class SpiritualMaterialLocalService {
         String js = JSONUtil.toJsonStr(spiritualMaterialForRedis);
         String catKey = redisKey + MarketConstant.ALL_TYPE;
         redisManager.addValue(catKey, js);
-        log.info("灵材存入 redis 成功!");
+        log.info("灵材存入 redis 成功!, 共 {} 个灵材", all.size());
         log.info("灵材初始化成功!");
+        // 所有调味料
+        SeasoningsForRedis seasoningsForRedis = new SeasoningsForRedis();
+        LambdaQueryWrapper<SpiritualSeasoningBase> seasoningWrapper = new LambdaQueryWrapper<>();
+        seasoningWrapper.eq(SpiritualSeasoningBase::getIsDeleted, 0);
+        List<SpiritualSeasoningBase> seasoningBases = iSpiritualSeasoningBaseService.list(seasoningWrapper);
+        if (CollUtil.isNotEmpty(seasoningBases)) {
+            seasoningsForRedis.setSeasoningBaseList(seasoningBases);
+            String seasoningJs = JSONUtil.toJsonStr(seasoningsForRedis);
+            String key = redisKey + MarketConstant.SEASONING;
+            redisManager.addValueWithOutExpiration(key, seasoningJs);
+            log.info("调味料存入 redis 成功，共 {} 个", seasoningBases.size());
+        } else {
+            log.warn("调味料数据不存在");
+        }
+        log.info("调味料初始化成功！");
     }
 }

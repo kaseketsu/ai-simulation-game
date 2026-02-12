@@ -21,5 +21,5 @@ public class SeasoningBatchAddRequest implements Serializable {
     /**
      * 批量添加请求
      */
-    private List<SeasoningBatchAddRequest> requestList;
+    private List<SeasoningAddRequest> requestList;
 }

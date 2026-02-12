@@ -14,4 +14,9 @@ public class MarketConstant {
      * 所有灵材的 type
      */
     public static final String ALL_TYPE = "6";
+
+    /**
+     * 调味料常量
+     */
+    public static final String SEASONING = "seasoning";
 }
