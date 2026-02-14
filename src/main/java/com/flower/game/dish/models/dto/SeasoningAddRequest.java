@@ -27,5 +27,5 @@ public class SeasoningAddRequest implements Serializable {
     /**
      * 调味料描述
      */
-    private String desc;
+    private String description;
 }

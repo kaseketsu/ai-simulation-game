@@ -32,6 +32,7 @@ public enum ErrorCode {
     SYS_CODE_ADD_ERROR("990305", "码值添加失败"),
     SAVE_ERROR("990306", "保存失败"),
     QUERY_ERROR("990307", "查询失败"),
+    INIT_ERROR("990203", "初始化失败"),
 
     // ======= 用户模块错误 =======
     LOGIN_ERROR("010300", "登录失败"),
