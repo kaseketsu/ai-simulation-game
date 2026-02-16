@@ -17,4 +17,9 @@ public class PromptConstant {
      * 图像 prompt
      */
     public static final String IMAGE = "image";
+
+    /**
+     * 系统 prompt
+     */
+    public static final String SYSTEM = "system";
 }

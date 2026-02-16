@@ -39,19 +39,25 @@ public class AiService {
     public void init() {
         try (
                 InputStream textPromptStream = this.getClass().getResourceAsStream("/prompts/createMeal-text.txt");
-                InputStream imagePromptStream = this.getClass().getResourceAsStream("/prompts/createMeal-image.txt")
+                InputStream imagePromptStream = this.getClass().getResourceAsStream("/prompts/createMeal-image.txt");
+                InputStream systemPromptStream = this.getClass().getResourceAsStream("/prompts/systemPrompt.txt");
         ) {
             // 转为 bufferedStream
             ThrowUtils.throwIf(textPromptStream == null, ErrorCode.PARAM_ERROR, "文本 prompt 不存在！");
             ThrowUtils.throwIf(imagePromptStream == null, ErrorCode.PARAM_ERROR, "图片 prompt 不存在！");
+            ThrowUtils.throwIf(systemPromptStream == null, ErrorCode.PARAM_ERROR, "系统 prompt 不存在！");
             InputStreamReader textStreamReader = new InputStreamReader(textPromptStream);
             InputStreamReader imageStreamReader = new InputStreamReader(imagePromptStream);
+            InputStreamReader systemStreamReader = new InputStreamReader(systemPromptStream);
             BufferedReader textBufferedReader = new BufferedReader(textStreamReader);
             BufferedReader imageBufferedReader = new BufferedReader(imageStreamReader);
+            BufferedReader systemBufferedReader = new BufferedReader(systemStreamReader);
             StringBuilder textSb = new StringBuilder();
             StringBuilder imageSb = new StringBuilder();
+            StringBuilder systemSb = new StringBuilder();
             textBufferedReader.lines().forEach(l -> textSb.append(l).append("\n"));
             imageBufferedReader.lines().forEach(l -> imageSb.append(l).append("\n"));
+            systemBufferedReader.lines().forEach(l -> systemSb.append(l).append("\n"));
             // 存入 redis
             String textKey = redisKey + PromptConstant.TEXT;
             redisManager.addValue(textKey, textSb.toString());
@@ -59,6 +65,8 @@ public class AiService {
             String imageKey = redisKey + PromptConstant.IMAGE;
             redisManager.addValue(imageKey, imageSb.toString());
             log.info("图片 prompt 存入 redis 成功, redis-key: {}", imageKey);
+            String systemKey = redisKey + PromptConstant.SYSTEM;
+            redisManager.addValue(systemKey, systemSb.toString());
         } catch (Exception ex) {
             log.error("初始化 prompt 失败, 原因是: {}", ex.getMessage());
             throw new BusinessException(ErrorCode.INIT_ERROR, "初始化 prompt 失败");

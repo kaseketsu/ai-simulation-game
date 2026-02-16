@@ -60,7 +60,10 @@ public enum ErrorCode {
     // ======= 灵材采买模块错误 =======
     SPIRITUAL_MATERIAL_QUERY_ERROR("070300", "灵材查询失败"),
     MONEY_NOT_ENOUGH_ERROR("070301", "余额不足"),
-    SPIRITUAL_MATERIAL_BUY_ERROR("070302", "灵材购买失败");
+    SPIRITUAL_MATERIAL_BUY_ERROR("070302", "灵材购买失败"),
+
+    // ======= ai 调用模块错误 =======
+    TEXT_CALL_ERROR("080200", "文本模型调用失败");
 
     /**
      * 错误码
@@ -95,4 +98,4 @@ public enum ErrorCode {
         return null;
     }
 
-}
+    }
