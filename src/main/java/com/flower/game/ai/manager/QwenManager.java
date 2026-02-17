@@ -110,7 +110,7 @@ public class QwenManager {
                         .model(imageModel)
                         .prompt(prompt)
                         .n(1)
-                        .size("1664*928")
+                        .size("1328*1328")
                         .parameters(parameters)
                         .build();
         ImageSynthesis imageSynthesis = new ImageSynthesis();

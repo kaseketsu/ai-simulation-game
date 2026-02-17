@@ -33,6 +33,8 @@ public enum ErrorCode {
     SAVE_ERROR("990306", "保存失败"),
     QUERY_ERROR("990307", "查询失败"),
     INIT_ERROR("990203", "初始化失败"),
+    DOWNLOAD_ERROR("990204", "下载失败"),
+    UPLOAD_ERROR("990205", "上传失败"),
 
     // ======= 用户模块错误 =======
     LOGIN_ERROR("010300", "登录失败"),

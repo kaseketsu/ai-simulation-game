@@ -2,6 +2,9 @@ package com.flower.game.dish.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpUtil;
 import com.flower.game.ai.manager.QwenManager;
 import com.flower.game.ai.models.entity.NameCreateResponse;
 import com.flower.game.base.models.entity.SpiritualMaterialsBase;
@@ -12,12 +15,18 @@ import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
 import com.flower.game.dish.models.vo.NewMaelInfoVO;
 import common.annotations.ExceptionLog;
+import common.exceptions.BusinessException;
+import common.exceptions.ErrorCode;
 import common.utils.ParamsCheckUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -35,6 +44,9 @@ public class DishService {
 
     @Resource
     private ISpiritualMaterialsBaseService iSpiritualMaterialsBaseService;
+
+    @Value("${spring.cos.save-path}")
+    private String savePath;
 
     /**
      * 批量添加灵膳
@@ -78,7 +90,16 @@ public class DishService {
         BeanUtil.copyProperties(mealName, spiritualMaterialsBase);
         iSpiritualMaterialsBaseService.save(spiritualMaterialsBase);
         // 请求生成新的图片
-
+        log.info("即将下载图片到本地....");
+        String picUrl = qwenManager.createNewMealPic(generateRequest);
+        try (FileOutputStream outputStream = new FileOutputStream(savePath)) {
+            HttpUtil.download(picUrl, outputStream, true);
+        } catch (Exception ex) {
+            log.error("图片下载失败，url: {}, 保存路径: {}, 原因为: {}", picUrl, savePath, ex.getMessage());
+            throw new BusinessException(ErrorCode.DOWNLOAD_ERROR, "图片下载失败");
+        }
+        log.info("图片下载成功, 保存路径为: {}", savePath);
+        // 保存到腾讯云存储
         return null;
     }
 }

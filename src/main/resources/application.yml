@@ -28,7 +28,7 @@ spring:
           max-idle: 8
           min-idle: 0
   jwt:
-    secret: 8e9f2a7d3c1b5e8a9d7b3c8f2e9a7d8c9b7e3a8d9c7b8e9a3d8c7b9e8a3d7c8b9
+    secret: your-secret
     access-token-expire: 900000
     refresh-token-expire: 604800000
     access-token-prefix: 'jwt:access:'
@@ -39,4 +39,20 @@ spring:
     token-prefix: Bearer
     # 铅球头名称
     header: Authorization
+  spiritual:
+    base-limit: 175
+    base-ratio: 0.2
+    redis-key: 'spiritualMaterial:'
+  ali:
+    # 阿里云: api-key
+    api-key: your-key
+    base-url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    text-model: "qwen-flash"
+    image-model: "qwen-image-plus"
+  cos:
+    save-path: "/tempPics"
+    secret-id:  your-id
+    secret-key:  your-key
+    bucket-name:  your-name
+    region: your-region
 
