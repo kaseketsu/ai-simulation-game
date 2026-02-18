@@ -34,7 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -116,20 +119,38 @@ public class DishService {
         String formatted = LocalDateTimeUtil.format(now, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         // 图片的完整保存路径
         String fullPath = "%s/%s_%s.png".formatted(savePath, uuid, formatted);
-        try (FileOutputStream outputStream = new FileOutputStream(fullPath)) {
+        // 生成临时文件
+        Path path;
+        try {
+            path =  Paths.get(fullPath);
+            Path parentDir = path.getParent();
+            // 补全父目录
+            if (parentDir != null) {
+                Files.createDirectories(parentDir);
+                log.info("父目录创建完毕: {}", parentDir.toAbsolutePath());
+            }
+            // 创建文件
+            Files.createFile(path);
+            log.info("文件创建完毕, 路径为: {}", path.toAbsolutePath());
+        } catch (IOException ex) {
+            log.error("文件生成失败，原因是: {}", ex.getMessage());
+            throw new BusinessException(ErrorCode.FILE_CREATE_ERROR);
+        }
+        try (FileOutputStream outputStream = new FileOutputStream(path.toFile())) {
             HttpUtil.download(picUrl, outputStream, true);
         } catch (Exception ex) {
             log.error("图片下载失败，url: {}, 保存路径: {}, 原因为: {}", picUrl, fullPath, ex.getMessage());
             throw new BusinessException(ErrorCode.DOWNLOAD_ERROR, "图片下载失败");
         }
+        fullPath = path.toAbsolutePath().toString();
         log.info("图片下载成功, 保存路径为: {}", fullPath);
         // 保存到腾讯云存储
         String fileName = FileUtils.fetchFileName("png");
-        String putPath = appConfig.getImageSavePath() + File.separator + fileName;
-        cosManager.putLocalFile( putPath, fullPath);
+        String putPath = appConfig.getImageSavePath() + "/" + fileName;
+        cosManager.putLocalFile(putPath, fullPath);
         log.info("上传到腾讯云存储成功，文件路径: {}", putPath);
         // 拼接 url
-        String imageUrl = appConfig.getImageSavePath() + putPath;
+        String imageUrl = appConfig.getCosImagePrefix() + putPath;
         log.info("前端展示图片 url 为: {}", imageUrl);
         // 构建返回对象
         NewMaelInfoVO newMaelInfoVO = new NewMaelInfoVO();

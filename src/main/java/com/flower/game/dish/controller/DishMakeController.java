@@ -2,8 +2,10 @@ package com.flower.game.dish.controller;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
+import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
+import com.flower.game.dish.models.vo.NewMaelInfoVO;
 import com.flower.game.dish.service.DishService;
 import com.flower.game.entrance.models.entity.SeasoningsForRedis;
 import common.baseEntities.BaseResponse;
@@ -71,5 +73,20 @@ public class DishMakeController {
         }
         PageVO<SpiritualSeasoningBase> seasoningBasePageVO = PageUtils.buildPageVO(seasoningBaseList, request.getPageSize(), request.getCurrentPage());
         return ResultUtils.success(seasoningBasePageVO);
+    }
+
+    /**
+     * 创建新灵膳并放回新灵膳信息给前端
+     *
+     * @param generateRequest 生成请求
+     * @return 新灵膳信息
+     */
+    @PostMapping("/createNewMeal")
+    public BaseResponse<NewMaelInfoVO> createNewMeal(@RequestBody NewMealGenerateRequest generateRequest) {
+        // 校验参数
+        ParamsCheckUtils.checkObj(generateRequest);
+        // 调用 dishService 方法
+        NewMaelInfoVO newMeal = dishService.createNewMeal(generateRequest);
+        return ResultUtils.success(newMeal);
     }
 }

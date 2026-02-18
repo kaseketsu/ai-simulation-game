@@ -1,5 +1,6 @@
 package common.manager;
 
+import cn.hutool.core.io.FileUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.model.ObjectMetadata;
@@ -49,7 +50,7 @@ public class CosManager {
      * @param localPath 本地文件路径
      */
     public void putLocalFile(String key, String localPath) {
-        try (InputStream stream = this.getClass().getResourceAsStream(localPath)) {
+        try (InputStream stream = FileUtil.getInputStream(localPath)) {
             ThrowUtils.throwIf(stream == null, ErrorCode.NOT_FOUND_ERROR, "文件不存在, 路径; %s".formatted(localPath));
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(stream.available());

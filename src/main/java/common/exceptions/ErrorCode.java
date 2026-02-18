@@ -36,6 +36,7 @@ public enum ErrorCode {
     DOWNLOAD_ERROR("990204", "下载失败"),
     UPLOAD_ERROR("990205", "上传失败"),
     CLOSE_ERROR("990206", "资源未正常关闭"),
+    FILE_CREATE_ERROR("990207", "文件创建失败"),
 
     // ======= 用户模块错误 =======
     LOGIN_ERROR("010300", "登录失败"),
