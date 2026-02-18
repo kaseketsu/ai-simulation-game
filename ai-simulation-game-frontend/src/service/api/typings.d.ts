@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseNewMaelInfoVO = {
+    data?: NewMaelInfoVO;
+    code?: string;
+    message?: string;
+  };
+
   type BaseResponsePageVOSpiritualMaterialAllCat = {
     data?: PageVOSpiritualMaterialAllCat;
     code?: string;
@@ -19,6 +25,12 @@ declare namespace API {
 
   type BaseResponsePageVOSpiritualRepoInfoVO = {
     data?: PageVOSpiritualRepoInfoVO;
+    code?: string;
+    message?: string;
+  };
+
+  type BaseResponsePageVOSpiritualSeasoningBase = {
+    data?: PageVOSpiritualSeasoningBase;
     code?: string;
     message?: string;
   };
@@ -96,6 +108,32 @@ declare namespace API {
     userState?: number;
   };
 
+  type NewMaelInfoVO = {
+    name?: string;
+    description?: string;
+    url?: string;
+  };
+
+  type NewMealGenerateRequest = {
+    mainIngredient?: string;
+    mainIngredientDescription?: string;
+    mainIngredientPrice?: number;
+    mainIngredientType?: number;
+    mainIngredientRarity?: number;
+    sideIngredient?: string;
+    sideIngredientPrice?: number;
+    sideIngredientRarity?: number;
+    sideIngredientDescription?: string;
+    sideIngredientType?: number;
+    seasoning?: string;
+    seasoningDescription?: string;
+  };
+
+  type PageRequest = {
+    currentPage?: number;
+    pageSize?: number;
+  };
+
   type PageVOSpiritualMaterialAllCat = {
     currentPage?: number;
     pageSize?: number;
@@ -110,6 +148,14 @@ declare namespace API {
     total?: number;
     pages?: number;
     records?: SpiritualRepoInfoVO[];
+  };
+
+  type PageVOSpiritualSeasoningBase = {
+    currentPage?: number;
+    pageSize?: number;
+    total?: number;
+    pages?: number;
+    records?: SpiritualSeasoningBase[];
   };
 
   type PlayProgressQueryRequest = {
@@ -149,6 +195,16 @@ declare namespace API {
     roleDesc?: string;
   };
 
+  type SeasoningAddRequest = {
+    name?: string;
+    url?: string;
+    description?: string;
+  };
+
+  type SeasoningBatchAddRequest = {
+    requestList?: SeasoningAddRequest[];
+  };
+
   type SpiritualMaterialAllCat = {
     type?: number;
     normalName?: string;
@@ -183,6 +239,18 @@ declare namespace API {
     currentPage?: number;
     pageSize?: number;
     userId?: number;
+  };
+
+  type SpiritualSeasoningBase = {
+    id?: number;
+    name?: string;
+    url?: string;
+    description?: string;
+    createTime?: string;
+    updateTime?: string;
+    creator?: string;
+    modifier?: string;
+    isDeleted?: number;
   };
 
   type SysCodeAddRequest = {

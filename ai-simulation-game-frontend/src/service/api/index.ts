@@ -9,6 +9,7 @@ import * as roleController from "./roleController";
 import * as playProgressController from "./playProgressController";
 import * as spiritualMarketController from "./spiritualMarketController";
 import * as gameEntranceController from "./gameEntranceController";
+import * as dishMakeController from "./dishMakeController";
 import * as characterController from "./characterController";
 export default {
   userController,
@@ -18,5 +19,6 @@ export default {
   playProgressController,
   spiritualMarketController,
   gameEntranceController,
+  dishMakeController,
   characterController,
 };
