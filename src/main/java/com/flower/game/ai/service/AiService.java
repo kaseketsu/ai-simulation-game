@@ -60,13 +60,13 @@ public class AiService {
             systemBufferedReader.lines().forEach(l -> systemSb.append(l).append("\n"));
             // 存入 redis
             String textKey = redisKey + PromptConstant.TEXT;
-            redisManager.addValue(textKey, textSb.toString());
+            redisManager.addValueWithOutExpiration(textKey, textSb.toString());
             log.info("文本 prompt 存入 redis 成功，redis-key: {}", textKey);
             String imageKey = redisKey + PromptConstant.IMAGE;
-            redisManager.addValue(imageKey, imageSb.toString());
+            redisManager.addValueWithOutExpiration(imageKey, imageSb.toString());
             log.info("图片 prompt 存入 redis 成功, redis-key: {}", imageKey);
             String systemKey = redisKey + PromptConstant.SYSTEM;
-            redisManager.addValue(systemKey, systemSb.toString());
+            redisManager.addValueWithOutExpiration(systemKey, systemSb.toString());
         } catch (Exception ex) {
             log.error("初始化 prompt 失败, 原因是: {}", ex.getMessage());
             throw new BusinessException(ErrorCode.INIT_ERROR, "初始化 prompt 失败");
