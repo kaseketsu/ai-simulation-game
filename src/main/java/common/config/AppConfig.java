@@ -1,0 +1,25 @@
+package common.config;
+
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+/**
+ * 存储一些配置信息
+ *
+ * @author F1ower
+ * @since 2026-2-18
+ */
+@Component
+@Data
+public class AppConfig {
+
+    /**
+     * cos 中图片默认保存地址
+     */
+    @Value("${image-save-path:/images}")
+    private String imageSavePath;
+
+    @Value("${cos-image-predix:https://ai-simulation-game-1334049508.cos.ap-shanghai.myqcloud.com}")
+    private String cosImagePrefix;
+}

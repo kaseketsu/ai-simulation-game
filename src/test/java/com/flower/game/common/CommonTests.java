@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Slf4j
-public class commonTests {
+public class CommonTests {
 
     @Test
     public void simpleTest() {

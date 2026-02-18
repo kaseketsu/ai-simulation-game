@@ -5,6 +5,8 @@ import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.region.Region;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +17,10 @@ import org.springframework.context.annotation.Configuration;
  * @author F1ower
  * @since 2026-2-17
  */
-@ConfigurationProperties("spring.cos")
+@ConfigurationProperties(prefix = "spring.cos")
 @Configuration
+@Slf4j
+@Data
 public class CosConfig {
 
     private String secretId;
@@ -27,6 +31,7 @@ public class CosConfig {
 
     @Bean
     public COSClient cosClient() {
+        log.info("secretKey: {}, secretId: {}", secretKey, secretId);
         // 初始化用户身份信息(secretId, secretKey)
         COSCredentials cred = new BasicCOSCredentials(secretId,secretKey);
         // 设置bucket的区域, COS地域的简称请参照 https://www.qcloud.com/document/product/436/6224
