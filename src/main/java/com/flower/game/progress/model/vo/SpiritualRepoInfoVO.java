@@ -41,4 +41,9 @@ public class SpiritualRepoInfoVO implements Serializable {
      * 灵材数量
      */
     private Integer count;
+
+    /**
+     * 描述
+     */
+    private String description;
 }

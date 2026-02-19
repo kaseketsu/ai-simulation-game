@@ -14,15 +14,23 @@ import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import com.flower.game.dish.models.dto.SeasoningAddRequest;
 import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
+import com.flower.game.dish.models.vo.MaterialVO;
 import com.flower.game.dish.models.vo.NewMaelInfoVO;
 import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
+import com.flower.game.progress.model.dto.SpiritualRepoQueryRequest;
+import com.flower.game.progress.model.vo.SpiritualRepoInfoVO;
+import com.flower.game.progress.service.GamePlayProgressService;
+import com.flower.game.progress.service.IPlayProgressService;
 import common.annotations.ExceptionLog;
 import common.config.AppConfig;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.manager.CosManager;
 import common.manager.RedisManager;
+import common.page.PageRequest;
+import common.page.PageVO;
 import common.utils.FileUtils;
+import common.utils.PageUtils;
 import common.utils.ParamsCheckUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +80,9 @@ public class DishService {
 
     @Resource
     private RedisManager redisManager;
+
+    @Resource
+    private GamePlayProgressService gamePlayProgressService;
 
     /**
      * 批量添加灵膳
@@ -127,6 +138,26 @@ public class DishService {
         updateRedis(mealName);
         log.info("返回对象构建完成，参数为: {}", JSONUtil.toJsonPrettyStr(newMaelInfoVO));
         return newMaelInfoVO;
+    }
+
+    /**
+     * 请求获取食材原料
+     *
+     * @param request 分页请求
+     * @return 分页食材
+     */
+    @ExceptionLog("获取食材原料失败")
+    public PageVO<MaterialVO> fetchMaterials(SpiritualRepoQueryRequest request) {
+        PageVO<SpiritualRepoInfoVO> infoVOPageVO = gamePlayProgressService.listSpiritualRepoByPage(request);
+        List<SpiritualRepoInfoVO> records = infoVOPageVO.getRecords();
+        // 获取其中稀有度为 1 的
+        List<MaterialVO> materialVOS = records.stream().filter(r -> r.getRarity().equals(1)).map(r -> {
+            MaterialVO materialVO = new MaterialVO();
+            BeanUtil.copyProperties(r, materialVO);
+            return materialVO;
+        }).toList();
+        // 包装为 page
+        return PageUtils.buildPageVO(materialVOS, request.getPageSize(), request.getCurrentPage());
     }
 
     /**

@@ -5,9 +5,12 @@ import cn.hutool.json.JSONUtil;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
+import com.flower.game.dish.models.vo.MaterialVO;
 import com.flower.game.dish.models.vo.NewMaelInfoVO;
 import com.flower.game.dish.service.DishService;
 import com.flower.game.entrance.models.entity.SeasoningsForRedis;
+import com.flower.game.market.models.dto.SpiritualMaterialBaseRequest;
+import com.flower.game.progress.model.dto.SpiritualRepoQueryRequest;
 import common.baseEntities.BaseResponse;
 import common.constant.MarketConstant;
 import common.manager.RedisManager;
@@ -88,5 +91,19 @@ public class DishMakeController {
         // 调用 dishService 方法
         NewMaelInfoVO newMeal = dishService.createNewMeal(generateRequest);
         return ResultUtils.success(newMeal);
+    }
+
+    /**
+     * 请求获取食材原料
+     *
+     * @param request 分页请求
+     * @return 分页食材
+     */
+    @PostMapping("/fetchMaterials")
+    public BaseResponse<PageVO<MaterialVO>> fetchMaterials(@RequestBody SpiritualRepoQueryRequest request) {
+        // 校验参数
+        ParamsCheckUtils.checkObj(request);
+        PageVO<MaterialVO> materialVOPageVO = dishService.fetchMaterials(request);
+        return ResultUtils.success(materialVOPageVO);
     }
 }
