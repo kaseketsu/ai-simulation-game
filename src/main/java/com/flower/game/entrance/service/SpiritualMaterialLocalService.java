@@ -63,9 +63,9 @@ public class SpiritualMaterialLocalService {
         }
         // 按照 groupId 进行分类
         log.info("开始按灵材 groupId 进行分类...");
-        Map<Long, SpiritualMaterialAllCat> catByGroupId = new HashMap<>();
+        Map<String, SpiritualMaterialAllCat> catByGroupId = new HashMap<>();
         spiritualMaterialsBases.forEach(s -> {
-            Long groupId = s.getGroupId();
+            String groupId = s.getGroupId();
             if (!catByGroupId.containsKey(groupId)) {
                 SpiritualMaterialAllCat cat = new SpiritualMaterialAllCat();
                 cat.setType(s.getType());
@@ -78,21 +78,25 @@ public class SpiritualMaterialLocalService {
                     spiritualMaterialAllCat.setNormalName(s.getName());
                     spiritualMaterialAllCat.setNormalUrl(s.getUrl());
                     spiritualMaterialAllCat.setNormalPrice(s.getPrice());
+                    spiritualMaterialAllCat.setNormalDescription(s.getDescription());
                 }
                 case 2 -> {
                     spiritualMaterialAllCat.setRareName(s.getName());
                     spiritualMaterialAllCat.setRareUrl(s.getUrl());
                     spiritualMaterialAllCat.setRarePrice(s.getPrice());
+                    spiritualMaterialAllCat.setRareDescription(s.getDescription());
                 }
                 case 3 -> {
                     spiritualMaterialAllCat.setSuperRareName(s.getName());
                     spiritualMaterialAllCat.setSuperRareUrl(s.getUrl());
                     spiritualMaterialAllCat.setSuperRarePrice(s.getPrice());
+                    spiritualMaterialAllCat.setSuperRareDescription(s.getDescription());
                 }
                 case 4 -> {
                     spiritualMaterialAllCat.setMythicalName(s.getName());
                     spiritualMaterialAllCat.setMythicalUrl(s.getUrl());
                     spiritualMaterialAllCat.setMythicalPrice(s.getPrice());
+                    spiritualMaterialAllCat.setMythicalDescription(s.getDescription());
                 }
             }
         });

@@ -47,25 +47,53 @@
 严禁生成以下返回!!!!
 ```json
 {
-  "name": "青禾凝香膳",
-  "type": 0,
-  "url": "https://example.com/images/spirit_dishes/qinghe_nixiang_shan.jpg",
-  "storeType": 0,
-  "price": 6500,
-  "rarity": 2,
-  "description": "以青禾灵谷为主材，辅以碧纹青禾谷调和谷性，佐以紫府香醬提韵，入口清润甘甜，余味幽香绵长。食之可温养经脉，助修士回气凝神，尤宜炼气期修士日常滋养。"
+   "storeType": 0,
+   "type": 0,
+   "normalName": "普通皮肤-经典款", // 普通品阶名称
+    "normalUrl": "https://example.com/skins/normal/1001", // 普通品阶url
+    "normalDescription": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
+    "normalPrice": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
+
+    "rareName": "稀有皮肤-进阶款", // 稀有品阶名称
+    "rareUrl": "https://example.com/skins/rare/2001", // 稀有品阶url
+    "rareDescription": "进阶款皮肤，附带轻微特效，局内模型细节优化", // 稀有描述
+    "rarePrice": 8800, // 稀有品阶价格（Long类型）
+
+    "superRareName": "超稀有皮肤-典藏款", // 超稀有品阶名称
+    "superRareUrl": "https://example.com/skins/super-rare/3001", // 超稀有品阶url
+    "superRareDescription": "典藏级皮肤，全技能特效+专属语音，传世品质", // 传世描述（超稀有品阶描述）
+    "superRarePrice": 16800, // 超稀有品阶价格（Long类型）
+
+    "mythicalName": "超超稀有皮肤-神话款", // 超超稀有品阶名称
+    "mythicalUrl": "https://example.com/skins/mythical/4001", // 超超稀有品阶url
+    "mythicalDescription": "神话级限定皮肤，独家回城特效+动态立绘，全服限量", // 神话品阶描述（超超稀有品阶描述）
+    "mythicalPrice": 29800 // 超超稀有品阶价格（Long类型）
 }
 ```
 
-【输出格式（必须严格 JSON，plaintext, 便于程序直接解析；不要输出多余解释）】
+【输出格式（必须严格 JSON，plaintext, 便于程序直接解析；不要输出多余解释，注释仅供参考，输出不要注释）】
 {
-  "name": "玄元灵谷",
-  "type": 0,
-  "url": "https://example.com/images/spirit_materials/xuanyuan_spirit_grain.jpg",
-  "storeType": 0,
-  "price": 5000,
-  "rarity": 2,
-  "description": "玄元灵谷产自灵脉汇聚之地，颗粒饱满，蕴含温和的木系灵力，是固本阶段修士日常修炼的优质灵材，入口清甜，易被人体吸收。"
+   "storeType": 0,
+   "type": 0,
+   "normalName": "普通皮肤-经典款", // 普通品阶名称
+    "normalUrl": "https://example.com/skins/normal/1001", // 普通品阶url
+    "normalDescription": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
+    "normalPrice": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
+
+    "rareName": "稀有皮肤-进阶款", // 稀有品阶名称
+    "rareUrl": "https://example.com/skins/rare/2001", // 稀有品阶url
+    "rareDescription": "进阶款皮肤，附带轻微特效，局内模型细节优化", // 稀有描述
+    "rarePrice": 8800, // 稀有品阶价格（Long类型）
+
+    "superRareName": "超稀有皮肤-典藏款", // 超稀有品阶名称
+    "superRareUrl": "https://example.com/skins/super-rare/3001", // 超稀有品阶url
+    "superRareDescription": "典藏级皮肤，全技能特效+专属语音，传世品质", // 传世描述（超稀有品阶描述）
+    "superRarePrice": 16800, // 超稀有品阶价格（Long类型）
+
+    "mythicalName": "超超稀有皮肤-神话款", // 超超稀有品阶名称
+    "mythicalUrl": "https://example.com/skins/mythical/4001", // 超超稀有品阶url
+    "mythicalDescription": "神话级限定皮肤，独家回城特效+动态立绘，全服限量", // 神话品阶描述（超超稀有品阶描述）
+    "mythicalPrice": 29800 // 超超稀有品阶价格（Long类型）
 }
 
 【质量自检（输出前在心里检查）】

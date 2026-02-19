@@ -34,6 +34,11 @@ public class SpiritualMaterialAllCat implements Serializable {
     private String normalUrl;
 
     /**
+     * 普通品阶描述
+     */
+    private String normalDescription;
+
+    /**
      * 普通品阶价格
      */
     private Long normalPrice;
@@ -54,6 +59,11 @@ public class SpiritualMaterialAllCat implements Serializable {
     private Long rarePrice;
 
     /**
+     * 稀有描述
+     */
+    private String rareDescription;
+
+    /**
      * 超稀有品阶名称
      */
     private String superRareName;
@@ -69,6 +79,11 @@ public class SpiritualMaterialAllCat implements Serializable {
     private Long superRarePrice;
 
     /**
+     * 传世描述
+     */
+    private String superRareDescription;
+
+    /**
      * 超超稀有品阶名称
      */
     private String mythicalName;
@@ -82,4 +97,9 @@ public class SpiritualMaterialAllCat implements Serializable {
      * 超超稀有品阶价格
      */
     private Long mythicalPrice;
+
+    /**
+     * 神话品阶描述
+     */
+    private String mythicalDescription;
 }

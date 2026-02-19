@@ -68,7 +68,7 @@ public class SpiritualMaterialsBase implements Serializable {
      * 组 id，同一组拥有四种品质
      */
     @TableField("group_id")
-    private Long groupId;
+    private String groupId;
 
     /**
      * 更新时间

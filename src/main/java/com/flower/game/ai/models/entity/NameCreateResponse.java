@@ -18,19 +18,9 @@ public class NameCreateResponse implements Serializable {
     private static final long serialVersionUID = 1696147815850790052L;
 
     /**
-     * 灵材名称
-     */
-    private String name;
-
-    /**
      * 灵材类型 (0 - 灵谷, 1 - 灵蔬, 2 - 灵肉, 3 - 灵茶, 4 - 灵果, 5 - 灵酿)
      */
     private Integer type;
-
-    /**
-     * 灵材图片 url
-     */
-    private String url;
 
     /**
      * 店铺类型 (0 - 固本类, 1 - 淬灵类)
@@ -38,22 +28,82 @@ public class NameCreateResponse implements Serializable {
     private Integer storeType;
 
     /**
-     * 组 id，同一组拥有四种品质
+     * 普通品阶名称
      */
-    private Long groupId;
+    private String normalName;
 
     /**
-     * 灵材价格
+     * 普通品阶 url
      */
-    private Long price;
+    private String normalUrl;
 
     /**
-     * 1 - 普通，2 - 稀有，3 - 传世， 4 - 神话
+     * 普通品阶描述
      */
-    private Integer rarity;
+    private String normalDescription;
 
     /**
-     * 灵材评价，用于 ai 生成
+     * 普通品阶价格
      */
-    private String description;
+    private Long normalPrice;
+
+    /**
+     * 稀有品阶名称
+     */
+    private String rareName;
+
+    /**
+     * 稀有品阶 url
+     */
+    private String rareUrl;
+
+    /**
+     * 稀有品阶价格
+     */
+    private Long rarePrice;
+
+    /**
+     * 稀有描述
+     */
+    private String rareDescription;
+
+    /**
+     * 超稀有品阶名称
+     */
+    private String superRareName;
+
+    /**
+     * 超稀有品阶 url
+     */
+    private String superRareUrl;
+
+    /**
+     * 超稀有品阶价格
+     */
+    private Long superRarePrice;
+
+    /**
+     * 传世描述
+     */
+    private String superRareDescription;
+
+    /**
+     * 超超稀有品阶名称
+     */
+    private String mythicalName;
+
+    /**
+     * 超超稀有品阶 url
+     */
+    private String mythicalUrl;
+
+    /**
+     * 超超稀有品阶价格
+     */
+    private Long mythicalPrice;
+
+    /**
+     * 神话品阶描述
+     */
+    private String mythicalDescription;
 }
