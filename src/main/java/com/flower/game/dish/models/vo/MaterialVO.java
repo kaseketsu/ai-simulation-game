@@ -28,4 +28,9 @@ public class MaterialVO implements Serializable {
      * 灵材描述
      */
     private String description;
+
+    /**
+     * 稀有度
+     */
+    private Integer rarity;
 }

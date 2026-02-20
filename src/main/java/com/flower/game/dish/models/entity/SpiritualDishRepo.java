@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("spiritual_dish_base")
-public class SpiritualDishBase implements Serializable {
+@TableName("spiritual_dish_repo")
+public class SpiritualDishRepo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -82,4 +82,10 @@ public class SpiritualDishBase implements Serializable {
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
+
+    /**
+     * 灵膳价格
+     */
+    @TableField("price")
+    private Long price;
 }

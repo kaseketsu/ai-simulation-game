@@ -33,17 +33,7 @@ public class NameCreateResponse implements Serializable {
     private String name;
 
     /**
-     * 普通品阶 url
-     */
-    private String url;
-
-    /**
      * 普通品阶描述
      */
     private String description;
-
-    /**
-     * 普通品阶价格
-     */
-    private Long price;
 }

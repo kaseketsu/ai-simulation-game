@@ -50,9 +50,7 @@
       "storeType": 0,
       "type": 0,
       "name": "普通皮肤-经典款", // 普通品阶名称
-      "url": "https://example.com/skins/normal/1001", // 普通品阶url
       "description": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
-      "price": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
 }
 ```
 
@@ -61,9 +59,7 @@
    "storeType": 0,
    "type": 0,
    "name": "普通皮肤-经典款", // 普通品阶名称
-   "url": "https://example.com/skins/normal/1001", // 普通品阶url
    "description": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
-   "price": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
 }
 
 【质量自检（输出前在心里检查）】

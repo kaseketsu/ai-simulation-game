@@ -14,6 +14,11 @@ import java.io.Serializable;
 public class NewMealGenerateRequest implements Serializable {
 
     /**
+     * 用户 id
+     */
+    private Long userId;
+
+    /**
      * 主食材
      */
     private String mainIngredient;
@@ -22,6 +27,11 @@ public class NewMealGenerateRequest implements Serializable {
      * 主食材描述
      */
     private String mainIngredientDescription;
+
+    /**
+     * 主食材稀有度
+     */
+    private Integer mainIngredientRarity;
 
     /**
      * 主食材价格
@@ -42,6 +52,11 @@ public class NewMealGenerateRequest implements Serializable {
      * 辅助食材价格
      */
     private Long sideIngredientPrice;
+
+    /**
+     * 副食材稀有度
+     */
+    private Integer sideIngredientRarity;
 
     /**
      * 主食材描述

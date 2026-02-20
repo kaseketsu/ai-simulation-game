@@ -1,7 +1,7 @@
 package com.flower.game.dish.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flower.game.dish.models.entity.SpiritualDishBase;
+import com.flower.game.dish.models.entity.SpiritualDishRepo;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.flower.game.dish.models.entity.SpiritualDishBase;
  * @author F1ower
  * @since 2026-02-20
  */
-public interface SpiritualDishBaseMapper extends BaseMapper<SpiritualDishBase> {
+public interface SpiritualDishRepoMapper extends BaseMapper<SpiritualDishRepo> {
 
 }

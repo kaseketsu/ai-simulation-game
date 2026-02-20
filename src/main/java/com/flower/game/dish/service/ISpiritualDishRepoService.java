@@ -1,7 +1,7 @@
 package com.flower.game.dish.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.flower.game.dish.models.entity.SpiritualDishBase;
+import com.flower.game.dish.models.entity.SpiritualDishRepo;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.flower.game.dish.models.entity.SpiritualDishBase;
  * @author F1ower
  * @since 2026-02-20
  */
-public interface ISpiritualDishBaseService extends IService<SpiritualDishBase> {
+public interface ISpiritualDishRepoService extends IService<SpiritualDishRepo> {
 
 }

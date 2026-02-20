@@ -372,10 +372,11 @@ async function startCreation() {
         // Let's try sending just names and available info first.
 
         const req: API.NewMealGenerateRequest = {
+            userId: gameStore.player.userId || undefined,
             mainIngredient: selectedMain.value.name,
-            mainIngredientDescription: selectedMain.value.description || `${selectedMain.value.name}`, // Fallback
-            mainIngredientPrice: selectedMain.value.price || 100, // Fallback dummy price
-            mainIngredientType: selectedMain.value.type || 0, // Fallback
+            mainIngredientDescription: selectedMain.value.description || `${selectedMain.value.name}`,
+            mainIngredientPrice: selectedMain.value.price || 100,
+            mainIngredientType: selectedMain.value.type || 0,
             mainIngredientRarity: selectedMain.value.rarity,
             
             sideIngredient: selectedSide.value.name,

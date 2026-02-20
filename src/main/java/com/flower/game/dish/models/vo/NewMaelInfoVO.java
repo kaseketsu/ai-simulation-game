@@ -31,4 +31,9 @@ public class NewMaelInfoVO implements Serializable {
      * 图片 ur;
      */
     private String url;
+
+    /**
+     * 灵膳价格
+     */
+    private Long price;
 }
