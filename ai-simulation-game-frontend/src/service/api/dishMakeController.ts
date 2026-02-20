@@ -49,3 +49,18 @@ export async function fetchSpiritualSeasoningByPage(
     }
   );
 }
+
+/** 此处后端没有提供注释 POST /dish/fetchMaterials */
+export async function fetchMaterials(
+  body: API.SpiritualRepoQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePageVOMaterialVO>("/dish/fetchMaterials", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

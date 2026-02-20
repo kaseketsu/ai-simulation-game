@@ -86,8 +86,8 @@
                 </div>
                 <div v-else-if="inventoryList.length > 0" class="grid grid-cols-4 gap-4">
                     <div 
-                        v-for="item in inventoryList" 
-                        :key="item.id"
+                        v-for="(item, index) in inventoryList" 
+                        :key="item.id || item.name || index"
                         @click="selectIngredient(item)"
                         class="bg-stone-800 border border-stone-700 rounded p-3 cursor-pointer hover:border-amber-500 transition-all flex flex-col gap-2 group relative"
                     >
@@ -97,7 +97,7 @@
                         <div class="font-bold text-stone-200 truncate">{{ item.name }}</div>
                         <div class="flex justify-between items-center text-xs">
                             <span :class="getRarityColor(item.rarity)">{{ getRarityName(item.rarity) }}</span>
-                            <span class="text-stone-500">x{{ item.count }}</span>
+                            <span v-if="item.count !== undefined" class="text-stone-500">x{{ item.count }}</span>
                         </div>
                         <!-- Selection Highlight -->
                         <div v-if="isItemSelected(item)" class="absolute inset-0 border-2 border-amber-500 rounded bg-amber-500/10 pointer-events-none"></div>
@@ -195,8 +195,7 @@
 import { ref, computed } from 'vue'
 import { useGameStore } from '@/stores/game'
 import { useToastStore } from '@/stores/toast'
-import { listSpiritualRepoByPage } from '@/service/api/playProgressController'
-import { createNewMeal, fetchSpiritualSeasoningByPage } from '@/service/api/dishMakeController'
+import { createNewMeal, fetchSpiritualSeasoningByPage, fetchMaterials } from '@/service/api/dishMakeController'
 
 const gameStore = useGameStore()
 const toast = useToastStore()
@@ -230,11 +229,13 @@ const isReady = computed(() => selectedMain.value && selectedSide.value && selec
 
 // Helper Functions
 function getRarityName(rarity: number) {
+    if (rarity === undefined || rarity === null) return '未知'
     const map: Record<number, string> = { 1: '普通', 2: '稀有', 3: '传世', 4: '神话' }
     return map[rarity] || '未知'
 }
 
 function getRarityColor(rarity: number) {
+    if (rarity === undefined || rarity === null) return 'text-stone-500'
     const map: Record<number, string> = { 
         1: 'text-stone-400', 
         2: 'text-blue-400', 
@@ -257,10 +258,19 @@ function closeSelector() {
 }
 
 async function fetchInventory() {
-    if (!gameStore.player.userId) return
+    // Ensure user ID is available
+    if (!gameStore.player.userId) {
+        await gameStore.checkProgress()
+    }
+    
+    if (!gameStore.player.userId) {
+        toast.error('无法获取用户信息，请重新登录')
+        return
+    }
+
     loadingInventory.value = true
     try {
-        const res = await listSpiritualRepoByPage({
+        const res = await fetchMaterials({
             userId: gameStore.player.userId,
             currentPage: currentPage.value,
             pageSize: pageSize.value
@@ -270,7 +280,7 @@ async function fetchInventory() {
             total.value = res.data.total || 0
         }
     } catch (error) {
-        console.error('Fetch inventory failed', error)
+        console.error('Fetch materials failed', error)
     } finally {
         loadingInventory.value = false
     }
@@ -291,8 +301,11 @@ function selectIngredient(item: any) {
 }
 
 function isItemSelected(item: any) {
-    return (selectorType.value === 'main' && selectedMain.value?.id === item.id) ||
-           (selectorType.value === 'side' && selectedSide.value?.id === item.id)
+    const key = item.id || item.name
+    const selected = selectorType.value === 'main' ? selectedMain.value : selectedSide.value
+    if (!selected) return false
+    const selectedKey = selected.id || selected.name
+    return key === selectedKey
 }
 
 // Seasoning Methods

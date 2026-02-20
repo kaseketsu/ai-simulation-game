@@ -30,80 +30,20 @@ public class NameCreateResponse implements Serializable {
     /**
      * 普通品阶名称
      */
-    private String normalName;
+    private String name;
 
     /**
      * 普通品阶 url
      */
-    private String normalUrl;
+    private String url;
 
     /**
      * 普通品阶描述
      */
-    private String normalDescription;
+    private String description;
 
     /**
      * 普通品阶价格
      */
-    private Long normalPrice;
-
-    /**
-     * 稀有品阶名称
-     */
-    private String rareName;
-
-    /**
-     * 稀有品阶 url
-     */
-    private String rareUrl;
-
-    /**
-     * 稀有品阶价格
-     */
-    private Long rarePrice;
-
-    /**
-     * 稀有描述
-     */
-    private String rareDescription;
-
-    /**
-     * 超稀有品阶名称
-     */
-    private String superRareName;
-
-    /**
-     * 超稀有品阶 url
-     */
-    private String superRareUrl;
-
-    /**
-     * 超稀有品阶价格
-     */
-    private Long superRarePrice;
-
-    /**
-     * 传世描述
-     */
-    private String superRareDescription;
-
-    /**
-     * 超超稀有品阶名称
-     */
-    private String mythicalName;
-
-    /**
-     * 超超稀有品阶 url
-     */
-    private String mythicalUrl;
-
-    /**
-     * 超超稀有品阶价格
-     */
-    private Long mythicalPrice;
-
-    /**
-     * 神话品阶描述
-     */
-    private String mythicalDescription;
+    private Long price;
 }

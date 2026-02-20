@@ -13,6 +13,7 @@ import com.flower.game.base.service.ISpiritualMaterialsBaseService;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import com.flower.game.dish.models.dto.SeasoningAddRequest;
 import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
+import com.flower.game.dish.models.entity.SpiritualDishBase;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
 import com.flower.game.dish.models.vo.MaterialVO;
 import com.flower.game.dish.models.vo.NewMaelInfoVO;
@@ -20,14 +21,12 @@ import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
 import com.flower.game.progress.model.dto.SpiritualRepoQueryRequest;
 import com.flower.game.progress.model.vo.SpiritualRepoInfoVO;
 import com.flower.game.progress.service.GamePlayProgressService;
-import com.flower.game.progress.service.IPlayProgressService;
 import common.annotations.ExceptionLog;
 import common.config.AppConfig;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.manager.CosManager;
 import common.manager.RedisManager;
-import common.page.PageRequest;
 import common.page.PageVO;
 import common.utils.FileUtils;
 import common.utils.PageUtils;
@@ -47,8 +46,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 灵膳相关服务
@@ -64,7 +61,7 @@ public class DishService {
     private QwenManager qwenManager;
 
     @Resource
-    private ISpiritualMaterialsBaseService iSpiritualMaterialsBaseService;
+    private ISpiritualDishBaseService iSpiritualDishBaseService;
 
     @Value("${spring.cos.save-path}")
     private String savePath;
@@ -121,18 +118,16 @@ public class DishService {
         // 生成新的名称
         log.info("请求 ai 获取新灵膳名称...");
         NameCreateResponse mealName = qwenManager.createNewMealName(generateRequest);
-        // 存入数据库
-        String uuid = UUID.randomUUID().toString();
-        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        String groupId = String.format("%s/%s", uuid, now);
-        // 异步更新数据库
-        addNewMealToDataBaseSync(generateRequest, mealName, groupId);
         // 这里先生成一张
         String imageUrl = generatePic(generateRequest);
+        // 存入数据库
+        SpiritualDishBase spiritualDishBase = new SpiritualDishBase();
+        BeanUtil.copyProperties(mealName, spiritualDishBase);
+        spiritualDishBase.setUrl(imageUrl);
         // 构建返回对象
         NewMaelInfoVO newMaelInfoVO = new NewMaelInfoVO();
-        newMaelInfoVO.setName(mealName.getNormalName());
-        newMaelInfoVO.setDescription(mealName.getNormalDescription());
+        newMaelInfoVO.setName(mealName.getName());
+        newMaelInfoVO.setDescription(mealName.getDescription());
         newMaelInfoVO.setUrl(imageUrl);
         // 更新 redis
         updateRedis(mealName);
@@ -161,32 +156,6 @@ public class DishService {
     }
 
     /**
-     * 将 ai 返回的四个信息分别生成图片并保存到数据库（异步）
-     *
-     * @param response 返回结果
-     */
-    private void addNewMealToDataBaseSync(NewMealGenerateRequest generateRequest, NameCreateResponse response, String groupId) {
-        try (ExecutorService virtualPool = Executors.newVirtualThreadPerTaskExecutor()) {
-            for (int i = 0; i < 4; i++) {
-                int finalI = i;
-                virtualPool.submit(() -> {
-                    try {
-                        log.info("虚拟线程任务号: {}, 启动...", groupId);
-                        long startTime = System.currentTimeMillis();
-                        SpiritualMaterialsBase spiritualMaterialsBase = fetchMaterialBase(generateRequest, response, groupId, finalI);
-                        iSpiritualMaterialsBaseService.save(spiritualMaterialsBase);
-                        long costTime = System.currentTimeMillis() - startTime;
-                        log.info("虚拟线程任务号: {}，结束, 耗时: {}ms", groupId, costTime);
-                    } catch (Exception e) {
-                        log.info("虚拟线程任务号: {}，执行失败，原因是: {}", groupId, e.getMessage());
-                        throw new BusinessException(ErrorCode.VIRTUAL_THREAD_ERROR, "食材保存失败");
-                    }
-                });
-            }
-        }
-    }
-
-    /**
      * 更新 redis 数据
      *
      * @param response 响应
@@ -202,47 +171,6 @@ public class DishService {
         materialForRedis.getCatList().add(spiritualMaterialAllCat);
         redisManager.addValueWithOutExpiration(key, JSONUtil.toJsonStr(materialForRedis));
         log.info("redis 更新完毕，redisKey: {}", key);
-    }
-
-    /**
-     * 根据稀有度生成不同食材
-     *
-     * @param generateRequest 生成请求
-     * @param response        文本模型响应
-     * @param groupId         租 id
-     * @param i               稀有度
-     * @return 填充好属性的食材
-     */
-    private SpiritualMaterialsBase fetchMaterialBase(NewMealGenerateRequest generateRequest, NameCreateResponse response, String groupId, int i) {
-        SpiritualMaterialsBase spiritualMaterialsBase = new SpiritualMaterialsBase();
-        BeanUtil.copyProperties(response, spiritualMaterialsBase);
-        switch (i) {
-            case 0 -> {
-                spiritualMaterialsBase.setDescription(response.getNormalDescription());
-                spiritualMaterialsBase.setName(response.getNormalName());
-                spiritualMaterialsBase.setPrice(response.getNormalPrice());
-            }
-            case 1 -> {
-                spiritualMaterialsBase.setDescription(response.getRareDescription());
-                spiritualMaterialsBase.setName(response.getRareName());
-                spiritualMaterialsBase.setPrice(response.getRarePrice());
-            }
-            case 2 -> {
-                spiritualMaterialsBase.setDescription(response.getSuperRareDescription());
-                spiritualMaterialsBase.setName(response.getSuperRareName());
-                spiritualMaterialsBase.setPrice(response.getSuperRarePrice());
-            }
-            case 3 -> {
-                spiritualMaterialsBase.setDescription(response.getMythicalDescription());
-                spiritualMaterialsBase.setName(response.getMythicalName());
-                spiritualMaterialsBase.setPrice(response.getMythicalPrice());
-            }
-        }
-        String url = generatePic(generateRequest);
-        spiritualMaterialsBase.setUrl(url);
-        spiritualMaterialsBase.setGroupId(groupId);
-        spiritualMaterialsBase.setRarity(i);
-        return spiritualMaterialsBase;
     }
 
     private String generatePic(NewMealGenerateRequest generateRequest) {

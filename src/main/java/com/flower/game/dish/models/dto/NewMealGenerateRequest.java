@@ -34,11 +34,6 @@ public class NewMealGenerateRequest implements Serializable {
     private Integer mainIngredientType;
 
     /**
-     * 主食材稀有度
-     */
-    private Integer mainIngredientRarity;
-
-    /**
      * 副食材
      */
     private String sideIngredient;
@@ -47,11 +42,6 @@ public class NewMealGenerateRequest implements Serializable {
      * 辅助食材价格
      */
     private Long sideIngredientPrice;
-
-    /**
-     * 辅助食材稀有度
-     */
-    private Integer sideIngredientRarity;
 
     /**
      * 主食材描述

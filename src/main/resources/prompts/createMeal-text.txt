@@ -47,27 +47,12 @@
 严禁生成以下返回!!!!
 ```json
 {
-   "storeType": 0,
-   "type": 0,
-   "normalName": "普通皮肤-经典款", // 普通品阶名称
-    "normalUrl": "https://example.com/skins/normal/1001", // 普通品阶url
-    "normalDescription": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
-    "normalPrice": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
-
-    "rareName": "稀有皮肤-进阶款", // 稀有品阶名称
-    "rareUrl": "https://example.com/skins/rare/2001", // 稀有品阶url
-    "rareDescription": "进阶款皮肤，附带轻微特效，局内模型细节优化", // 稀有描述
-    "rarePrice": 8800, // 稀有品阶价格（Long类型）
-
-    "superRareName": "超稀有皮肤-典藏款", // 超稀有品阶名称
-    "superRareUrl": "https://example.com/skins/super-rare/3001", // 超稀有品阶url
-    "superRareDescription": "典藏级皮肤，全技能特效+专属语音，传世品质", // 传世描述（超稀有品阶描述）
-    "superRarePrice": 16800, // 超稀有品阶价格（Long类型）
-
-    "mythicalName": "超超稀有皮肤-神话款", // 超超稀有品阶名称
-    "mythicalUrl": "https://example.com/skins/mythical/4001", // 超超稀有品阶url
-    "mythicalDescription": "神话级限定皮肤，独家回城特效+动态立绘，全服限量", // 神话品阶描述（超超稀有品阶描述）
-    "mythicalPrice": 29800 // 超超稀有品阶价格（Long类型）
+      "storeType": 0,
+      "type": 0,
+      "name": "普通皮肤-经典款", // 普通品阶名称
+      "url": "https://example.com/skins/normal/1001", // 普通品阶url
+      "description": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
+      "price": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
 }
 ```
 
@@ -75,25 +60,10 @@
 {
    "storeType": 0,
    "type": 0,
-   "normalName": "普通皮肤-经典款", // 普通品阶名称
-    "normalUrl": "https://example.com/skins/normal/1001", // 普通品阶url
-    "normalDescription": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
-    "normalPrice": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
-
-    "rareName": "稀有皮肤-进阶款", // 稀有品阶名称
-    "rareUrl": "https://example.com/skins/rare/2001", // 稀有品阶url
-    "rareDescription": "进阶款皮肤，附带轻微特效，局内模型细节优化", // 稀有描述
-    "rarePrice": 8800, // 稀有品阶价格（Long类型）
-
-    "superRareName": "超稀有皮肤-典藏款", // 超稀有品阶名称
-    "superRareUrl": "https://example.com/skins/super-rare/3001", // 超稀有品阶url
-    "superRareDescription": "典藏级皮肤，全技能特效+专属语音，传世品质", // 传世描述（超稀有品阶描述）
-    "superRarePrice": 16800, // 超稀有品阶价格（Long类型）
-
-    "mythicalName": "超超稀有皮肤-神话款", // 超超稀有品阶名称
-    "mythicalUrl": "https://example.com/skins/mythical/4001", // 超超稀有品阶url
-    "mythicalDescription": "神话级限定皮肤，独家回城特效+动态立绘，全服限量", // 神话品阶描述（超超稀有品阶描述）
-    "mythicalPrice": 29800 // 超超稀有品阶价格（Long类型）
+   "name": "普通皮肤-经典款", // 普通品阶名称
+   "url": "https://example.com/skins/normal/1001", // 普通品阶url
+   "description": "基础款皮肤，无特殊特效，解锁基础外观展示", // 普通品阶描述
+   "price": 1000, // 普通品阶价格（Long类型，示例单位：分/点券）
 }
 
 【质量自检（输出前在心里检查）】

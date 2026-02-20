@@ -19,6 +19,7 @@ import java.util.Scanner;
 @Setter
 @Slf4j
 public class CodeGenerator {
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         Yaml yaml = new Yaml();
         try (InputStream inputStream = CodeGenerator.class.getClassLoader().getResourceAsStream("application.yml")) {

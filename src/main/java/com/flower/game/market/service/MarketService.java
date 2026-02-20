@@ -126,7 +126,7 @@ public class MarketService {
                 .eq(SpiritualMaterialsBase::getIsDeleted, 0);
         SpiritualMaterialsBase materialsBase = iSpiritualMaterialsBaseService.getOne(baseMaterialWrapper);
         // 根据 groupId，找出所有四种 rarity
-        Long groupId = materialsBase.getGroupId();
+        String groupId = materialsBase.getGroupId();
         LambdaQueryWrapper<SpiritualMaterialsBase> baseGroupWrapper = new LambdaQueryWrapper<>();
         baseGroupWrapper.eq(SpiritualMaterialsBase::getGroupId, groupId)
                 .eq(SpiritualMaterialsBase::getIsDeleted, 0);

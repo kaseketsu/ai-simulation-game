@@ -17,6 +17,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageVOMaterialVO = {
+    data?: PageVOMaterialVO;
+    code?: string;
+    message?: string;
+  };
+
   type BaseResponsePageVOSpiritualMaterialAllCat = {
     data?: PageVOSpiritualMaterialAllCat;
     code?: string;
@@ -108,6 +114,12 @@ declare namespace API {
     userState?: number;
   };
 
+  type MaterialVO = {
+    name?: string;
+    url?: string;
+    description?: string;
+  };
+
   type NewMaelInfoVO = {
     name?: string;
     description?: string;
@@ -132,6 +144,14 @@ declare namespace API {
   type PageRequest = {
     currentPage?: number;
     pageSize?: number;
+  };
+
+  type PageVOMaterialVO = {
+    currentPage?: number;
+    pageSize?: number;
+    total?: number;
+    pages?: number;
+    records?: MaterialVO[];
   };
 
   type PageVOSpiritualMaterialAllCat = {
@@ -209,16 +229,20 @@ declare namespace API {
     type?: number;
     normalName?: string;
     normalUrl?: string;
+    normalDescription?: string;
     normalPrice?: number;
     rareName?: string;
     rareUrl?: string;
     rarePrice?: number;
+    rareDescription?: string;
     superRareName?: string;
     superRareUrl?: string;
     superRarePrice?: number;
+    superRareDescription?: string;
     mythicalName?: string;
     mythicalUrl?: string;
     mythicalPrice?: number;
+    mythicalDescription?: string;
   };
 
   type SpiritualMaterialBaseRequest = {
@@ -233,6 +257,7 @@ declare namespace API {
     name?: string;
     url?: string;
     count?: number;
+    description?: string;
   };
 
   type SpiritualRepoQueryRequest = {
