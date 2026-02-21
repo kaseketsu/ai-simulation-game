@@ -19,6 +19,11 @@ public class NewMealGenerateRequest implements Serializable {
     private Long userId;
 
     /**
+     * 主食材 id
+     */
+    private Long mainId;
+
+    /**
      * 主食材
      */
     private String mainIngredient;
@@ -42,6 +47,11 @@ public class NewMealGenerateRequest implements Serializable {
      * 主食材类型
      */
     private Integer mainIngredientType;
+
+    /**
+     * 辅食材 id
+     */
+    private Long sideId;
 
     /**
      * 副食材

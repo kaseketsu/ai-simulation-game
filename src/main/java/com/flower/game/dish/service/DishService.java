@@ -20,6 +20,8 @@ import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
 import com.flower.game.dish.models.vo.MaterialVO;
 import com.flower.game.dish.models.vo.NewMaelInfoVO;
 import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
+import com.flower.game.market.models.entity.SpiritualMaterialsRepo;
+import com.flower.game.market.service.ISpiritualMaterialsRepoService;
 import com.flower.game.progress.model.dto.SpiritualRepoQueryRequest;
 import com.flower.game.progress.model.entity.PlayProgress;
 import com.flower.game.progress.model.vo.SpiritualRepoInfoVO;
@@ -32,10 +34,7 @@ import common.exceptions.ErrorCode;
 import common.manager.CosManager;
 import common.manager.RedisManager;
 import common.page.PageVO;
-import common.utils.FileUtils;
-import common.utils.ObjUtils;
-import common.utils.PageUtils;
-import common.utils.ParamsCheckUtils;
+import common.utils.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,6 +92,9 @@ public class DishService {
 
     @Resource
     private ISpiritualRecipeBaseService iSpiritualRecipeBaseService;
+
+    @Resource
+    private ISpiritualMaterialsRepoService iSpiritualMaterialsRepoService;
 
     // 修正语法错误 + 补全所有1-10阶倍率 + 规范命名
     private final Map<Integer, Double> storeMultiplier = new HashMap<>() {
@@ -154,6 +156,15 @@ public class DishService {
     public NewMaelInfoVO createNewMeal(NewMealGenerateRequest generateRequest) {
         // 校验参数
         ParamsCheckUtils.checkObj(generateRequest);
+        // 获得主食材和辅助食材信息
+        SpiritualMaterialsRepo mainInfo = iSpiritualMaterialsRepoService.getById(generateRequest.getMainId());
+        SpiritualMaterialsRepo sideInfo = iSpiritualMaterialsRepoService.getById(generateRequest.getSideId());
+        ThrowUtils.throwIf(mainInfo.getCount() <= 0 || sideInfo.getCount() <= 0, ErrorCode.NOT_FOUND_ERROR, "灵材数量不足");
+        mainInfo.setCount(mainInfo.getCount() - 1);
+        sideInfo.setCount(sideInfo.getCount() - 1);
+        // 更新数据库
+        iSpiritualMaterialsRepoService.updateById(mainInfo);
+        iSpiritualMaterialsRepoService.updateById(sideInfo);
         // 查看配方表，看看是否有存在的灵膳
         LambdaQueryWrapper<SpiritualRecipeBase> recipeWrapper = new LambdaQueryWrapper<>();
         recipeWrapper.eq(SpiritualRecipeBase::getMainIngredient, generateRequest.getMainIngredient())
@@ -182,7 +193,6 @@ public class DishService {
             boolean hasDish = dish != null;
             if (hasDish) {
                 // 当前 dishCount + 1
-                ObjUtils.removeAutoParams(dish);
                 dish.setCount(dish.getCount() + 1);
                 iSpiritualDishRepoService.updateById(dish);
             } else {
@@ -203,6 +213,7 @@ public class DishService {
             spiritualDishRepo.setPrice(price);
             spiritualDishRepo.setUrl(imageUrl);
             spiritualDishRepo.setCount(1);
+            spiritualDishRepo.setUserId(generateRequest.getUserId());
             // 存入数据库
             iSpiritualDishRepoService.save(spiritualDishRepo);
             // 存入配方表, mainName + sideName + seasoning = obj
@@ -235,7 +246,7 @@ public class DishService {
         PageVO<SpiritualRepoInfoVO> infoVOPageVO = gamePlayProgressService.listSpiritualRepoByPage(request);
         List<SpiritualRepoInfoVO> records = infoVOPageVO.getRecords();
         // 转换为 vo（原逻辑：过滤掉稀有度不为 1 的）
-        List<MaterialVO> materialVOS = records.stream().map(r -> {
+        List<MaterialVO> materialVOS = records.stream().filter(r -> r.getCount() > 0).map(r -> {
             MaterialVO materialVO = new MaterialVO();
             BeanUtil.copyProperties(r, materialVO);
             return materialVO;

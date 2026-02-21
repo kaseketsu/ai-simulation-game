@@ -15,6 +15,16 @@ public class MaterialVO implements Serializable {
     private static final long serialVersionUID = -3636694633754986439L;
 
     /**
+     * repoId
+     */
+    private Long id;
+
+    /**
+     * 数量
+     */
+    private Integer count;
+
+    /**
      * 灵材名称
      */
     private String name;
