@@ -266,6 +266,26 @@ CREATE TABLE `spiritual_dish_base`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_as_cs COMMENT ='灵膳基础信息表';
 
+-- 灵膳配方基础表
+CREATE TABLE `spiritual_recipe_base`
+(
+    `id`              INT                                    NOT NULL AUTO_INCREMENT COMMENT '调味料唯一ID',
+    `main_ingredient` VARCHAR(64)                            NOT NULL COMMENT '主食材',
+    `side_ingredient` VARCHAR(64)                            NOT NULL COMMENT '辅食材',
+    `seasoning`       VARCHAR(64)                            NOT NULL COMMENT '调味料',
+    `response`        VARCHAR(1024)                          NOT NULL COMMENT 'ai 生成结果',
+    `create_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `creator`         VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    `modifier`        VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    `is_deleted`      INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
+    PRIMARY KEY (`id`),
+    KEY idx_name (`main_ingredient`, `side_ingredient`, `seasoning`),
+    UNIQUE (`main_ingredient`, `side_ingredient`, `seasoning`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_as_cs COMMENT ='灵膳配方基础信息表';
+
 
 USE ai_simulation_game;
 

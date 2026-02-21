@@ -3,12 +3,15 @@ package com.flower.game.dish.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.ai.manager.QwenManager;
 import com.flower.game.ai.models.entity.NameCreateResponse;
 import com.flower.game.base.models.entity.SpiritualMaterialAllCat;
+import com.flower.game.base.models.entity.SpiritualRecipeBase;
+import com.flower.game.base.service.ISpiritualRecipeBaseService;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import com.flower.game.dish.models.dto.SeasoningAddRequest;
 import com.flower.game.dish.models.dto.SeasoningBatchAddRequest;
@@ -30,6 +33,7 @@ import common.manager.CosManager;
 import common.manager.RedisManager;
 import common.page.PageVO;
 import common.utils.FileUtils;
+import common.utils.ObjUtils;
 import common.utils.PageUtils;
 import common.utils.ParamsCheckUtils;
 import jakarta.annotation.Resource;
@@ -86,6 +90,9 @@ public class DishService {
 
     @Resource
     private ISpiritualDishRepoService iSpiritualDishRepoService;
+
+    @Resource
+    private ISpiritualRecipeBaseService iSpiritualRecipeBaseService;
 
     // 修正语法错误 + 补全所有1-10阶倍率 + 规范命名
     private final Map<Integer, Double> storeMultiplier = new HashMap<>() {
@@ -147,29 +154,72 @@ public class DishService {
     public NewMaelInfoVO createNewMeal(NewMealGenerateRequest generateRequest) {
         // 校验参数
         ParamsCheckUtils.checkObj(generateRequest);
-        // 生成新的名称
-        log.info("请求 ai 获取新灵膳名称...");
-        NameCreateResponse mealName = qwenManager.createNewMealName(generateRequest);
-        // 这里先生成一张
-        String imageUrl = generatePic(generateRequest);
-        // 存入数据库
-        SpiritualDishRepo SpiritualDishRepo = new SpiritualDishRepo();
-        BeanUtil.copyProperties(mealName, SpiritualDishRepo);
-        // 计算价格
-        Long price = calculatePrice(generateRequest);
-        SpiritualDishRepo.setPrice(price);
-        SpiritualDishRepo.setUrl(imageUrl);
-        // 存入数据库
-        iSpiritualDishRepoService.save(SpiritualDishRepo);
-        // todo: 存入配方表, mainName + sideName + seasoning = obj
+        // 查看配方表，看看是否有存在的灵膳
+        LambdaQueryWrapper<SpiritualRecipeBase> recipeWrapper = new LambdaQueryWrapper<>();
+        recipeWrapper.eq(SpiritualRecipeBase::getMainIngredient, generateRequest.getMainIngredient())
+                .eq(SpiritualRecipeBase::getSideIngredient, generateRequest.getSideIngredient())
+                .eq(SpiritualRecipeBase::getSeasoning, generateRequest.getSeasoning());
+        // 灵膳配方信息
+        SpiritualRecipeBase recipeBase = iSpiritualRecipeBaseService.getOne(recipeWrapper);
+        boolean hasRecipe = recipeBase != null;
+        // 最终填充信息
+        SpiritualDishRepo res;
+        if (hasRecipe) {
+            String response = recipeBase.getResponse();
+            log.info("灵膳配方存在，ai 生成结果为: {}", response);
+            SpiritualDishRepo dishRepo = JSONUtil.toBean(response, SpiritualDishRepo.class);
+            res = dishRepo;
+            // 清除部分自动生成数据
+            ObjUtils.removeAutoParams(dishRepo);
+            // 添加当前 userId
+            dishRepo.setUserId(generateRequest.getUserId());
+            // 判断库中是否存在灵膳
+            LambdaQueryWrapper<SpiritualDishRepo> dishWrapper = new LambdaQueryWrapper<>();
+            dishWrapper.eq(SpiritualDishRepo::getUserId, generateRequest.getUserId())
+                    .eq(SpiritualDishRepo::getName, dishRepo.getName())
+                    .eq(SpiritualDishRepo::getIsDeleted, 0);
+            SpiritualDishRepo dish = iSpiritualDishRepoService.getOne(dishWrapper);
+            boolean hasDish = dish != null;
+            if (hasDish) {
+                // 当前 dishCount + 1
+                ObjUtils.removeAutoParams(dish);
+                dish.setCount(dish.getCount() + 1);
+                iSpiritualDishRepoService.updateById(dish);
+            } else {
+                dishRepo.setCount(1);
+                iSpiritualDishRepoService.save(dishRepo);
+            }
+        } else {
+            // 生成新的名称
+            log.info("请求 ai 获取新灵膳名称...");
+            NameCreateResponse mealName = qwenManager.createNewMealName(generateRequest);
+            // 这里先生成一张
+            String imageUrl = generatePic(generateRequest);
+            // 存入数据库
+            SpiritualDishRepo spiritualDishRepo = new SpiritualDishRepo();
+            BeanUtil.copyProperties(mealName, spiritualDishRepo);
+            // 计算价格
+            Long price = calculatePrice(generateRequest);
+            spiritualDishRepo.setPrice(price);
+            spiritualDishRepo.setUrl(imageUrl);
+            spiritualDishRepo.setCount(1);
+            // 存入数据库
+            iSpiritualDishRepoService.save(spiritualDishRepo);
+            // 存入配方表, mainName + sideName + seasoning = obj
+            SpiritualRecipeBase spiritualRecipeBase = new SpiritualRecipeBase();
+            spiritualRecipeBase.setMainIngredient(generateRequest.getMainIngredient());
+            spiritualRecipeBase.setSideIngredient(generateRequest.getSideIngredient());
+            spiritualRecipeBase.setSeasoning(generateRequest.getSeasoning());
+            spiritualRecipeBase.setResponse(JSONUtil.toJsonStr(spiritualDishRepo));
+            iSpiritualRecipeBaseService.save(spiritualRecipeBase);
+            res = spiritualDishRepo;
+        }
         // 构建返回对象
         NewMaelInfoVO newMaelInfoVO = new NewMaelInfoVO();
-        newMaelInfoVO.setName(mealName.getName());
-        newMaelInfoVO.setDescription(mealName.getDescription());
-        newMaelInfoVO.setPrice(price);
-        newMaelInfoVO.setUrl(imageUrl);
-        // 更新 redis
-        updateRedis(mealName);
+        newMaelInfoVO.setName(res.getName());
+        newMaelInfoVO.setDescription(res.getDescription());
+        newMaelInfoVO.setPrice(res.getPrice());
+        newMaelInfoVO.setUrl(res.getUrl());
         log.info("返回对象构建完成，参数为: {}", JSONUtil.toJsonPrettyStr(newMaelInfoVO));
         return newMaelInfoVO;
     }
@@ -224,23 +274,6 @@ public class DishService {
         return Math.round(price);
     }
 
-    /**
-     * 更新 redis 数据
-     *
-     * @param response 响应
-     */
-    private void updateRedis(NameCreateResponse response) {
-        // 包装为 allCat，更新 redis
-        log.info("准备将新生成内容存入 redis 中....");
-        SpiritualMaterialAllCat spiritualMaterialAllCat = new SpiritualMaterialAllCat();
-        BeanUtil.copyProperties(response, spiritualMaterialAllCat);
-        String key = redisKey + response.getType();
-        String value = redisManager.getValue(key, String.class);
-        SpiritualMaterialForRedis materialForRedis = JSONUtil.toBean(value, SpiritualMaterialForRedis.class);
-        materialForRedis.getCatList().add(spiritualMaterialAllCat);
-        redisManager.addValueWithOutExpiration(key, JSONUtil.toJsonStr(materialForRedis));
-        log.info("redis 更新完毕，redisKey: {}", key);
-    }
 
     private String generatePic(NewMealGenerateRequest generateRequest) {
         // 请求生成新的图片

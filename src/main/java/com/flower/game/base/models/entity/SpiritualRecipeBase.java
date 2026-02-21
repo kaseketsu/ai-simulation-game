@@ -1,4 +1,4 @@
-package com.flower.game.dish.models.entity;
+package com.flower.game.base.models.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,17 +14,17 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 灵膳基础信息表
+ * 灵膳配方基础信息表
  * </p>
  *
  * @author F1ower
- * @since 2026-02-20
+ * @since 2026-02-21
  */
 @Getter
 @Setter
 @ToString
-@TableName("spiritual_dish_repo")
-public class SpiritualDishRepo implements Serializable {
+@TableName("spiritual_recipe_base")
+public class SpiritualRecipeBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,22 +35,28 @@ public class SpiritualDishRepo implements Serializable {
     private Integer id;
 
     /**
-     * 用户唯一ID
+     * 主食材
      */
-    @TableField("user_id")
-    private Long userId;
+    @TableField("main_ingredient")
+    private String mainIngredient;
 
     /**
-     * 灵膳名称
+     * 辅食材
      */
-    @TableField("name")
-    private String name;
+    @TableField("side_ingredient")
+    private String sideIngredient;
 
     /**
-     * 灵膳图片 url
+     * 调味料
      */
-    @TableField("url")
-    private String url;
+    @TableField("seasoning")
+    private String seasoning;
+
+    /**
+     * ai 生成结果
+     */
+    @TableField("response")
+    private String response;
 
     /**
      * 创建时间
@@ -82,22 +88,4 @@ public class SpiritualDishRepo implements Serializable {
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
-
-    /**
-     * 灵膳价格
-     */
-    @TableField("price")
-    private Long price;
-
-    /**
-     * 灵膳数量
-     */
-    @TableField("count")
-    private Integer count;
-
-    /**
-     * 灵膳描述
-     */
-    @TableField("description")
-    private String description;
 }
