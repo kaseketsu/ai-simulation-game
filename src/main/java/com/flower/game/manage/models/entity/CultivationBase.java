@@ -88,4 +88,16 @@ public class CultivationBase implements Serializable {
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
+
+    /**
+     * 地域
+     */
+    @TableField("region")
+    private Integer region;
+
+    /**
+     * 商店类型
+     */
+    @TableField("商店类型")
+    private Integer storeType;
 }

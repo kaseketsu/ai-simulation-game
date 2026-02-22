@@ -91,7 +91,6 @@
 输入格式：
 
 {
-  "storeLevel": number,
   "region": number,
   "storeType": number
 }
@@ -126,7 +125,9 @@
     "name": "string",
     "daoTitle": "string or null",
     "gender": number,
-    "status": number
+    "status": number,
+    "region": number,
+    "storeType": number,
   },
 
   "personality": {

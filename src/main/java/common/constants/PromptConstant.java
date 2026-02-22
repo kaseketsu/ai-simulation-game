@@ -22,4 +22,14 @@ public class PromptConstant {
      * 系统 prompt
      */
     public static final String SYSTEM = "system";
+
+    /**
+     * 修士系统 prompt
+     */
+    public static final String SYSTEM_CULTIVATION = "system_cultivation";
+
+    /**
+     * 修士生成 prompt
+     */
+    public static final String CULTIVATION = "cultivation";
 }

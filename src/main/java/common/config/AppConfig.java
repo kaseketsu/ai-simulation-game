@@ -20,6 +20,21 @@ public class AppConfig {
     @Value("${image-save-path:/images}")
     private String imageSavePath;
 
+    /**
+     * cos 中图片前缀路径
+     */
     @Value("${cos-image-predix:https://ai-simulation-game-1334049508.cos.ap-shanghai.myqcloud.com}")
     private String cosImagePrefix;
+
+    /**
+     * 系统 prompt - 创建修士
+     */
+    @Value("${system-people:/prompts/systemPrompt-People}")
+    private String systemPeople;
+
+    /**
+     * 创建修士
+     */
+    @Value("${create-people:/prompts/createPeople}")
+    private String createPeople;
 }
