@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 修士身份信息
+ * 修士性格信息
  * </p>
  *
  * @author F1ower
@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("cultivation_base")
-public class CultivationBase implements Serializable {
+@TableName("cultivation_personality")
+public class CultivationPersonality implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,28 +35,28 @@ public class CultivationBase implements Serializable {
     private Long id;
 
     /**
-     * 姓名
+     * 修士ID
      */
-    @TableField("name")
-    private String name;
+    @TableField("cultivation_id")
+    private Long cultivationId;
 
     /**
-     * 道号
+     * 性情类型
      */
-    @TableField("dao_title")
-    private String daoTitle;
+    @TableField("temperament")
+    private Byte temperament;
 
     /**
-     * 性别 (0-男,1-女)
+     * 说话风格
      */
-    @TableField("gender")
-    private Byte gender;
+    @TableField("speech_style")
+    private Byte speechStyle;
 
     /**
-     * 身份 (0-散修,1-内门,2-核心,3-长老)
+     * 性格标签数组
      */
-    @TableField("status")
-    private Byte status;
+    @TableField("traits")
+    private String traits;
 
     /**
      * 创建时间
