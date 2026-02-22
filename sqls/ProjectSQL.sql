@@ -286,6 +286,23 @@ CREATE TABLE `spiritual_recipe_base`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_as_cs COMMENT ='灵膳配方基础信息表';
 
+-- 修士基础表
+CREATE TABLE `cultivation_base`
+(
+    `id`          BIGINT                                 NOT NULL AUTO_INCREMENT COMMENT '修士唯一ID',
+    `user_id`     BIGINT                                 NOT NULL COMMENT '用户唯一ID',
+    `properties`  VARCHAR(512)                           NOT NULL COMMENT '修士基础属性',
+    `create_time` DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `creator`     VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    `modifier`    VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    `is_deleted`  INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
+    PRIMARY KEY (`id`),
+    key idx_user_id (`user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_as_cs COMMENT ='修士基础信息表';
+
 
 USE ai_simulation_game;
 

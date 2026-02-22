@@ -97,7 +97,7 @@
                         <div class="font-bold text-stone-200 truncate">{{ item.name }}</div>
                         <div class="flex justify-between items-center text-xs">
                             <span :class="getRarityColor(item.rarity)">{{ getRarityName(item.rarity) }}</span>
-                            <span v-if="item.count !== undefined" class="text-stone-500">x{{ item.count }}</span>
+                            <span v-if="item.count != null" class="text-stone-500">x{{ item.count }}</span>
                         </div>
                         <!-- Selection Highlight -->
                         <div v-if="isItemSelected(item)" class="absolute inset-0 border-2 border-amber-500 rounded bg-amber-500/10 pointer-events-none"></div>
@@ -373,12 +373,14 @@ async function startCreation() {
 
         const req: API.NewMealGenerateRequest = {
             userId: gameStore.player.userId || undefined,
+            mainId: selectedMain.value.id,
             mainIngredient: selectedMain.value.name,
             mainIngredientDescription: selectedMain.value.description || `${selectedMain.value.name}`,
             mainIngredientPrice: selectedMain.value.price || 100,
             mainIngredientType: selectedMain.value.type || 0,
             mainIngredientRarity: selectedMain.value.rarity,
             
+            sideId: selectedSide.value.id,
             sideIngredient: selectedSide.value.name,
             sideIngredientPrice: selectedSide.value.price || 50,
             sideIngredientRarity: selectedSide.value.rarity,

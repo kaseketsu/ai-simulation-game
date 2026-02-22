@@ -112,14 +112,17 @@ declare namespace API {
     userAvatar?: string;
     userRole?: string;
     userState?: number;
+  };
+
   type MaterialVO = {
+    id?: number;
+    count?: number;
     name?: string;
     url?: string;
     description?: string;
     rarity?: number;
     price?: number;
     type?: number;
-  };  rarity?: number;
   };
 
   type NewMaelInfoVO = {
@@ -131,11 +134,13 @@ declare namespace API {
 
   type NewMealGenerateRequest = {
     userId?: number;
+    mainId?: number;
     mainIngredient?: string;
     mainIngredientDescription?: string;
-    mainIngredientRarity?: number;
     mainIngredientPrice?: number;
     mainIngredientType?: number;
+    mainIngredientRarity?: number;
+    sideId?: number;
     sideIngredient?: string;
     sideIngredientPrice?: number;
     sideIngredientRarity?: number;
