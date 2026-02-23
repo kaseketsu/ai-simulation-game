@@ -29,12 +29,12 @@ public class AppConfig {
     /**
      * 系统 prompt - 创建修士
      */
-    @Value("${system-people:/prompts/systemPrompt-People}")
+    @Value("${system-people:/prompts/systemPrompt-People.txt}")
     private String systemPeople;
 
     /**
      * 创建修士
      */
-    @Value("${create-people:/prompts/createPeople}")
+    @Value("${create-people:/prompts/createPeople.txt}")
     private String createPeople;
 }

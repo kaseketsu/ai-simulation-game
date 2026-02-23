@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -67,6 +68,38 @@ public class RedisManager {
     public void addValueWithOutExpiration(@NonNull final String key, @NonNull final Object value) {
         ParamsCheckUtils.checkAll(key, value);
         redisTemplate.opsForValue().setIfAbsent(key, value);
+    }
+
+    /**
+     * 添加 list 到 redis
+     *
+     * @param key   键
+     * @param value 值
+     */
+    public <T> void addValueForList(@NonNull final String key, @NonNull final List<T> value) {
+        ParamsCheckUtils.checkAll(key, value);
+        redisTemplate.opsForList().leftPushAll(key, value);
+    }
+
+    /**
+     * 获取 list
+     *
+     * @param key   键
+     * @param clazz 指定类型
+     * @return list
+     */
+    public <T> List<T> fetchValueForList(@NonNull final String key, @NonNull Class<T> clazz) {
+        ParamsCheckUtils.checkAll(key);
+        List<Object> values = redisTemplate.opsForList().range(key, 0, -1);
+        List<T> res = CollUtil.newArrayList();
+        if (CollUtil.isNotEmpty(values)) {
+            for (Object o : values) {
+                if (clazz.isInstance(o)) {
+                    res.add(clazz.cast(o));
+                }
+            }
+        }
+        return res;
     }
 
     /**

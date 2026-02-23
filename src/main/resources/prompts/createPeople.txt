@@ -71,7 +71,16 @@
 --------------------------------------------------
 【生成目标】
 
-你需要生成一名“正在进入食肆的修士顾客”，包括：
+你需要根据 batchSize 数量，生成 batchSize 名“正在进入食肆的修士顾客”。
+
+每名顾客必须：
+- 独立生成
+- 不重复姓名
+- 不重复完全相同性格组合
+- 可单独用于经营系统计算
+- 不共享经济数据
+
+包括：
 
 1）身份信息（用于经济计算）
 2）性格与说话风格（用于对话）
@@ -79,7 +88,6 @@
 4）消费能力（用于经营系统）
 5）来店目的（用于行为逻辑）
 6）入店开场对白（用于UI展示）
-7）UI标签（用于前端快速识别）
 
 生成必须符合“顾客逻辑”，而不是英雄人物设定。
 
@@ -93,7 +101,16 @@
 {
   "region": number,
   "storeType": number
+  "batchSize": number
 }
+
+规则说明：
+
+- 若 region 为空 → 在 0 / 1 之间合理随机
+- 若 storeType 为空 → 在 0 / 1 之间合理随机
+- batchSize 必须 >= 1
+- 若 batchSize > 1 → 必须生成对应数量的顾客数组
+- 不允许只生成一个对象
 
 --------------------------------------------------
 【命名与文本规则】
@@ -121,35 +138,59 @@
 【输出格式（必须严格 JSON，plaintext，无解释）】
 
 {
-  "identity": {
-    "name": "string",
-    "daoTitle": "string or null",
-    "gender": number,
-    "status": number,
-    "region": number,
-    "storeType": number,
-  },
+  "customers": [
+    {
+      "identity": {
+        "name": "string",
+        "daoTitle": "string or null",
+        "gender": number,
+        "status": number,
+        "region": number,
+        "storeType": number,
+      },
 
-  "personality": {
-    "temperament": number,
-    "speechStyle": number,
-    "traits": ["string","string"]
-  },
+      "personality": {
+        "temperament": number,
+        "speechStyle": number,
+        "traits": ["string","string"]
+      },
 
-  "dialogue": {
-    "openingLine": "string"
-  },
+      "dialogue": {
+        "openingLine": "string"
+      },
+    }
+  ]
 }
+
+- customers 数组长度必须严格等于 batchSize
+- 不允许输出单个对象
+- 不允许附加解释文本
+- 不允许缺失字段
+--------------------------------------------------
+【批量生成稳定性规则】
+当 batchSize > 1 时：
+
+- 每名顾客必须拥有：
+  - 不同姓名
+  - 不同气质组合（temperament 不可全部相同）
+  - 经济身份可重复，但不可全部相同
+  - 对话不得重复句式
+
+- 输出顺序即为入店顺序
+
+- 不允许生成群体描述
+- 不允许合并描述
+- 不允许共享对白
 
 --------------------------------------------------
 【质量自检（输出前必须在内部检查）】
 
-- 是否符合对应身份经济规则？
-- 是否像食肆顾客而非剧情NPC？
-- 是否符合时辰段倾向？
-- 是否符合经营品类偏好？
-- 是否无现代词汇？
-- 是否严格 JSON？
-- 是否所有字段存在？
-
+customers 数组长度是否 = batchSize？
+是否所有顾客字段完整？
+是否无重复姓名？
+是否身份经济规则正确匹配？
+是否符合 region 风格？
+是否符合 storeType 偏好？
+是否所有输出为严格 JSON？
+是否无解释文字？
 完成后直接输出 JSON。

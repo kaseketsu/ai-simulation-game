@@ -98,6 +98,18 @@ public class CultivationBase implements Serializable {
     /**
      * 商店类型
      */
-    @TableField("商店类型")
+    @TableField("store_type")
     private Integer storeType;
+
+    /**
+     * 修士形象
+     */
+    @TableField("url")
+    private String url;
+
+    /**
+     * 开场白
+     */
+    @TableField("opening_line")
+    private String openingLine;
 }
