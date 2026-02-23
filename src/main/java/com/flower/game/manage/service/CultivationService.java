@@ -38,6 +38,7 @@ public class CultivationService {
     /**
      * 将部分全局信息存入 redis
      */
+    // todo: 加入新的 prompt，修士放入 redis，如果超过 50 个就随机选
     @PostConstruct
     public void init() {
         try (
@@ -71,5 +72,5 @@ public class CultivationService {
         }
     }
 
-
+    // todo: 守护线程生成直到 redis 里有 50 个, 先落库再放入 redis
 }
