@@ -8,6 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.ai.manager.QwenManager;
 import com.flower.game.ai.models.entity.NameCreateResponse;
+import com.flower.game.ai.templates.MealCreateImageTemplate;
 import com.flower.game.ai.templates.MealCreateTextTemplate;
 import com.flower.game.base.models.entity.SpiritualRecipeBase;
 import com.flower.game.base.service.ISpiritualRecipeBaseService;
@@ -64,7 +65,7 @@ public class DishService {
     private MealCreateTextTemplate mealCreateTextTemplate;
 
     @Resource
-    private QwenManager qwenManager;
+    private MealCreateImageTemplate mealCreateImageTemplate;
 
     @Value("${spring.cos.save-path}")
     private String savePath;
@@ -283,7 +284,7 @@ public class DishService {
     private String generatePic(NewMealGenerateRequest generateRequest) {
         // 请求生成新的图片
         log.info("即将下载图片到本地....");
-        String picUrl = qwenManager.createNewMealPic(generateRequest);
+        String picUrl = mealCreateImageTemplate.fetchPicUrl(generateRequest);
         // 拼接保存路径
         String uuid = UUID.randomUUID().toString();
         LocalDateTime now = LocalDateTime.now();

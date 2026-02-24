@@ -1,6 +1,7 @@
 package com.flower.game.ai.templates;
 
 import com.flower.game.ai.models.entity.NameCreateResponse;
+import com.flower.game.ai.templates.abstractTemplates.AbstractTextModelCallTemplate;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import common.constants.RedisKeyConstants;
 import common.manager.RedisManager;

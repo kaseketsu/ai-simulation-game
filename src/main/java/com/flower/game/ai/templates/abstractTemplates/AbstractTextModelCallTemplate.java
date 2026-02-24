@@ -1,4 +1,4 @@
-package com.flower.game.ai.templates;
+package com.flower.game.ai.templates.abstractTemplates;
 
 import cn.hutool.json.JSONUtil;
 import com.alibaba.dashscope.aigc.generation.Generation;
@@ -27,14 +27,9 @@ import java.util.Arrays;
 @Slf4j
 public abstract class AbstractTextModelCallTemplate<T, R> {
 
-    @Resource
-    private RedisManager redisManager;
 
     @Value("${spring.ali.text-model}")
     private String textModel;
-
-    @Value("${spring.ali.image-model}")
-    private String imageModel;
 
     @Value("${spring.ali.api-key}")
     private String apiKey;
@@ -97,9 +92,24 @@ public abstract class AbstractTextModelCallTemplate<T, R> {
                 .build();
     }
 
+    /**
+     * 获取返回值类型
+     *
+     * @return 返回值类型
+     */
     public abstract Class<R> fetchRespClass();
 
+    /**
+     * 获取系统 prompt
+     *
+     * @return 系统 prompt
+     */
     public abstract String fetchSysPrompt();
 
+    /**
+     * 获取文本 prompt
+     *
+     * @return 文本 prompt
+     */
     public abstract String fetchTextPrompt();
 }
