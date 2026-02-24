@@ -32,4 +32,9 @@ public class PromptConstant {
      * 修士生成 prompt
      */
     public static final String CULTIVATION = "cultivation";
+
+    /**
+     * 修士图片生成 prompt
+     */
+    public static final String CULTIVATION_PIC = "cultivation_pic";
 }

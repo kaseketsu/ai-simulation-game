@@ -37,4 +37,10 @@ public class AppConfig {
      */
     @Value("${create-people:/prompts/createPeople.txt}")
     private String createPeople;
+
+    /**
+     * 创建修士图片
+     */
+    @Value("${create-people:/prompts/createPeople-image.txt}")
+    private String createPeoplePic;
 }
