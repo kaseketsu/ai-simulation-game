@@ -56,40 +56,6 @@ public class QwenManager {
     private String apiKey;
 
     /**
-     * 传入用户消息并获取消息
-     *
-     * @param newMealGenerateRequest 灵膳创建相关消息
-     * @return ai 响应结果
-     */
-    @ExceptionLog("灵膳创建失败")
-    public NameCreateResponse createNewMealName(NewMealGenerateRequest newMealGenerateRequest) {
-        // 校验参数
-        ParamsCheckUtils.checkObj(newMealGenerateRequest);
-        // 创建 message
-        String systemPrompt = redisManager.getValue(RedisKeyConstants.SYSTEM_PROMPT, String.class);
-        String textPrompt = redisManager.getValue(RedisKeyConstants.TEXT_PROMPT, String.class);
-        Generation generation = new Generation();
-        // 生成请求信息
-        String userMessage = textPrompt.formatted(
-                JSONUtil.toJsonPrettyStr(newMealGenerateRequest)
-        );
-        GenerationParam params = fetchGenerationParam(userMessage, systemPrompt, textPrompt);
-        GenerationResult callRes;
-        try {
-            callRes = generation.call(params);
-        } catch (NoApiKeyException | InputRequiredException e) {
-            log.error("文本模型调用失败. 调用模型: {}, 调用参数: {}, 错误原因: {}", textModel, JSONUtil.toJsonPrettyStr(params), e.getMessage());
-            throw new BusinessException(ErrorCode.TEXT_CALL_ERROR);
-        }
-        log.info("ai 返回内容为: {}", JSONUtil.toJsonPrettyStr(callRes));
-        // 获取 content
-        String content = callRes.getOutput().getChoices().get(0).getMessage().getContent();
-        log.info("content 为: {}", content);
-        // 转换为对应实体类
-        return JSONUtil.toBean(content, NameCreateResponse.class);
-    }
-
-    /**
      * 创建新灵膳图片
      *
      * @param newMealGenerateRequest 生成请求
@@ -100,6 +66,16 @@ public class QwenManager {
         ParamsCheckUtils.checkObj(newMealGenerateRequest);
         String imagePrompt = redisManager.getValue(RedisKeyConstants.IMAGE_PROMPT, String.class);
         String prompt = imagePrompt.formatted(JSONUtil.toJsonPrettyStr(newMealGenerateRequest));
+        return callImageModel(prompt);
+    }
+
+    /**
+     * 根据 prompt 调用模型并返回 url
+     *
+     * @param prompt 提示词
+     * @return url
+     */
+    private String callImageModel(String prompt) {
         log.info("即将调用模型：{}, 请求提示词为: {}", imageModel, prompt);
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("prompt_extend", true);
@@ -124,32 +100,5 @@ public class QwenManager {
         }
         // 返回 url
         return result.getOutput().getResults().get(0).get("url");
-    }
-
-
-    /**
-     * 获取 ai 生成参数
-     *
-     * @param userMessage  用户信息
-     * @param systemPrompt 系统提示
-     * @param textPrompt   文本提示
-     * @return 生成参数
-     */
-    private GenerationParam fetchGenerationParam(String userMessage, String systemPrompt, String textPrompt) {
-        Message systemMsg = Message.builder()
-                .role(Role.SYSTEM.getValue())
-                .content(systemPrompt)
-                .build();
-        log.error("即将请求 ai, 用户输入为: {}", userMessage);
-        Message userMsg = Message.builder()
-                .role(Role.SYSTEM.getValue())
-                .content(userMessage)
-                .build();
-        return GenerationParam.builder()
-                .apiKey(apiKey)
-                .model(textModel)
-                .messages(Arrays.asList(systemMsg, userMsg))
-                .resultFormat(GenerationParam.ResultFormat.MESSAGE)
-                .build();
     }
 }

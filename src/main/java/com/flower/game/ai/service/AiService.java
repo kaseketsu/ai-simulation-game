@@ -72,4 +72,6 @@ public class AiService {
             throw new BusinessException(ErrorCode.INIT_ERROR, "初始化 prompt 失败");
         }
     }
+
+
 }

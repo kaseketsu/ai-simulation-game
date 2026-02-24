@@ -37,8 +37,6 @@ public class MealCreateTest {
         newMealGenerateRequest.setSideIngredientPrice(28000L);
         newMealGenerateRequest.setSeasoning("清霖灵露");
         newMealGenerateRequest.setSeasoningDescription("淬灵锻体，压制火系灵力反噬");
-        NameCreateResponse newMealName = qwenManager.createNewMealName(newMealGenerateRequest);
-        log.info("新的灵膳名称为: {}", JSONUtil.toJsonPrettyStr(newMealName));
     }
 
     @Test
@@ -56,7 +54,5 @@ public class MealCreateTest {
         newMealGenerateRequest.setSideIngredientPrice(28000L);
         newMealGenerateRequest.setSeasoning("清霖灵露");
         newMealGenerateRequest.setSeasoningDescription("淬灵锻体，压制火系灵力反噬");
-        String newPic = qwenManager.createNewMealPic(newMealGenerateRequest);
-        log.info("新的图片url为: {}", newPic);
     }
 }

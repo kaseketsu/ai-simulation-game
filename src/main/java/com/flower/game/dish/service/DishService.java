@@ -3,13 +3,12 @@ package com.flower.game.dish.service;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.util.ObjUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.ai.manager.QwenManager;
 import com.flower.game.ai.models.entity.NameCreateResponse;
-import com.flower.game.base.models.entity.SpiritualMaterialAllCat;
+import com.flower.game.ai.templates.MealCreateTextTemplate;
 import com.flower.game.base.models.entity.SpiritualRecipeBase;
 import com.flower.game.base.service.ISpiritualRecipeBaseService;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
@@ -19,7 +18,6 @@ import com.flower.game.dish.models.entity.SpiritualDishRepo;
 import com.flower.game.dish.models.entity.SpiritualSeasoningBase;
 import com.flower.game.dish.models.vo.MaterialVO;
 import com.flower.game.dish.models.vo.NewMaelInfoVO;
-import com.flower.game.entrance.models.entity.SpiritualMaterialForRedis;
 import com.flower.game.market.models.entity.SpiritualMaterialsRepo;
 import com.flower.game.market.service.ISpiritualMaterialsRepoService;
 import com.flower.game.progress.model.dto.SpiritualRepoQueryRequest;
@@ -32,7 +30,6 @@ import common.config.AppConfig;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.manager.CosManager;
-import common.manager.RedisManager;
 import common.page.PageVO;
 import common.utils.*;
 import jakarta.annotation.Resource;
@@ -64,6 +61,9 @@ public class DishService {
     private ISpiritualSeasoningBaseService iSpiritualSeasoningBaseService;
 
     @Resource
+    private MealCreateTextTemplate mealCreateTextTemplate;
+
+    @Resource
     private QwenManager qwenManager;
 
     @Value("${spring.cos.save-path}")
@@ -74,12 +74,6 @@ public class DishService {
 
     @Resource
     private AppConfig appConfig;
-
-    @Value("${spring.spiritual.redis-key}")
-    private String redisKey;
-
-    @Resource
-    private RedisManager redisManager;
 
     @Resource
     private GamePlayProgressService gamePlayProgressService;
@@ -202,7 +196,7 @@ public class DishService {
         } else {
             // 生成新的名称
             log.info("请求 ai 获取新灵膳名称...");
-            NameCreateResponse mealName = qwenManager.createNewMealName(generateRequest);
+            NameCreateResponse mealName = mealCreateTextTemplate.fetchTextResponse(generateRequest);
             // 这里先生成一张
             String imageUrl = generatePic(generateRequest);
             // 存入数据库
