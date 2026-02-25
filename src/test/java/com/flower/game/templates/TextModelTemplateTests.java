@@ -1,7 +1,7 @@
 package com.flower.game.templates;
 
 import cn.hutool.json.JSONUtil;
-import com.flower.game.ai.models.entity.NameCreateResponse;
+import com.flower.game.dish.models.entity.NameCreateResponse;
 import com.flower.game.ai.templates.MealCreateTextTemplate;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
 import jakarta.annotation.Resource;

@@ -1,4 +1,4 @@
-package com.flower.game.ai.models.entity;
+package com.flower.game.dish.models.entity;
 
 import lombok.Data;
 

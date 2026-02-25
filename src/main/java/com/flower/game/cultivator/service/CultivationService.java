@@ -1,4 +1,4 @@
-package com.flower.game.manage.service;
+package com.flower.game.cultivator.service;
 
 import common.config.AppConfig;
 import common.constants.PromptConstant;

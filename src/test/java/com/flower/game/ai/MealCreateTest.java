@@ -1,11 +1,7 @@
 package com.flower.game.ai;
 
-import cn.hutool.json.JSONUtil;
 import com.flower.game.ai.manager.QwenManager;
-import com.flower.game.ai.models.entity.MealCreateMessage;
-import com.flower.game.ai.models.entity.NameCreateResponse;
 import com.flower.game.dish.models.dto.NewMealGenerateRequest;
-import common.exceptions.BusinessException;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

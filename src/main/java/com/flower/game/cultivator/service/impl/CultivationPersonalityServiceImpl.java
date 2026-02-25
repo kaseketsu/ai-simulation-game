@@ -1,9 +1,9 @@
-package com.flower.game.manage.service.impl;
+package com.flower.game.cultivator.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.flower.game.manage.dao.CultivationPersonalityMapper;
-import com.flower.game.manage.models.entity.CultivationPersonality;
-import com.flower.game.manage.service.ICultivationPersonalityService;
+import com.flower.game.cultivator.dao.CultivationPersonalityMapper;
+import com.flower.game.cultivator.models.entity.CultivationPersonality;
+import com.flower.game.cultivator.service.ICultivationPersonalityService;
 import org.springframework.stereotype.Service;
 
 /**

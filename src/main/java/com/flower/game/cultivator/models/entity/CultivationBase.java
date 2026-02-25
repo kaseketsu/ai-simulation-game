@@ -1,4 +1,4 @@
-package com.flower.game.manage.models.entity;
+package com.flower.game.cultivator.models.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 修士性格信息
+ * 修士身份信息
  * </p>
  *
  * @author F1ower
@@ -23,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("cultivation_personality")
-public class CultivationPersonality implements Serializable {
+@TableName("cultivation_base")
+public class CultivationBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,28 +35,28 @@ public class CultivationPersonality implements Serializable {
     private Long id;
 
     /**
-     * 修士ID
+     * 姓名
      */
-    @TableField("cultivation_id")
-    private Long cultivationId;
+    @TableField("name")
+    private String name;
 
     /**
-     * 性情类型
+     * 道号
      */
-    @TableField("temperament")
-    private Byte temperament;
+    @TableField("dao_title")
+    private String daoTitle;
 
     /**
-     * 说话风格
+     * 性别 (0-男,1-女)
      */
-    @TableField("speech_style")
-    private Byte speechStyle;
+    @TableField("gender")
+    private Byte gender;
 
     /**
-     * 性格标签数组
+     * 身份 (0-散修,1-内门,2-核心,3-长老)
      */
-    @TableField("traits")
-    private String traits;
+    @TableField("status")
+    private Byte status;
 
     /**
      * 创建时间
@@ -88,4 +88,28 @@ public class CultivationPersonality implements Serializable {
     @TableLogic
     @TableField("is_deleted")
     private Integer isDeleted;
+
+    /**
+     * 地域
+     */
+    @TableField("region")
+    private Integer region;
+
+    /**
+     * 商店类型
+     */
+    @TableField("store_type")
+    private Integer storeType;
+
+    /**
+     * 修士形象
+     */
+    @TableField("url")
+    private String url;
+
+    /**
+     * 开场白
+     */
+    @TableField("opening_line")
+    private String openingLine;
 }

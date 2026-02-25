@@ -1,4 +1,4 @@
-package com.flower.game.manage.models.entity;
+package com.flower.game.cultivator.models.entity;
 
 /**
  * 用户类

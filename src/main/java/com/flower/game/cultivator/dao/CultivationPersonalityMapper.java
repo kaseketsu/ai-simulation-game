@@ -1,7 +1,7 @@
-package com.flower.game.manage.dao;
+package com.flower.game.cultivator.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.flower.game.manage.models.entity.CultivationPersonality;
+import com.flower.game.cultivator.models.entity.CultivationPersonality;
 
 /**
  * <p>

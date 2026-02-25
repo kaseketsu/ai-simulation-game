@@ -1,16 +1,13 @@
 package com.flower.game.ai.templates;
 
 import com.flower.game.ai.templates.abstractTemplates.AbstractTextModelCallTemplate;
-import com.flower.game.manage.models.dto.CultivationCreateRequest;
-import com.flower.game.manage.models.entity.Customer;
-import com.flower.game.manage.models.entity.Customers;
+import com.flower.game.cultivator.models.dto.CultivationCreateRequest;
+import com.flower.game.cultivator.models.entity.Customers;
 import common.constants.PromptConstant;
 import common.manager.RedisManager;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 修士创建模板类

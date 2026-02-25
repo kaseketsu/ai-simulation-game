@@ -1,8 +1,8 @@
-package com.flower.game.manage.service;
+package com.flower.game.cultivator.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.flower.game.manage.models.entity.CultivationPersonality;
+import com.flower.game.cultivator.models.entity.CultivationPersonality;
 
 /**
  * <p>

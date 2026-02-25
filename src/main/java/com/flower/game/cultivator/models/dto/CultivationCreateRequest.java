@@ -1,4 +1,4 @@
-package com.flower.game.manage.models.dto;
+package com.flower.game.cultivator.models.dto;
 
 import lombok.Data;
 
