@@ -1,9 +1,11 @@
 package common.manager;
 
 import cn.hutool.core.collection.CollUtil;
+import common.constants.PromptConstant;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
 import common.utils.ParamsCheckUtils;
+import common.utils.ThrowUtils;
 import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +35,9 @@ public class RedisManager {
     @Value("${spring.data.redis.default-expiration}")
     private Long defaultExpiration;
 
+    @Value("${spring.spiritual.redis-key}")
+    private String redisKey;
+
     /**
      * k - v 存储
      */
@@ -47,6 +55,25 @@ public class RedisManager {
     public void addValue(@NonNull final String key, @NonNull final Object value, @NonNull final Long expire, @NonNull final TimeUnit timeUnit) {
         ParamsCheckUtils.checkAll(key, value, expire, timeUnit);
         redisTemplate.opsForValue().setIfAbsent(key, value, expire, timeUnit);
+    }
+
+    /**
+     * 存入 stream 到 redis
+     *
+     * @param inputStream 输入流
+     * @param key         键
+     */
+    public String addStream(final InputStream inputStream, String key) {
+        // 转为 bufferedStream
+        ThrowUtils.throwIf(inputStream == null, ErrorCode.PARAM_ERROR, "数据流不存在！ key 为: %s".formatted(key));
+        InputStreamReader streamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(streamReader);
+        StringBuilder sb = new StringBuilder();
+        bufferedReader.lines().forEach(l -> sb.append(l).append("\n"));
+        // 存入 redis
+        String finalKey = redisKey + key;
+        this.addValueWithOutExpiration(redisKey + key, sb.toString());
+        return finalKey;
     }
 
     /**
