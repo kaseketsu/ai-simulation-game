@@ -34,9 +34,12 @@ public class DialogueService {
     public void init() {
         try (
                 InputStream textPromptStream = this.getClass().getResourceAsStream("/prompts/dialoguePrompt.txt");
+                InputStream sysPromptStream = this.getClass().getResourceAsStream("/prompts/systemPrompt-dialogue.txt");
         ) {
             String key = redisManager.addStream(textPromptStream, PromptConstant.DIALOGUE);
-            log.info("文本 prompt 存入 redis 成功，redis-key: {}", key);
+            log.info("对话文本 prompt 存入 redis 成功，redis-key: {}", key);
+            String sysKey = redisManager.addStream(sysPromptStream, PromptConstant.DIALOGUE_SYS);
+            log.info("对话系统 prompt 存入 redis 成功，redis-key: {}", sysKey);
         } catch (Exception ex) {
             log.error("初始化 prompt 失败, 原因是: {}", ex.getMessage());
             throw new BusinessException(ErrorCode.INIT_ERROR, "初始化 prompt 失败");

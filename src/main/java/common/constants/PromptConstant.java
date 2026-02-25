@@ -42,4 +42,9 @@ public class PromptConstant {
      * 修士对话 prompt
      */
     public static final String DIALOGUE = "dialogue";
+
+    /**
+     * 修士对话系统 prompt
+     */
+    public static final String DIALOGUE_SYS = "dialogue_sys";
 }
