@@ -47,10 +47,4 @@ public class BargainParams implements Serializable {
      * 例：散修=基础价×1.1，宗门长老=基础价×2.0
      */
     private Long maxAcceptPrice;
-
-    /**
-     * 修士欲购买的灵膳/灵饮名称
-     * 例："赤焰灵肉冰髓羹"、"月华灵谷凝香膳"
-     */
-    private String spiritFoodName;
 }

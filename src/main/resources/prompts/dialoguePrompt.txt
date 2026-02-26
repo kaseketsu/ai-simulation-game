@@ -15,8 +15,12 @@
     "currentPrice": {{currentPrice}}, // 掌柜当前报价（灵石数，如：100）
     "minAcceptPrice": {{minPrice}}, // 修士可接受最低价格（如散修50）
     "maxAcceptPrice": {{maxPrice}}, // 修士可接受最高价格（如散修110）
-    "spiritFoodName": "{{foodName}}" // 修士欲购买的灵膳/灵饮名称（如：赤焰灵肉冰髓羹）
   }
+  "spiritDishes": {
+      "price": {{price}}, // 价格
+      "description": {{desc}}, // 灵膳描述
+      "name": {{currentPrice}}, // 灵膳名称
+    }
 }
 
 【实际输入】
