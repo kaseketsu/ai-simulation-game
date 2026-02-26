@@ -164,6 +164,30 @@ CREATE TABLE IF NOT EXISTS user_role
 ) ENGINE = InnoDB
   COLLATE = utf8mb4_0900_as_cs COMMENT = '用户角色关联表';
 
+-- 创建谈价会话表
+CREATE TABLE `bargain_session`
+(
+    `id`              BIGINT      NOT NULL AUTO_INCREMENT COMMENT '会话ID（主键）',
+    `user_id`         VARCHAR(64) NOT NULL COMMENT '用户唯一标识（如用户账号/OpenID）',
+    `session_id`      VARCHAR(64) NOT NULL COMMENT '谈价会话唯一标识（UUID生成）',
+    `cultivator_info` JSON        NOT NULL COMMENT '修士基础信息（冗余存储，避免关联查询）',
+    `bargain_params`  JSON        NOT NULL COMMENT '谈价核心参数（初始值+实时更新）',
+    `bargain_history` JSON        NOT NULL COMMENT '谈价历史记录（数组，每轮谈价数据）',
+    `session_status`  TINYINT     NOT NULL DEFAULT 0 COMMENT '会话状态：0-进行中，1-已完成，2-已取消',
+    `create_time`     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '会话创建时间',
+    `update_time`     DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后更新时间',
+    -- 主键约束
+    PRIMARY KEY (`id`),
+    -- 唯一索引：保证同一个用户的同一个会话ID唯一
+    UNIQUE KEY `uk_user_session` (`user_id`, `session_id`),
+    -- 普通索引：加速按用户+状态查询未完成会话
+    KEY `idx_user_status` (`user_id`, `session_status`),
+    KEY `idx_user_id`(`user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+    COMMENT = '用户-修士谈价会话持久化表';
+
 alter table permission
     add is_deleted int default 0 not null comment '是否删除';
 
@@ -289,40 +313,40 @@ CREATE TABLE `spiritual_recipe_base`
 -- 修士基础表
 CREATE TABLE `cultivation_base`
 (
-    `id`              BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `name`            VARCHAR(32) NOT NULL COMMENT '姓名',
-    `dao_title`       VARCHAR(32) DEFAULT NULL COMMENT '道号',
-    `gender`          TINYINT NOT NULL COMMENT '性别 (0-男,1-女)',
-    `status`          TINYINT NOT NULL COMMENT '身份 (0-散修,1-内门,2-核心,3-长老)',
-    `create_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `creator`         VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
-    `modifier`        VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
-    `is_deleted`      INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
+    `id`          BIGINT                                 NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `name`        VARCHAR(32)                            NOT NULL COMMENT '姓名',
+    `dao_title`   VARCHAR(32)                                     DEFAULT NULL COMMENT '道号',
+    `gender`      TINYINT                                NOT NULL COMMENT '性别 (0-男,1-女)',
+    `status`      TINYINT                                NOT NULL COMMENT '身份 (0-散修,1-内门,2-核心,3-长老)',
+    `create_time` DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `creator`     VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    `modifier`    VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    `is_deleted`  INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
     PRIMARY KEY (`id`),
     KEY `idx_status` (`status`)
-) ENGINE=InnoDB
-  DEFAULT CHARSET=utf8mb4
-    COMMENT='修士身份信息';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+    COMMENT ='修士身份信息';
 
 -- 修士性格表
 CREATE TABLE `cultivation_personality`
 (
-    `id`              BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `cultivation_id`  BIGINT NOT NULL COMMENT '修士ID',
-    `temperament`     TINYINT NOT NULL COMMENT '性情类型',
-    `speech_style`    TINYINT NOT NULL COMMENT '说话风格',
-    `traits`          JSON NOT NULL COMMENT '性格标签数组',
-    `create_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `creator`         VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
-    `modifier`        VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
-    `is_deleted`      INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
+    `id`             BIGINT                                 NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `cultivation_id` BIGINT                                 NOT NULL COMMENT '修士ID',
+    `temperament`    TINYINT                                NOT NULL COMMENT '性情类型',
+    `speech_style`   TINYINT                                NOT NULL COMMENT '说话风格',
+    `traits`         JSON                                   NOT NULL COMMENT '性格标签数组',
+    `create_time`    DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`    DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `creator`        VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '创建人',
+    `modifier`       VARCHAR(16) COLLATE utf8mb4_0900_as_cs NOT NULL DEFAULT 'SYS' COMMENT '修改人',
+    `is_deleted`     INT                                    NOT NULL DEFAULT 0 COMMENT '是否删除 (0 - 否, 1 - 是)',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_cultivation_id` (`cultivation_id`)
-) ENGINE=InnoDB
-  DEFAULT CHARSET=utf8mb4
-    COMMENT='修士性格信息';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+    COMMENT ='修士性格信息';
 
 
 USE ai_simulation_game;

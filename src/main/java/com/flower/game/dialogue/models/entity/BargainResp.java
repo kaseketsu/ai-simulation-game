@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @since 2026-2-25
  */
 @Data
-public class BargainReply implements Serializable {
+public class BargainResp implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -7894561230123456789L;

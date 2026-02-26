@@ -19,10 +19,10 @@ public class BargainParams implements Serializable {
     private static final long serialVersionUID = 8975421634578901234L;
 
     /**
-     * 当前谈价轮次（从1开始计数）
+     * 当前谈价轮次（从0开始计数）
      * 例：散修首次谈价为1，第二次为2
      */
-    private Integer currentBargainRound;
+    private Integer bargainTimes;
 
     /**
      * 该修士总谈价次数（由身份决定上限）

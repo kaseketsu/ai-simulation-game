@@ -10,8 +10,8 @@
     "region": {{region}} // 0-玄洲，1-沧澜
   },
   "bargainParams": {
-    "currentBargainRound": {{currentRound}}, // 当前谈价轮次（从1开始）
-    "totalBargainTimes": {{totalTimes}}, // 该修士总谈价次数（如散修0-2次，由身份决定）
+    "bargainTimes": {{times}}, // 该修士已谈价次数，默认为 0，表示尚未谈价
+    "totalBargainTimes": {{totalTimes}}, // 该修士总谈价次数（如散修0-2次，由身份决定），如为 0，该修士不还价
     "currentPrice": {{currentPrice}}, // 掌柜当前报价（灵石数，如：100）
     "minAcceptPrice": {{minPrice}}, // 修士可接受最低价格（如散修50）
     "maxAcceptPrice": {{maxPrice}}, // 修士可接受最高价格（如散修110）
@@ -19,7 +19,7 @@
   "spiritDishes": {
       "price": {{price}}, // 价格
       "description": {{desc}}, // 灵膳描述
-      "name": {{currentPrice}}, // 灵膳名称
+      "name": {{name}}, // 灵膳名称
     }
 }
 
