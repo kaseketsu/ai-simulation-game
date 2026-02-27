@@ -68,7 +68,8 @@ public enum ErrorCode {
     SPIRITUAL_MATERIAL_BUY_ERROR("070302", "灵材购买失败"),
 
     // ======= ai 调用模块错误 =======
-    TEXT_CALL_ERROR("080200", "文本模型调用失败");
+    TEXT_CALL_ERROR("080200", "文本模型调用失败"),
+    IMAGE_CALL_ERROR("080201", "图片模型嗲用失败");
 
     /**
      * 错误码

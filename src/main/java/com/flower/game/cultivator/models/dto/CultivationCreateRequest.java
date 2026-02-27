@@ -33,29 +33,4 @@ public class CultivationCreateRequest implements Serializable {
      * 批量大小（数字）
      */
     private Integer batchSize;
-
-    /**
-     * 名称
-     */
-    private String name;
-
-    /**
-     * 性别（数字枚举值，如 0-男、1-女）
-     */
-    private Integer gender;
-
-    /**
-     * 状态（数字枚举值，如 0-散修）
-     */
-    private Integer status;
-
-    /**
-     * 性格类型（数字枚举值）
-     */
-    private Integer temperament;
-
-    /**
-     * 性格特质列表
-     */
-    private List<String> traits;
 }

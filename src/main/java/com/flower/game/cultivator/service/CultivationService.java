@@ -1,5 +1,16 @@
 package com.flower.game.cultivator.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.flower.game.ai.templates.CultivationCreateTextTemplate;
+import com.flower.game.ai.templates.CultivationImageCreateTemplate;
+import com.flower.game.cultivator.models.dto.CultivationCreateRequest;
+import com.flower.game.cultivator.models.dto.CultivatorImageCreateRequest;
+import com.flower.game.cultivator.models.entity.*;
+import common.annotations.ExceptionLog;
 import common.config.AppConfig;
 import common.constants.PromptConstant;
 import common.exceptions.BusinessException;
@@ -11,10 +22,14 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * 修士生成、对话等相关服务类
@@ -34,6 +49,20 @@ public class CultivationService {
 
     @Value("${spring.spiritual.redis-key}")
     private String redisKey;
+
+    @Resource
+    private CultivationCreateTextTemplate cultivationCreateTextTemplate;
+
+    @Resource
+    private CultivationImageCreateTemplate cultivationImageCreateTemplate;
+
+    @Resource
+    private ICultivationBaseService iCultivationBaseService;
+
+    @Resource
+    private ICultivationPersonalityService iCultivationPersonalityService;
+
+    private final ExecutorService virtualPool = Executors.newVirtualThreadPerTaskExecutor();
 
     /**
      * 将部分全局信息存入 redis
@@ -78,5 +107,71 @@ public class CultivationService {
             log.error("prompt 初始化失败, 原因是: {}", ex.getMessage());
             throw new BusinessException(ErrorCode.INIT_ERROR, "prompt 初始化失败");
         }
+    }
+
+    /**
+     * 骗量生成修士
+     */
+    @ExceptionLog("修士批量创建失败")
+    @Transactional(rollbackFor = Exception.class)
+    public void createCultivationByBatch(CultivationCreateRequest createRequest) {
+        // 调用 template 获取 文本回复
+        Customers customers = cultivationCreateTextTemplate.fetchTextResponse(createRequest);
+        ThrowUtils.throwIf(customers == null || CollUtil.isEmpty(customers.getCustomers()), ErrorCode.TEXT_CALL_ERROR, "修士创建文本模型调用失败");
+        List<Customer> customerList = customers.getCustomers();
+        // 获取 ai 返回批次大小
+        int actualBatchSize = customerList.size();
+        // 批量存表
+        for (Customer customer : customerList) {
+            Identity identity = customer.getIdentity();
+            Personality personality = customer.getPersonality();
+            Dialogue dialogue = customer.getDialogue();
+            CultivationBase cultivationBase = new CultivationBase();
+            // 复制参数
+            BeanUtil.copyProperties(identity, cultivationBase, CopyOptions.create().ignoreNullValue());
+            BeanUtil.copyProperties(dialogue, cultivationBase, CopyOptions.create().ignoreNullValue());
+            // 存入 base 库
+            iCultivationBaseService.save(cultivationBase);
+            // 获取 id
+            Long baseId = cultivationBase.getId();
+            // 异步生成图片
+            CultivatorImageCreateRequest cultivatorImageCreateRequest = new CultivatorImageCreateRequest();
+            BeanUtil.copyProperties(cultivationBase, cultivatorImageCreateRequest, CopyOptions.create().ignoreNullValue());
+            BeanUtil.copyProperties(personality, cultivatorImageCreateRequest, CopyOptions.create().ignoreNullValue());
+            fillUrl(baseId, cultivatorImageCreateRequest);
+            // 存入 person 库
+            CultivationPersonality cultivationPersonality = new CultivationPersonality();
+            BeanUtil.copyProperties(personality, cultivationPersonality, CopyOptions.create().ignoreNullValue());
+            cultivationPersonality.setTraits(JSONUtil.toJsonStr(personality.getTraits()));
+            cultivationPersonality.setCultivationId(baseId);
+            iCultivationPersonalityService.save(cultivationPersonality);
+            log.info("批量创建修士完成，成功处理 {} 条", actualBatchSize);
+        }
+    }
+
+    /**
+     * 填充修士图片 url
+     */
+    private void fillUrl(Long id, CultivatorImageCreateRequest createRequest) {
+        // 参数校验
+        ThrowUtils.throwIf(createRequest == null, ErrorCode.PARAM_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ErrorCode.PARAM_ERROR);
+        long start = System.currentTimeMillis();
+        log.info("图片生成任务id: {}, 开始.....", id);
+        virtualPool.execute(() -> {
+            try {
+                String url = cultivationImageCreateTemplate.fetchPicUrl(createRequest);
+                ThrowUtils.throwIf(url == null || url.isEmpty(), ErrorCode.IMAGE_CALL_ERROR);
+                log.info("修士图片生成模型调用成功，生成 url 为: {}, 花费时间为: {}", url, System.currentTimeMillis() - start);
+                // 写入对应 id 的 cultivation_base
+                CultivationBase cultivationBase = iCultivationBaseService.getById(id);
+                cultivationBase.setUrl(url);
+                iCultivationBaseService.updateById(cultivationBase);
+                log.info("图片生成任务 id: {}, 已完成", id);
+            } catch (Exception e) {
+                log.error("任务 id: {}, 修士图片生成模型调用失败，原因为: {}", id, e.getMessage());
+                throw new BusinessException(ErrorCode.IMAGE_CALL_ERROR, "修士生成失败");
+            }
+        });
     }
 }

@@ -6,6 +6,7 @@ import common.constants.PromptConstant;
 import common.manager.RedisManager;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 修士图片生成模板类
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author F1ower
  * @since 2026-2-25
  */
+@Service
 public class CultivationImageCreateTemplate extends AbstractImageModelCallTemplate<CultivatorImageCreateRequest> {
 
     @Resource
