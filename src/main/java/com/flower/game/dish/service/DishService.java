@@ -34,6 +34,7 @@ import common.page.PageVO;
 import common.utils.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -280,49 +281,16 @@ public class DishService {
     }
 
 
+    /**
+     * 生成图片并上传到 cos
+     *
+     * @param generateRequest 生成请求
+     * @return cos 地址
+     */
     private String generatePic(NewMealGenerateRequest generateRequest) {
         // 请求生成新的图片
         log.info("即将下载图片到本地....");
         String picUrl = mealCreateImageTemplate.fetchPicUrl(generateRequest);
-        // 拼接保存路径
-        String uuid = UUID.randomUUID().toString();
-        LocalDateTime now = LocalDateTime.now();
-        String formatted = LocalDateTimeUtil.format(now, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        // 图片的完整保存路径
-        String fullPath = "%s/%s_%s.png".formatted(savePath, uuid, formatted);
-        // 生成临时文件
-        Path path;
-        try {
-            path = Paths.get(fullPath);
-            Path parentDir = path.getParent();
-            // 补全父目录
-            if (parentDir != null) {
-                Files.createDirectories(parentDir);
-                log.info("父目录创建完毕: {}", parentDir.toAbsolutePath());
-            }
-            // 创建文件
-            Files.createFile(path);
-            log.info("文件创建完毕, 路径为: {}", path.toAbsolutePath());
-        } catch (IOException ex) {
-            log.error("文件生成失败，原因是: {}", ex.getMessage());
-            throw new BusinessException(ErrorCode.FILE_CREATE_ERROR);
-        }
-        try (FileOutputStream outputStream = new FileOutputStream(path.toFile())) {
-            HttpUtil.download(picUrl, outputStream, true);
-        } catch (Exception ex) {
-            log.error("图片下载失败，url: {}, 保存路径: {}, 原因为: {}", picUrl, fullPath, ex.getMessage());
-            throw new BusinessException(ErrorCode.DOWNLOAD_ERROR, "图片下载失败");
-        }
-        fullPath = path.toAbsolutePath().toString();
-        log.info("图片下载成功, 保存路径为: {}", fullPath);
-        // 保存到腾讯云存储
-        String fileName = FileUtils.fetchFileName("png");
-        String putPath = appConfig.getImageSavePath() + "/" + fileName;
-        cosManager.putLocalFile(putPath, fullPath);
-        log.info("上传到腾讯云存储成功，文件路径: {}", putPath);
-        // 拼接 url
-        String imageUrl = appConfig.getCosImagePrefix() + putPath;
-        log.info("前端展示图片 url 为: {}", imageUrl);
-        return imageUrl;
+        return cosManager.uploadToCOS(picUrl);
     }
 }

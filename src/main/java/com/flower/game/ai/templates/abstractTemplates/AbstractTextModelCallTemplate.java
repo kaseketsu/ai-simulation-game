@@ -59,7 +59,6 @@ public abstract class AbstractTextModelCallTemplate<T, R> {
             log.error("文本模型调用失败. 调用模型: {}, 调用参数: {}, 错误原因: {}", textModel, JSONUtil.toJsonPrettyStr(params), e.getMessage());
             throw new BusinessException(ErrorCode.TEXT_CALL_ERROR);
         }
-        log.info("ai 返回内容为: {}", JSONUtil.toJsonPrettyStr(callRes));
         // 获取 content
         String content = callRes.getOutput().getChoices().get(0).getMessage().getContent();
         log.info("content 为: {}", content);

@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.ai.templates.CultivationCreateTextTemplate;
 import com.flower.game.ai.templates.CultivationImageCreateTemplate;
 import com.flower.game.cultivator.models.dto.CultivationCreateRequest;
@@ -15,6 +14,7 @@ import common.config.AppConfig;
 import common.constants.PromptConstant;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
+import common.manager.CosManager;
 import common.manager.RedisManager;
 import common.utils.ThrowUtils;
 import jakarta.annotation.PostConstruct;
@@ -27,9 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 修士生成、对话等相关服务类
@@ -61,6 +61,9 @@ public class CultivationService {
 
     @Resource
     private ICultivationPersonalityService iCultivationPersonalityService;
+
+    @Resource
+    private CosManager cosManager;
 
     private final ExecutorService virtualPool = Executors.newVirtualThreadPerTaskExecutor();
 
@@ -145,8 +148,8 @@ public class CultivationService {
             cultivationPersonality.setTraits(JSONUtil.toJsonStr(personality.getTraits()));
             cultivationPersonality.setCultivationId(baseId);
             iCultivationPersonalityService.save(cultivationPersonality);
-            log.info("批量创建修士完成，成功处理 {} 条", actualBatchSize);
         }
+        log.info("批量创建修士完成，成功处理 {} 条", actualBatchSize);
     }
 
     /**
@@ -163,9 +166,11 @@ public class CultivationService {
                 String url = cultivationImageCreateTemplate.fetchPicUrl(createRequest);
                 ThrowUtils.throwIf(url == null || url.isEmpty(), ErrorCode.IMAGE_CALL_ERROR);
                 log.info("修士图片生成模型调用成功，生成 url 为: {}, 花费时间为: {}", url, System.currentTimeMillis() - start);
+                // 写入 cos
+                String cosUrl = cosManager.uploadToCOS(url);
                 // 写入对应 id 的 cultivation_base
                 CultivationBase cultivationBase = iCultivationBaseService.getById(id);
-                cultivationBase.setUrl(url);
+                cultivationBase.setUrl(cosUrl);
                 iCultivationBaseService.updateById(cultivationBase);
                 log.info("图片生成任务 id: {}, 已完成", id);
             } catch (Exception e) {

@@ -12,6 +12,7 @@ import common.utils.ParamsCheckUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,8 +41,11 @@ public abstract class AbstractImageModelCallTemplate<T> {
         // 校验参数
         ParamsCheckUtils.checkObj(request);
         String imagePrompt = fetchImagePrompt();
-        String prompt = imagePrompt.formatted(JSONUtil.toJsonPrettyStr(request));
-        return callImageModel(prompt);
+        // 生成 JSON 参数（美化格式）
+        String requestJson = JSONUtil.toJsonPrettyStr(request);
+        // 为 StringBuilder 拼接
+        String finalPrompt = imagePrompt.replace("%s", requestJson);
+        return callImageModel(finalPrompt);
     }
 
     /**
@@ -73,6 +77,7 @@ public abstract class AbstractImageModelCallTemplate<T> {
             log.error("图像模型调用失败. 调用模型: {}, 调用参数: {}, 错误原因: {}", imageModel, JSONUtil.toJsonPrettyStr(param), e.getMessage());
             throw new BusinessException(ErrorCode.TEXT_CALL_ERROR);
         }
+        log.info("图像模型返回结果为: {}", JSONUtil.toJsonPrettyStr(result));
         // 返回 url
         return result.getOutput().getResults().get(0).get("url");
     }
