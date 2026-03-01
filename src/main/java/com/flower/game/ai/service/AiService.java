@@ -1,5 +1,10 @@
 package com.flower.game.ai.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.flower.game.cultivator.models.dto.CultivationCreateRequest;
+import com.flower.game.cultivator.models.entity.CultivationBase;
+import com.flower.game.cultivator.service.CultivationService;
+import com.flower.game.cultivator.service.ICultivationBaseService;
 import common.constants.PromptConstant;
 import common.exceptions.BusinessException;
 import common.exceptions.ErrorCode;
@@ -31,6 +36,12 @@ public class AiService {
 
     @Resource
     private RedisManager redisManager;
+
+    @Resource
+    private CultivationService cultivationService;
+
+    @Resource
+    private ICultivationBaseService iCultivationBaseService;
 
     /**
      * 初始化 prompt 到 redis
@@ -73,5 +84,28 @@ public class AiService {
         }
     }
 
-
+    /**
+     * 生成修士，暂定 100 个阈值
+     */
+    @PostConstruct
+    public void generateCultivators() {
+        final long upperBound = 100L;
+        // 获取当前 cultivator 数量
+        LambdaQueryWrapper<CultivationBase> baseWrapper = new LambdaQueryWrapper<>();
+        baseWrapper.eq(CultivationBase::getIsDeleted, 0);
+        long count = iCultivationBaseService.count(baseWrapper);
+        if (count >= upperBound) {
+            return;
+        }
+        long left = upperBound - count;
+        long batch = (left / 10) + 1L;
+        for (long i = 0; i < batch; i++) {
+            // 创建修士
+            CultivationCreateRequest cultivationCreateRequest = new CultivationCreateRequest();
+            cultivationCreateRequest.setBatchSize(10);
+            cultivationCreateRequest.setRegion(-1);
+            cultivationCreateRequest.setStoreType(-1);
+            cultivationService.createCultivationByBatch(cultivationCreateRequest);
+        }
+    }
 }
