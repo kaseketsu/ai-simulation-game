@@ -38,6 +38,7 @@ public enum ErrorCode {
     CLOSE_ERROR("990206", "资源未正常关闭"),
     FILE_CREATE_ERROR("990207", "文件创建失败"),
     VIRTUAL_THREAD_ERROR("990208", "虚拟线程执行失败"),
+    SCHEDULE_TASK_FAILURE_ERROR("990209", "定时任务执行失败"),
 
     // ======= 用户模块错误 =======
     LOGIN_ERROR("010300", "登录失败"),

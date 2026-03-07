@@ -4,8 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.flower.game.ai.templates.CultivationCreateTextTemplate;
 import com.flower.game.ai.templates.CultivationImageCreateTemplate;
+import com.flower.game.cultivator.dao.CultivationPersonalityMapper;
 import com.flower.game.cultivator.models.dto.CultivationCreateRequest;
 import com.flower.game.cultivator.models.dto.CultivatorImageCreateRequest;
 import com.flower.game.cultivator.models.entity.*;
@@ -20,7 +22,10 @@ import common.utils.ThrowUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +71,42 @@ public class CultivationService {
     private CosManager cosManager;
 
     private final ExecutorService virtualPool = Executors.newVirtualThreadPerTaskExecutor();
+
+    /**
+     * 每分钟执行一次
+     */
+    @Async("virtualPool")
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void regenerateCultivationPic() {
+        try {
+            // 查找没有 url 的修士
+            log.info("定时任务: 修士图片生成开始了....");
+            long now = System.currentTimeMillis();
+            LambdaQueryWrapper<CultivationBase> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(CultivationBase::getIsDeleted, 0)
+                    .isNull(CultivationBase::getUrl)
+                    .last("limit 1");
+            List<CultivationBase> noUrlCultivators = iCultivationBaseService.list(queryWrapper);
+            // 循环生成图片，每次休眠 1000 * 60 ms，阿里疑似不让并发
+            for (CultivationBase cultivationBase : noUrlCultivators) {
+                CultivatorImageCreateRequest createRequest = new CultivatorImageCreateRequest();
+                // 查找性格
+                Long baseId = cultivationBase.getId();
+                LambdaQueryWrapper<CultivationPersonality> personalityWrapper = new LambdaQueryWrapper<>();
+                personalityWrapper.eq(CultivationPersonality::getCultivationId, baseId)
+                        .eq(CultivationPersonality::getIsDeleted, 0);
+                CultivationPersonality personality = iCultivationPersonalityService.getOne(personalityWrapper);
+                BeanUtil.copyProperties(cultivationBase, createRequest);
+                BeanUtil.copyProperties(personality, createRequest);
+                log.info("修士名称为: {} , 地区为: {}, 性别为: {} 的图片即将生成....", createRequest.getName(), createRequest.getRegion(), createRequest.getGender());
+                fillUrl(baseId, createRequest);
+                log.info("图片生成完成, 耗时: {} ms, 即将休眠 60s....", System.currentTimeMillis() - now);
+            }
+        } catch (Exception ex) {
+            log.error("修士图片重新生成定时任务执行失败, 原因是: {}", ex.getMessage());
+            //....
+        }
+    }
 
     /**
      * 将部分全局信息存入 redis
@@ -155,7 +196,7 @@ public class CultivationService {
     /**
      * 填充修士图片 url
      */
-    private void fillUrl(Long id, CultivatorImageCreateRequest createRequest) {
+    public void fillUrl(Long id, CultivatorImageCreateRequest createRequest) {
         // 参数校验
         ThrowUtils.throwIf(createRequest == null, ErrorCode.PARAM_ERROR);
         ThrowUtils.throwIf(id == null || id <= 0, ErrorCode.PARAM_ERROR);
